@@ -84,17 +84,29 @@ button {
 .project-list {
     margin-bottom: 20px;
 }
+.project-header {
+    font-size: font.$xxlarge;
+    background-color: color.$bg-2;
+}
 .project {
     display: flex;
 }
-.project-header {
-    font-size: font.$xxlarge;
-}
 .project-title {
-    font-size: font.$xlarge;
+    font-size: font.$large;
 }
 .project-btn {
-    width: 100%;
+    width: 80%;
+}
+.num-todos-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('../icons/circle-icon.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    font-size: font.$medium;
+    flex-grow: 1;
 }
 .todo-pane {
     width: 69%;

@@ -150,20 +150,33 @@ button {
   margin-bottom: 20px;
 }
 
+.project-header {
+  font-size: 30px;
+  background-color: #D4F0BE;
+}
+
 .project {
   display: flex;
 }
 
-.project-header {
-  font-size: 30px;
-}
-
 .project-title {
-  font-size: 24px;
+  font-size: 21px;
 }
 
 .project-btn {
-  width: 100%;
+  width: 80%;
+}
+
+.num-todos-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("../icons/circle-icon.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  font-size: 16px;
+  flex-grow: 1;
 }
 
 .todo-pane {
