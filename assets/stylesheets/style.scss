@@ -84,6 +84,7 @@ button {
 }
 .project-list {
     margin-bottom: 20px;
+    padding-left: 20px;
 }
 .project-header {
     font-size: font.$xxlarge;
@@ -174,7 +175,22 @@ button {
     width: 20px;
     height: auto;
 }
-
 #githubProfileLink {
     margin: 15px;
+}
+// SMALL Viewport-Specific Rules
+@media (max-width: 1299px) {
+    .project-pane {
+        display: none;
+    }
+    .todo-pane {
+        width: 99%;
+        margin-left: 1%;
+    }
+}
+//LARGE Viewport-Specific Rules
+@media (min-width: 1300px) {
+    .view-projects-btn {
+        display:none;
+    }
 }
