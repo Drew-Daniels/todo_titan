@@ -65,6 +65,7 @@ html, body {
 }
 
 header {
+  padding: 1% 0;
   background-color: #FFFFFF;
   margin-left: 1%;
   display: flex;
@@ -154,10 +155,19 @@ button {
   font-size: 30px;
   background-color: #D4F0BE;
   border-radius: 10px 10px 0 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .project {
   display: flex;
+  margin-top: 10px;
+}
+
+.project-image {
+  margin-right: 5px;
 }
 
 .project-title {
@@ -191,7 +201,7 @@ button {
 }
 
 .todo-options-bar {
-  height: 5%;
+  height: 40px;
   background-color: #D4F0BE;
   border-radius: 10px 10px 0 0;
   display: flex;
@@ -204,13 +214,13 @@ button {
   align-items: center;
 }
 
-.todo-option {
+.option-btn {
   background-color: #B6E394;
   margin-right: 10px;
   border-radius: 10px;
 }
 
-.todo-option-image {
+.option-image {
   margin-left: 5px;
 }
 
@@ -235,6 +245,10 @@ button {
 
 .todo-title {
   font-size: 21px;
+}
+
+.todo-complete {
+  text-decoration: line-through;
 }
 
 #githubIcon {

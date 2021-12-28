@@ -22,15 +22,17 @@
                 <div class="project-pane">
                     <div class="project-list-container">
                         <div class="project-header">
-                            <div>
+                            <div class="project-header-main">
                                 <img src="assets/icons/time-sensitive-task-icon.svg" alt="">
                                 <span>Overview</span>
                             </div>
+                            <ul class="project-header-options-list">
+                            </ul>
                         </div>
                         <ul class="project-list">
                             <li class="project">
                                 <button class="project-btn">
-                                    <img src="assets/icons/today-icon.svg" alt="">
+                                    <img class="project-image" src="assets/icons/today-icon.svg" alt="">
                                     <span class="project-title">Today</span>
                                 </button>
                                 <div class="num-todos-container">
@@ -39,7 +41,7 @@
                             </li>
                             <li class="project">
                                 <button class="project-btn">
-                                    <img src="assets/icons/this-week-icon.svg" alt="">
+                                    <img class="project-image" src="assets/icons/this-week-icon.svg" alt="">
                                     <span class="project-title">This Week</span>
                                 </button>
                                 <div class="num-todos-container">
@@ -48,7 +50,7 @@
                             </li>
                             <li class="project">
                                 <button class="project-btn">
-                                    <img src="assets/icons/all-time-icon.svg" alt="">
+                                    <img class="project-image" src="assets/icons/all-time-icon.svg" alt="">
                                     <span class="project-title">All</span>
                                 </button>
                                 <div class="num-todos-container">
@@ -59,15 +61,23 @@
                     </div>
                     <div class="project-list-container">
                         <div class="project-header">
-                            <div>
+                            <div class="project-header-main">
                                 <img src="assets/icons/my-projects-icon.svg" alt="">
                                 <span>My Projects</span>
                             </div>
+                            <ul class="project-header-options-list">
+                                <li class="project-header-options-list-item">
+                                    <button class="option-btn">
+                                        <span>Add a New Project</span>
+                                        <img class="option-image" src="assets/icons/create-new-project-icon.svg" alt="">
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
                         <ul class="project-list">
                             <li class="project">
                                 <button class="project-btn">
-                                    <img src="assets/icons/project-icon.svg" alt="">
+                                    <img class="project-image" src="assets/icons/project-icon.svg" alt="">
                                     <span class="project-title">Cooking</span>
                                 </button>
                                 <div class="num-todos-container">
@@ -76,7 +86,7 @@
                             </li>
                             <li class="project">
                                 <button class="project-btn">
-                                    <img src="assets/icons/project-icon.svg" alt="">
+                                    <img class="project-image" src="assets/icons/project-icon.svg" alt="">
                                     <span class="project-title">Gym</span>
                                 </button>
                                 <div class="num-todos-container">
@@ -90,15 +100,21 @@
                     <div class="todo-options-bar">
                         <ul class="todo-options-list">
                             <li class="todo-options-list-item">
-                                <button class="todo-option">
+                                <button class="option-btn">
                                     <span class="todo-option-text">Add a Todo</span>
-                                    <img class="todo-option-image" src="assets/icons/add-todo-icon.svg" alt="">
+                                    <img class="option-image" src="assets/icons/add-todo-icon.svg" alt="">
                                 </button>
                             </li>
                             <li class="todo-options-list-item">
-                                <button class="todo-option">
+                                <button class="option-btn">
+                                    <span class="todo-option-text">Hide Complete Todos</span>
+                                    <img class="option-image" src="assets/icons/hide-complete-todos-icon.svg" alt="">
+                                </button>
+                            </li>
+                            <li class="todo-options-list-item">
+                                <button class="option-btn">
                                     <span class="todo-option-text">Delete This Project</span>
-                                    <img class="todo-option-image"src="assets/icons/project-delete-icon.svg" alt="">
+                                    <img class="option-image"src="assets/icons/project-delete-icon.svg" alt="">
                                 </button>
                             </li>
                         </ul>
@@ -162,9 +178,9 @@
                                 <img src="assets/icons/medium-priority-icon.svg" alt="">
                             </button>
                         </li>
-                        <li class="todo">
+                        <li class="todo todo-complete">
                             <button class="todo-checkbox">
-                                <img src="assets/icons/todo-incomplete-icon.svg" alt="">
+                                <img src="assets/icons/todo-complete-icon.svg" alt="">
                             </button>
                             <div class="todo-text">
                                 <div class="todo-title">

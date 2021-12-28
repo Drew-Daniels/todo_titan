@@ -12,6 +12,7 @@ html, body {
     font-family: 'Roboto', sans-serif;
 }
 header {
+    padding: 1% 0;
     background-color: color.$bg-4;
     margin-left: 1%;
     display: flex;
@@ -88,9 +89,17 @@ button {
     font-size: font.$xxlarge;
     background-color: color.$bg-2;
     border-radius: 10px 10px 0 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .project {
     display: flex;
+    margin-top: 10px;
+}
+.project-image {
+    margin-right: 5px;
 }
 .project-title {
     font-size: font.$large;
@@ -119,7 +128,7 @@ button {
     flex-direction: column;
 }
 .todo-options-bar {
-    height: 5%;
+    height: 40px;
     background-color: color.$bg-2;
     border-radius: 10px 10px 0 0;
     display: flex;
@@ -130,12 +139,12 @@ button {
     justify-content: flex-end;
     align-items: center;
 }
-.todo-option {
+.option-btn {
     background-color: color.$bg-1;
     margin-right: 10px;
     border-radius: 10px;
 }
-.todo-option-image {
+.option-image {
     margin-left: 5px;
 }
 .todo-list {
@@ -157,6 +166,9 @@ button {
 }
 .todo-title {
     font-size: font.$large;
+}
+.todo-complete {
+    text-decoration: line-through;
 }
 #githubIcon {
     width: 20px;
