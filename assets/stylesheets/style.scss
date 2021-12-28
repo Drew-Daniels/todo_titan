@@ -13,11 +13,17 @@ html, body {
 }
 header {
     background-color: color.$bg-4;
+    margin-left: 1%;
+    display: flex;
+    margin-bottom: 5px;
 }
 footer {
     background-color: color.$bg-4;
     text-align: center;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1%;
 }
 img {
     max-width: 100%;
@@ -38,6 +44,7 @@ button {
 }
 .logo {
     height: 50px;
+    margin-right: 10px;
 }
 .logo-text {
     font-size: font.$xxxlarge;
@@ -49,9 +56,11 @@ button {
     -webkit-text-fill-color: transparent; 
     -moz-text-fill-color: transparent;
 }
-.container {
+.logo-name-container {
     display: flex;
     align-items: center;
+    width: 28%;
+    justify-content: center;
 }
 .content-container {
     display: flex;
@@ -65,11 +74,12 @@ button {
     background-color: color.$bg-4;
 }
 .project-pane {
-    width: 29%;
+    width: 28%;
     height: 100%;
     background-color: color.$bg-3;
     border: 1px solid color.$tt;
-    border-radius: 0 10px 10px 0;
+    border-radius: 10px 10px 10px 10px;
+    margin-left: 1%;
 }
 .project-list {
     margin-bottom: 20px;
@@ -87,10 +97,11 @@ button {
     width: 100%;
 }
 .todo-pane {
-    width: 70%;
+    width: 69%;
+    margin-right: 1%;
     background-color: color.$bg-3;
     border: 1px solid color.$tt;
-    border-radius: 10px 0 0 10px;
+    border-radius: 10px 10px 10px 10px;
     justify-content: center;
 }
 .todo-list {
