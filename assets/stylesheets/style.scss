@@ -1,18 +1,21 @@
 @use 'reset';
 @use 'font';
 @use 'color';
+* {
+    box-sizing: border-box;
+}
 html, body {
     height: 100%;
     margin: 0;
     background-color: color.$bg-4;
-    color: white;
+    color: #404040;
     font-family: 'Roboto', sans-serif;
 }
 header {
-    background-color: color.$bg-3;
+    background-color: color.$bg-4;
 }
 footer {
-    background-color: color.$bg-3;
+    background-color: color.$bg-4;
     text-align: center;
     width: 100%;
 }
@@ -21,7 +24,14 @@ img {
     max-height: 100%;
 }
 a {
-    color: color.$tt-blue;
+    color: color.$tt;
+}
+button {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    color: #404040;
 }
 .img-container {
     display: flex;
@@ -32,7 +42,7 @@ a {
 .logo-text {
     font-size: font.$xxxlarge;
     background-size: 100%;
-    background: linear-gradient(45deg, color.$tt-blue, color.$bg-1);
+    background: linear-gradient(45deg, color.$tt, color.$bg-1);
     background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;
@@ -52,12 +62,20 @@ a {
     display: flex;
     justify-content: space-between;
     flex: 1;
-    background-color: red;
+    background-color: color.$bg-4;
 }
 .project-pane {
     width: 29%;
     height: 100%;
-    background-color: color.$bg-2;
+    background-color: color.$bg-3;
+    border: 1px solid color.$tt;
+    border-radius: 0 10px 10px 0;
+}
+.project-list {
+    margin-bottom: 20px;
+}
+.project {
+    display: flex;
 }
 .project-header {
     font-size: font.$xxlarge;
@@ -65,19 +83,35 @@ a {
 .project-title {
     font-size: font.$xlarge;
 }
+.project-btn {
+    width: 100%;
+}
 .todo-pane {
     width: 70%;
-    background-color: color.$bg-2;
+    background-color: color.$bg-3;
+    border: 1px solid color.$tt;
+    border-radius: 10px 0 0 10px;
+    justify-content: center;
+}
+.todo-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .todo {
     display: flex;
+    border: 1px solid color.$tt;
+    border-radius: 10px 10px 10px 10px;
+    background-color: color.$bg-3;
+    align-items: center;
+    justify-content: space-between;
+    color: #404040;
+    width: 98%;
+    margin-top: 5px;
 }
 .todo-title {
     font-size: font.$large;
-}
-.todo-priority {
-    background-color: color.$hp;
-    width: 10px;
 }
 #githubIcon {
     width: 20px;
