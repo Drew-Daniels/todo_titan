@@ -276,6 +276,7 @@ input {
 
 .todo {
   display: flex;
+  flex-direction: column;
   border: 0.06em solid #609931;
   border-radius: 1em;
   background-color: #F9FDF6;
@@ -292,6 +293,16 @@ input {
   display: flex;
   align-items: center;
   padding-left: 1em;
+}
+
+.todo-line-1 {
+  display: flex;
+  width: 100%;
+}
+
+.todo-line-2 {
+  padding: 1em 0 0 4em;
+  width: 100%;
 }
 
 .todo-col-1 {
@@ -317,6 +328,11 @@ input {
 
 .todo-checkbox {
   flex: 0 0 4em;
+}
+
+.task {
+  display: flex;
+  align-items: center;
 }
 
 #githubIcon {
