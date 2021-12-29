@@ -161,7 +161,7 @@
                             <div class="todo-line-2">
                                 <ul class="task-list">
                                     <li class="task">
-                                        <button>
+                                        <button class="task-checkbox">
                                             <img src="assets/icons/task-incomplete-icon.svg" alt="">
                                         </button>
                                         <span>
@@ -169,11 +169,11 @@
                                         </span>
                                     </li>
                                     <li class="task">
-                                        <button>
+                                        <button class="task-checkbox">
                                             <img src="assets/icons/task-incomplete-icon.svg" alt="">
                                         </button>
                                         <span>
-                                            This is my second task
+                                            This is my second task and it's a really long task you have no idea. Like it's crazy long and it's going to take a really long time, maybe forever.
                                         </span>
                                     </li>
                                 </ul>
@@ -214,7 +214,7 @@
                             <div class="todo-line-2 hide">
                                 <ul class="task-list">
                                     <li class="task">
-                                        <button>
+                                        <button class="task-checkbox">
                                             <img src="assets/icons/task-incomplete-icon.svg" alt="">
                                         </button>
                                         <span>
@@ -222,7 +222,7 @@
                                         </span>
                                     </li>
                                     <li class="task">
-                                        <button>
+                                        <button class="task-checkbox">
                                             <img src="assets/icons/task-incomplete-icon.svg" alt="">
                                         </button>
                                         <span>
@@ -265,7 +265,7 @@
                             <div class="todo-line-2">
                                 <ul class="task-list">
                                     <li class="task">
-                                        <button>
+                                        <button class="task-checkbox">
                                             <img src="assets/icons/task-incomplete-icon.svg" alt="">
                                         </button>
                                         <span>
@@ -273,7 +273,7 @@
                                         </span>
                                     </li>
                                     <li class="task">
-                                        <button>
+                                        <button class="task-checkbox">
                                             <img src="assets/icons/task-incomplete-icon.svg" alt="">
                                         </button>
                                         <span>
@@ -287,7 +287,8 @@
                 </div>
                 <div class="project-edit-pane hide">
                     <form action="">
-                        <label for="project-title" class="fancy-header">Project Title:</label>
+                        <span class="fancy-header">Edit Project</span>
+                        <label for="project-title">Project Title:</label>
                         <input type="text" id="project-title" name="project-title" value="Current Project Name">
                         <div class="submission-container">
                             <button class="submit-changes-btn fancy-btn">
@@ -296,34 +297,67 @@
                         </div>
                     </form>
                 </div>
-                <div class="todo-edit-pane hide">
+                <div class="todo-edit-pane">
                     <form action="">
-                        <label for="todo-title" class="fancy-header">Todo Title:</label>
-                        <input type="text" id="todo-title" name="todo-title" value="Current Todo Name">
-                        <label for="todo-due-date" class="fancy-header">Todo Due Date:</label>
-                        <input type="date" id="todo-due-date" name="todo-due-date" value="2021-12-09">
-                        <div>
-                            <input type="radio" id="priority-level-1" name="priority-level" value="high-priority">
-                            <label for="priority-level-1">High</label>
-
-                            <input type="radio" id="priority-level-2" name="priority-level" value="medium-priority">
-                            <label for="priority-level-2">Medium</label>
-
-                            <input type="radio" id="priority-level-3" name="priority-level" value="low-priority">
-                            <label for="priority-level-3">Low</label>
+                        <span class="fancy-header">Edit Todo</span>
+                        <div class="form-section">
+                            <label for="todo-title">Todo Title:</label>
+                            <input type="text" id="todo-title" name="todo-title" value="Current Todo Name">
                         </div>
-                        <div>
-                            Tasks
-                            <!-- Tasks
+                        <div class="form-section">
+                            <label for="todo-due-date">Due Date:</label>
+                            <input type="date" id="todo-due-date" name="todo-due-date" value="2021-12-09">
+                        </div>
+                        <div class="form-section">
+                            <span>Priority:</span>
+                            <div class="priority-level-container">
+                                <div class="priority-level-line">
+                                    <input type="radio" id="priority-level-1" name="priority-level" value="high-priority">
+                                    <label for="priority-level-1">High</label>
+                                </div>
+                                <div class="priority-level-line">
+                                    <input type="radio" id="priority-level-2" name="priority-level" value="medium-priority">
+                                    <label for="priority-level-2">Medium</label>
+                                </div>
+                                <div class="priority-level-line">
+                                    <input type="radio" id="priority-level-3" name="priority-level" value="low-priority">
+                                    <label for="priority-level-3">Low</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <span>Tasks</span>
                             <ul class="task-list">
-                                <li>
-                                    <img src="assets/icons/todo-incomplete-icon.svg" alt="">
-                                    <span>First Task</span>
+                                <li class="task">
+                                    <button class="task-checkbox">
+                                        <img src="assets/icons/task-incomplete-icon.svg" alt="">
+                                    </button>
+                                    <input type="text" value="First task" name="tasks">
+                                    <button>
+                                        <img src="assets/icons/task-delete-icon.svg" alt="">
+                                    </button>
                                 </li>
-                            </ul> -->
+                                <li class="task">
+                                    <button class="task-checkbox">
+                                        <img src="assets/icons/task-incomplete-icon.svg" alt="">
+                                    </button>
+                                    <input type="text" value="This is my second task and it's a really long task you have no idea. Like it's crazy long and it's going to take a really long time, maybe forever." name="tasks">
+                                    <button>
+                                        <img src="assets/icons/task-delete-icon.svg" alt="">
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
-                        <label for="todo-notes" class="fancy-header">Notes</label>
-                        <textarea name="todo-notes" id="todo-notes" cols="30" rows="10">These are some prepopulated notes for this todo</textarea>
+                        <div class="form-section">
+                            <button class="fancy-btn">
+                                <img src="assets/icons/task-add-icon.svg" alt="">
+                                <span>Add a Task</span>
+                            </button>
+                        </div>
+                        <div class="form-section">
+                            <label for="todo-notes">Notes:</label>
+                            <textarea name="todo-notes" id="todo-notes" cols="30" rows="10">These are some prepopulated notes for this todo</textarea>
+                        </div>
                         <div class="submission-container">
                             <button class="submit-changes-btn fancy-btn">
                                 <img src="assets/icons/submit-icon.svg" alt="">

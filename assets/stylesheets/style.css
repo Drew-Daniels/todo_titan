@@ -109,8 +109,14 @@ form {
   padding-bottom: 1em;
 }
 
-input {
-  margin: 1em 1em 0 1em;
+.form-section {
+  margin-bottom: 2em;
+  display: flex;
+}
+
+textarea {
+  resize: none;
+  display: block;
 }
 
 .submission-container {
@@ -174,7 +180,7 @@ input {
 }
 
 .project-pane {
-  width: 28%;
+  flex-basis: 28%;
   background-color: #F9FDF6;
   border: 0.06em solid #609931;
   border-radius: 1em 1em 1em 1em;
@@ -242,13 +248,17 @@ input {
 }
 
 .todo-pane {
-  width: 69%;
   margin-right: 1em;
   background-color: #B6E394;
   border: 0.06em solid #609931;
   border-radius: 1em;
   display: flex;
+  flex-basis: 69%;
   flex-direction: column;
+}
+
+.project-edit-pane, .todo-edit-pane {
+  flex-basis: 28%;
 }
 
 .todo-options-bar {
@@ -336,9 +346,18 @@ input {
   flex: 0 0 4em;
 }
 
+.task-checkbox {
+  flex: 0 0 3em;
+}
+
 .task {
   display: flex;
   align-items: center;
+}
+
+.priority-level-container {
+  display: flex;
+  flex-direction: column;
 }
 
 #githubIcon {
