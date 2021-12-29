@@ -11,6 +11,9 @@ html, body {
     color: #404040;
     font-family: 'Roboto', sans-serif;
 }
+input, select, textarea, button {
+    font-family: inherit;
+}
 header {
     background-color: color.$bg-4;
     display: flex;

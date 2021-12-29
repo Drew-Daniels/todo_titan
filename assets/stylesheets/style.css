@@ -64,6 +64,10 @@ html, body {
   font-family: "Roboto", sans-serif;
 }
 
+input, select, textarea, button {
+  font-family: inherit;
+}
+
 header {
   background-color: #FFFFFF;
   display: flex;
