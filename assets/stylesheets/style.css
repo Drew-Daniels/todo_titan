@@ -97,6 +97,33 @@ button {
   color: #404040;
 }
 
+form {
+  background-color: #F9FDF6;
+  border: 0.06em solid #609931;
+  border-radius: 1em 1em 1em 1em;
+  margin-right: 1em;
+  padding-bottom: 1em;
+}
+
+input {
+  margin: 1em 1em 0 1em;
+}
+
+.submission-container {
+  display: flex;
+  justify-content: center;
+}
+
+.submit-changes-btn {
+  margin-top: 1em;
+}
+
+.fancy-btn {
+  background-color: #B6E394;
+  height: 3em;
+  border-radius: 0.63em;
+}
+
 .img-container {
   display: flex;
 }
@@ -144,7 +171,6 @@ button {
 
 .project-pane {
   width: 28%;
-  height: 100%;
   background-color: #F9FDF6;
   border: 0.06em solid #609931;
   border-radius: 1em 1em 1em 1em;
@@ -155,6 +181,15 @@ button {
 .project-list {
   margin-bottom: 1em;
   padding-left: 1em;
+}
+
+.fancy-header {
+  background-color: #D4F0BE;
+  border-radius: 1em 1em 0 0;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .project-header {
@@ -225,10 +260,7 @@ button {
 }
 
 .option-btn {
-  background-color: #B6E394;
-  height: 3em;
   margin-right: 0.63em;
-  border-radius: 0.63em;
 }
 
 .option-image {

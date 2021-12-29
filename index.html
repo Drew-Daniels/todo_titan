@@ -14,7 +14,7 @@
                 <img class="logo" src="assets/icons/todo-titan-icon.svg" alt="Todo Titan Checkmark Icon">
                 <span class="logo-text">TODO Titan</span>
             </div>
-            <button id="view-projects-btn" class="option-btn">
+            <button id="view-projects-btn" class="option-btn fancy-btn">
                 <span>View Projects</span>
                 <img class="option-image" src="assets/icons/project-list-icon.svg" alt="">
             </button>
@@ -69,7 +69,7 @@
                             </div>
                             <ul class="project-header-options-list">
                                 <li class="project-header-options-list-item">
-                                    <button class="option-btn">
+                                    <button class="option-btn fancy-btn">
                                         <span>Add a New Project</span>
                                         <img class="option-image" src="assets/icons/create-new-project-icon.svg" alt="">
                                     </button>
@@ -102,25 +102,25 @@
                     <div class="todo-options-bar">
                         <ul class="todo-options-list">
                             <li class="todo-options-list-item">
-                                <button class="option-btn">
+                                <button class="option-btn fancy-btn">
                                     <span class="todo-option-text">Add a Todo</span>
                                     <img class="option-image" src="assets/icons/add-todo-icon.svg" alt="">
                                 </button>
                             </li>
                             <li class="todo-options-list-item">
-                                <button class="option-btn">
+                                <button class="option-btn fancy-btn">
                                     <span class="todo-option-text">Hide Complete Todos</span>
                                     <img class="option-image" src="assets/icons/hide-complete-todos-icon.svg" alt="">
                                 </button>
                             </li>
                             <li class="todo-options-list-item">
-                                <button class="option-btn">
+                                <button class="option-btn fancy-btn">
                                     <span class="todo-option-text">Edit This Project</span>
                                     <img class="option-image"src="assets/icons/project-edit-icon.svg" alt="">
                                 </button>
                             </li>
                             <li class="todo-options-list-item">
-                                <button class="option-btn">
+                                <button class="option-btn fancy-btn">
                                     <span class="todo-option-text">Delete This Project</span>
                                     <img class="option-image"src="assets/icons/project-delete-icon.svg" alt="">
                                 </button>
@@ -218,6 +218,54 @@
                             </div>
                         </li>
                     </ul>
+                </div>
+                <div class="project-edit-pane hide">
+                    <form action="">
+                        <label for="project-title" class="fancy-header">Project Title:</label>
+                        <input type="text" id="project-title" name="project-title" value="Current Project Name">
+                        <div class="submission-container">
+                            <button class="submit-changes-btn fancy-btn">
+                                <img src="assets/icons/submit-icon.svg" alt="">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="todo-edit-pane hide">
+                    <form action="">
+                        <label for="todo-title" class="fancy-header">Todo Title:</label>
+                        <input type="text" id="todo-title" name="todo-title" value="Current Todo Name">
+                        <label for="todo-due-date" class="fancy-header">Todo Due Date:</label>
+                        <input type="date" id="todo-due-date" name="todo-due-date" value="2021-12-09">
+                        <div>
+                            <input type="radio" id="priority-level-1" name="priority-level" value="high-priority">
+                            <label for="priority-level-1">High</label>
+
+                            <input type="radio" id="priority-level-2" name="priority-level" value="medium-priority">
+                            <label for="priority-level-2">Medium</label>
+
+                            <input type="radio" id="priority-level-3" name="priority-level" value="low-priority">
+                            <label for="priority-level-3">Low</label>
+                        </div>
+                        <div>
+                            Tasks
+                            <!-- Tasks
+                            <ul class="task-list">
+                                <li>
+                                    <img src="assets/icons/todo-incomplete-icon.svg" alt="">
+                                    <span>First Task</span>
+                                </li>
+                            </ul> -->
+                        </div>
+                        <label for="todo-notes" class="fancy-header">Notes</label>
+                        <textarea name="todo-notes" id="todo-notes" cols="30" rows="10">
+                            These are some prepopulated notes for this todo
+                        </textarea>
+                        <div class="submission-container">
+                            <button class="submit-changes-btn fancy-btn">
+                                <img src="assets/icons/submit-icon.svg" alt="">
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </main>

@@ -39,6 +39,28 @@ button {
     border: none;
     color: #404040;
 }
+form {
+    background-color: color.$bg-3;
+    border: .06em solid color.$tt;
+    border-radius: 1em 1em 1em 1em;
+    margin-right: 1em;
+    padding-bottom: 1em;
+}
+input {
+    margin: 1em 1em 0 1em;
+}
+.submission-container {
+    display: flex;
+    justify-content: center;
+}
+.submit-changes-btn {
+    margin-top: 1em;
+}
+.fancy-btn {
+    background-color: color.$bg-1;
+    height: 3em;
+    border-radius: .63em;
+}
 .img-container {
     display: flex;
 }
@@ -79,7 +101,6 @@ button {
 }
 .project-pane {
     width: 28%;
-    height: 100%;
     background-color: color.$bg-3;
     border: .06em solid color.$tt;
     border-radius: 1em 1em 1em 1em;
@@ -89,6 +110,14 @@ button {
 .project-list {
     margin-bottom: 1em;
     padding-left: 1em;
+}
+.fancy-header {
+    background-color: color.$bg-2;
+    border-radius: 1em 1em 0 0;
+    height: 3em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .project-header {
     background-color: color.$bg-2;
@@ -148,10 +177,7 @@ button {
     align-items: center;
 }
 .option-btn {
-    background-color: color.$bg-1;
-    height: 3em;
     margin-right: .63em;
-    border-radius: .63em;
 }
 .option-image {
     margin-left: .31em;
