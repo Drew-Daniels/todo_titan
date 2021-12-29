@@ -168,16 +168,36 @@ button {
     border-radius: 1em;
     background-color: color.$bg-3;
     align-items: center;
-    justify-content: space-between;
     color: #404040;
     width: 98%;
+    min-height: 3em;
     margin-top: .31em;
+    font-size: font.$small;
+    padding: 1em 0;
+}
+.todo-col-base {
+    display: flex;
+    align-items: center;
+    padding-left: 1em;
+}
+.todo-col-1 {
+    flex: 1 0 33%;
+}
+.todo-col-2 {
+    padding-right: 1em;
+    justify-content: center;
 }
 .todo-title {
     font-size: font.$large;
 }
 .todo-complete {
     text-decoration: line-through;
+}
+.hide {
+    display: none;
+}
+.todo-checkbox {
+    flex: 0 0 4em;
 }
 #githubIcon {
     width: 1.5em;
