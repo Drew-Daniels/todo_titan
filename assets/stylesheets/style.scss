@@ -111,6 +111,9 @@ input {
     margin-bottom: 1em;
     padding-left: 1em;
 }
+.selected {
+    background-color: color.$bg-2;
+}
 .fancy-header {
     background-color: color.$bg-2;
     border-radius: 1em 1em 0 0;
@@ -133,6 +136,7 @@ input {
 }
 .project {
     display: flex;
+    justify-content: space-between;
     margin-top: .5em;
 }
 .project-image {
@@ -141,9 +145,6 @@ input {
 .project-title {
     font-size: font.$large;
 }
-.project-btn {
-    width: 80%;
-}
 .num-todos-container {
     display: flex;
     align-items: center;
@@ -151,9 +152,10 @@ input {
     background: url('../icons/circle-icon.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: 100%;
     font-size: font.$medium;
-    flex-grow: 1;
+    width: 1.5em;
+    margin-right: 1em;
 }
 .todo-pane {
     width: 69%;
