@@ -179,11 +179,11 @@ textarea {
     border: .06em solid color.$tt;
     border-radius: 1em;
     display: flex;
-    flex-basis: 69%;
+    flex: 1 1 69%;
     flex-direction: column;
 }
 .project-edit-pane, .todo-edit-pane {
-    flex-basis: 31%;
+    flex: 1 1 31%;
 }
 .todo-options-bar {
     height: 3em;
