@@ -8,19 +8,19 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
         <link rel="shortcut icon" href="assets/icons/todo-titan-icon.svg">
     </head>
-    <body>
-        <header>
-            <div class="logo-name-container">
-                <img class="logo" src="assets/icons/todo-titan-icon.svg" alt="Todo Titan Checkmark Icon">
-                <span class="logo-text">TODO Titan</span>
-            </div>
-            <button id="view-projects-btn" class="option-btn fancy-btn">
-                <span>View Projects</span>
-                <img class="option-image" src="assets/icons/project-list-icon.svg" alt="">
-            </button>
-        </header>
-        <main class="content-container">
-            <div class="content">
+    <body class="content-container">
+        <div class="content">
+            <header>
+                <div class="logo-name-container">
+                    <img class="logo" src="assets/icons/todo-titan-icon.svg" alt="Todo Titan Checkmark Icon">
+                    <span class="logo-text">TODO Titan</span>
+                </div>
+                <button id="view-projects-btn" class="option-btn fancy-btn">
+                    <span>View Projects</span>
+                    <img class="option-image" src="assets/icons/project-list-icon.svg" alt="">
+                </button>
+            </header>
+            <main>
                 <div class="project-pane">
                     <div class="project-list-container">
                         <div class="project-header">
@@ -288,8 +288,8 @@
                 <div class="project-edit-pane hide">
                     <form action="">
                         <span class="form-header fancy-header">Edit Project</span>
-                        <div class="form-section">
-                            <label for="project-title">Project Title:</label>
+                        <div class="edit-project-title-section form-section">
+                            <label class="project-title-label" for="project-title">Project Title:</label>
                             <input type="text" id="project-title" name="project-title" value="Current Project Name">
                         </div>
                         <div class="submission-container">
@@ -367,13 +367,13 @@
                         </div>
                     </form>
                 </div>
-            </div>
-        </main>
-        <footer>View source code on 
-            <a href="https://github.com/Drew-Daniels/todo2"><img id="githubIcon" src="assets/icons/github-icon.png"></a>
-            <div id="githubProfileLink">
-                Created by <a href="https://github.com/Drew-Daniels">Drew Daniels</a>
-            </div>
-        </footer>
+            </main>
+            <footer>View source code on 
+                <a href="https://github.com/Drew-Daniels/todo2"><img id="githubIcon" src="assets/icons/github-icon.png"></a>
+                <div id="githubProfileLink">
+                    Created by <a href="https://github.com/Drew-Daniels">Drew Daniels</a>
+                </div>
+            </footer>
+        </div>
     </body>
 </html>
