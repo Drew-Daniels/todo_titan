@@ -60,9 +60,6 @@ form {
 .edit-todo-title-section {
     margin-top: 1em;
 }
-input {
-    // margin: 1em 1em 0 1em;
-}
 textarea {
     resize: none;
     display: block;
@@ -199,6 +196,9 @@ textarea {
     width: 100%;
     justify-content: flex-end;
     align-items: center;
+}
+.todo-options-list:first-child {
+    margin-left: 1em;
 }
 .option-btn {
     margin-right: .63em;

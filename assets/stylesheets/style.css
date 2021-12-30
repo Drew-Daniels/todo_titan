@@ -285,6 +285,10 @@ textarea {
   align-items: center;
 }
 
+.todo-options-list:first-child {
+  margin-left: 1em;
+}
+
 .option-btn {
   margin-right: 0.63em;
 }
