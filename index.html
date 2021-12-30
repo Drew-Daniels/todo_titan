@@ -287,9 +287,11 @@
                 </div>
                 <div class="project-edit-pane hide">
                     <form action="">
-                        <span class="fancy-header">Edit Project</span>
-                        <label for="project-title">Project Title:</label>
-                        <input type="text" id="project-title" name="project-title" value="Current Project Name">
+                        <span class="form-header fancy-header">Edit Project</span>
+                        <div class="form-section">
+                            <label for="project-title">Project Title:</label>
+                            <input type="text" id="project-title" name="project-title" value="Current Project Name">
+                        </div>
                         <div class="submission-container">
                             <button class="submit-changes-btn fancy-btn">
                                 <img src="assets/icons/submit-icon.svg" alt="">
@@ -299,17 +301,17 @@
                 </div>
                 <div class="todo-edit-pane">
                     <form action="">
-                        <span class="fancy-header">Edit Todo</span>
-                        <div class="form-section">
-                            <label for="todo-title">Todo Title:</label>
+                        <span class="form-header fancy-header">Edit Todo</span>
+                        <div class="edit-todo-title-section form-section">
+                            <label class="todo-title-label" for="todo-title">Todo Title:</label>
                             <input type="text" id="todo-title" name="todo-title" value="Current Todo Name">
                         </div>
                         <div class="form-section">
-                            <label for="todo-due-date">Due Date:</label>
+                            <label class="todo-due-date-label" for="todo-due-date">Due Date:</label>
                             <input type="date" id="todo-due-date" name="todo-due-date" value="2021-12-09">
                         </div>
                         <div class="form-section">
-                            <span>Priority:</span>
+                            <span class="todo-priority-level-label">Priority:</span>
                             <div class="priority-level-container">
                                 <div class="priority-level-line">
                                     <input type="radio" id="priority-level-1" name="priority-level" value="high-priority">
@@ -326,7 +328,7 @@
                             </div>
                         </div>
                         <div class="form-section">
-                            <span>Tasks</span>
+                            <span class="todo-tasks-label">Tasks:</span>
                             <ul class="task-list">
                                 <li class="task">
                                     <button class="task-checkbox">
@@ -349,7 +351,7 @@
                             </ul>
                         </div>
                         <div class="form-section">
-                            <button class="fancy-btn">
+                            <button id="add-task-btn" class="fancy-btn">
                                 <img src="assets/icons/task-add-icon.svg" alt="">
                                 <span>Add a Task</span>
                             </button>

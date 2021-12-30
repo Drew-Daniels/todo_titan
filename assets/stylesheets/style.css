@@ -109,14 +109,24 @@ form {
   padding-bottom: 1em;
 }
 
+.form-header {
+  padding-left: 1em;
+}
+
 .form-section {
-  margin-bottom: 2em;
+  padding: 0 1em;
+  margin-bottom: 1em;
   display: flex;
+}
+
+.edit-todo-title-section {
+  margin-top: 1em;
 }
 
 textarea {
   resize: none;
   display: block;
+  margin-left: 1em;
 }
 
 .submission-container {
@@ -258,7 +268,7 @@ textarea {
 }
 
 .project-edit-pane, .todo-edit-pane {
-  flex-basis: 28%;
+  flex-basis: 31%;
 }
 
 .todo-options-bar {
@@ -317,7 +327,7 @@ textarea {
 }
 
 .todo-line-2 {
-  padding: 1em 0 0 4em;
+  padding: 1em 13em 0 4em;
   width: 100%;
 }
 
@@ -332,6 +342,22 @@ textarea {
 
 .todo-title {
   font-size: 1.31em;
+}
+
+.todo-title-label {
+  margin-right: 2em;
+}
+
+.todo-due-date-label {
+  margin-right: 2.4em;
+}
+
+.todo-priority-level-label {
+  margin-right: 3em;
+}
+
+.todo-tasks-label {
+  margin-right: 1em;
 }
 
 .todo-complete {
@@ -358,6 +384,13 @@ textarea {
 .priority-level-container {
   display: flex;
   flex-direction: column;
+}
+
+#add-task-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #githubIcon {
