@@ -38,7 +38,37 @@ import todoIncompleteIcon from './icons/todo-incomplete-icon.svg';
 import DOM from './dom';
 
 // Set Constants
-const TITLE = 'Todo Titan'
+const TITLE_TEXT = 'Todo Titan'
+const HTML = DOM.getHTML();
+const HEAD = DOM.getHead();
 
-DOM.addFavicon(todoTitanIcon);
-DOM.addTitle(TITLE);
+// +++++ INITIAL PAGE SETUP +++++
+// === HEAD ===
+const FAVICON = DOM.createFavicon(todoTitanIcon);
+DOM.attach(FAVICON, HEAD);
+const TITLE = DOM.createTitle(TITLE_TEXT);
+DOM.attach(TITLE, HEAD);
+
+// === BODY (Content-Container)===
+const BODY = DOM.getBody();
+DOM.addClasses(BODY, 'content-container');
+DOM.attach(BODY, HTML);
+
+// = CONTENT =
+const CONTENT = DOM.createDiv('content');
+DOM.attach(CONTENT, BODY);
+// Header
+const HEADER = DOM.createHeader();
+DOM.attach(HEADER, CONTENT);
+const LOGO_NAME_CONTAINER = DOM.createDiv('logo-name-container');
+DOM.attach(LOGO_NAME_CONTAINER, HEADER);
+
+// Main
+const MAIN = DOM.createMain()
+DOM.attach(MAIN, CONTENT);
+
+// Footer
+const FOOTER = DOM.createFooter(CONTENT);
+DOM.attach(FOOTER, CONTENT);
+
+
