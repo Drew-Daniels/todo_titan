@@ -1,61 +1,100 @@
 'use strict';
 
 // Create Functions
-function createFavicon(faviconPath) {
+function createFavicon(faviconPath, attachTo) {
     let faviconEl = document.createElement('link');
     faviconEl.setAttribute('rel', 'shortcut icon');
     faviconEl.setAttribute('href', faviconPath);
+    attachTo.appendChild(faviconEl);
     return faviconEl;
 }
-function createTitle(webpagetitle) {
+function createTitle(webpagetitle, attachTo) {
     let titleEl = document.createElement('title');
     titleEl.innerHTML = webpagetitle;
+    attachTo.appendChild(titleEl);
     return titleEl;
 }
-function createHeader() {
+function createHeader(attachTo, ...classes) {
     let headerEl = document.createElement('header');
+    headerEl = classify(headerEl, classes);
+    attachTo.appendChild(headerEl);
     return headerEl;
 }
-function createMain() {
+function createMain(attachTo, ...classes) {
     let mainEl = document.createElement('main');
+    mainEl = classify(mainEl, classes);
+    attachTo.appendChild(mainEl);
     return mainEl;
 }
-function createFooter() {
+function createFooter(attachTo, ...classes) {
     let footerEl = document.createElement('footer');
+    footerEl = classify(footerEl, classes);
+    attachTo.appendChild(footerEl);
     return footerEl;
 }
-function createDiv(...classes) {
+function createDiv(attachTo, ...classes) {
     let divEl = document.createElement('div');
-    if (classes !== 'undefined') {
-        divEl.classList.add(classes);
-    }
+    divEl = classify(divEl, classes);
+    attachTo.appendChild(divEl);
     return divEl;
 }
-function createButton(buttonText, ...classes) {
+function createButton(attachTo, ...classes) {
     let buttonEl = document.createElement('button');
-    buttonEl.innerText = buttonText;
-    if (classes !== 'undefined') {
-        buttonEl.classList.add(classes);
-    }
+    buttonEl = classify(buttonEl, classes);
+    attachTo.appendChild(buttonEl);
     return buttonEl;
 }
-function createImage(src, alt, ...classes) {
+function createImage(attachTo, src, alt, ...classes) {
     let imageEl = document.createElement('img');
     imageEl.src = src;
     imageEl.alt = alt;
-    if (classes !== 'undefined') {
-        imageEl.classList.add(classes);
-    }
+    imageEl = classify(imageEl, classes);
+    attachTo.appendChild(imageEl);
     return imageEl;
 }
-function createSpan(text, ...classes) {
+function createSpan(attachTo, text, ...classes) {
     let spanEl = document.createElement('span');
     spanEl.innerText = text;
-    if (classes !== 'undefined') {
-        spanEl.classList.add(classes);
-    }
+    spanEl = classify(spanEl, classes);
+    attachTo.appendChild(spanEl);
     return spanEl;
 }
+function createAnchor(attachTo, href, ...classes) {
+    let anchorEl = document.createElement('a');
+    anchorEl.href = href;
+    anchorEl = classify(anchorEl, classes);
+    attachTo.appendChild(anchorEl);
+    return anchorEl;
+}
+function createUL(attachTo, ...classes) {
+    let ulEl = document.createElement('ul');
+    ulEl = classify(ulEl, classes);
+    attachTo.appendChild(ulEl);
+    return ulEl;
+}
+function createOL(attachTo, ...classes) {
+    let olEl = document.createElement('ol');
+    olEl = classify(olEl, classes);
+    attachTo.appendChild(olEl);
+    return olEl;
+}
+function createLI(attachTo, ...classes) {
+    let liEl = document.createElement('li');
+    liEl = classify(liEl, classes);
+    attachTo.appendChild(liEl);
+    return liEl;
+}
+function createForm(attachTo, action='', ...classes) {
+    let formEl = document.createElement('form');
+    formEl.action = action;
+    formEl = classify(formEl, classes);
+    attachTo.appendChild(formEl);
+    return formEl;
+}
+// TODO:
+// createInput
+// createLabel
+
 
 // GET Functions - Used to grab nodes that exist by default or have already been created using the functions above
 function getHTML() {
@@ -76,15 +115,24 @@ function addClasses(element, ...classes) {
     element.classList.add(classes);
     return element;
 }
+function classify(element, classes) {
+    if (classes.length !== 0) {
+        element.classList.add(...classes);
+    }
+    return element;
+}
 function attach(element, attachTo) {
     attachTo.appendChild(element);
+}
+function setInnerText(element, text) {
+    element.innerText = text;
 }
 
 // Export
 export default {
     // CREATE functions
-    createFavicon, createTitle, createHeader, createMain, createFooter, createDiv, createButton, createImage, createSpan,
+    createFavicon, createTitle, createHeader, createMain, createFooter, createDiv, createButton, createImage, createSpan, createAnchor, createUL, createOL, createLI, createForm,
     // GET functions
     getHTML, getHead, getBody,
     // HELPER functions
-    addClasses, attach};
+    addClasses, attach, setInnerText};

@@ -38,37 +38,55 @@ import todoIncompleteIcon from './icons/todo-incomplete-icon.svg';
 import DOM from './dom';
 
 // Set Constants
-const TITLE_TEXT = 'Todo Titan'
+const TITLE_TEXT = 'Todo Titan';
+const LOGO_TEXT = 'TODO Titan';
+const FOOTER_TEXT = 'View Source code on';
+const GITHUB_PROFILE_TEXT = 'Created by';
+const GITHUB_PROJECT_URL = 'https://github.com/Drew-Daniels/todo_titan';
+const GITHUB_PROFILE_URL = 'https://github.com/Drew-Daniels';
+
 const HTML = DOM.getHTML();
 const HEAD = DOM.getHead();
 
 // +++++ INITIAL PAGE SETUP +++++
 // === HEAD ===
-const FAVICON = DOM.createFavicon(todoTitanIcon);
-DOM.attach(FAVICON, HEAD);
-const TITLE = DOM.createTitle(TITLE_TEXT);
-DOM.attach(TITLE, HEAD);
+const FAVICON = DOM.createFavicon(todoTitanIcon, HEAD);
+const TITLE = DOM.createTitle(TITLE_TEXT, HEAD);
 
-// === BODY (Content-Container)===
+// === BODY (Content-Container) ===
 const BODY = DOM.getBody();
 DOM.addClasses(BODY, 'content-container');
-DOM.attach(BODY, HTML);
 
 // = CONTENT =
-const CONTENT = DOM.createDiv('content');
-DOM.attach(CONTENT, BODY);
+const CONTENT = DOM.createDiv(BODY, 'content');
+
 // Header
-const HEADER = DOM.createHeader();
-DOM.attach(HEADER, CONTENT);
-const LOGO_NAME_CONTAINER = DOM.createDiv('logo-name-container');
-DOM.attach(LOGO_NAME_CONTAINER, HEADER);
+const HEADER = DOM.createHeader(CONTENT);
+
+const LOGO_NAME_CONTAINER = DOM.createDiv(HEADER, 'logo-name-container');
+const LOGO_EL = DOM.createImage(LOGO_NAME_CONTAINER, todoTitanIcon, 'Todo Titan Checkmark Icon', 'logo')
+const LOGO_TEXT_EL = DOM.createSpan(LOGO_NAME_CONTAINER, LOGO_TEXT, "logo-text");
+
+const VIEW_PROJECTS_BUTTON = DOM.createButton(HEADER, 'option-btn', 'fancy-btn')
+VIEW_PROJECTS_BUTTON.id = 'view-projects-btn';
+const VIEW_PROJECTS_BUTTON_SPAN = DOM.createSpan(VIEW_PROJECTS_BUTTON, 'View Projects');
+const VIEW_PROJECTS_BUTTON_IMAGE = DOM.createImage(VIEW_PROJECTS_BUTTON, projectListIcon);
+
 
 // Main
-const MAIN = DOM.createMain()
-DOM.attach(MAIN, CONTENT);
+const MAIN = DOM.createMain(CONTENT);
 
 // Footer
 const FOOTER = DOM.createFooter(CONTENT);
-DOM.attach(FOOTER, CONTENT);
+DOM.setInnerText(FOOTER, FOOTER_TEXT);
+
+const GITHUB_PROJECT_ANCHOR = DOM.createAnchor(FOOTER, GITHUB_PROJECT_URL);
+const GITHUB_IMG = DOM.createImage(GITHUB_PROJECT_ANCHOR, githubIcon, 'Github Icon', 'github-icon')
+
+const GITHUB_PROFILE_CONTAINER = DOM.createDiv(FOOTER, 'github-profile-container');
+GITHUB_PROFILE_CONTAINER.innerText = 'Created by';
+
+const GITHUB_PROFILE_ANCHOR = DOM.createAnchor(GITHUB_PROFILE_CONTAINER, GITHUB_PROFILE_URL, 'github-profile-link');
+GITHUB_PROFILE_ANCHOR.innerText = 'Drew Daniels';
 
 
