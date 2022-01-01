@@ -73,8 +73,54 @@ const VIEW_PROJECTS_BUTTON_SPAN = DOM.createSpan(VIEW_PROJECTS_BUTTON, 'View Pro
 const VIEW_PROJECTS_BUTTON_IMAGE = DOM.createImage(VIEW_PROJECTS_BUTTON, projectListIcon);
 
 
-// Main
+// ++ Main ++
 const MAIN = DOM.createMain(CONTENT);
+// Project Pane
+const PROJECT_PANE      = DOM.createDiv(MAIN, 'project-pane');
+    // Default Project List for 'Time-Sensitive' Todos
+    const PROJECT_LIST_CONTAINER_TS = DOM.createDiv(PROJECT_PANE, 'project-list-container');
+        const TS_PROJECT_LIST_HEADER = DOM.createDiv(PROJECT_LIST_CONTAINER_TS, 'project-header');
+            const TS_PROJECT_LIST_HEADER_MAIN = DOM.createDiv(TS_PROJECT_LIST_HEADER, 'project-header-main');
+                const TS_PROJECT_LIST_ICON  = DOM.createImage(TS_PROJECT_LIST_HEADER_MAIN, timeSensitiveTaskIcon, 'Time Sensitive Task Icon');
+                const TS_PROJECT_LIST_TITLE = DOM.createSpan(TS_PROJECT_LIST_HEADER_MAIN, 'Overview');
+        const TS_PROJECT_LIST_UL     = DOM.createUL(PROJECT_LIST_CONTAINER_TS, 'project-list');
+            const TS_PROJECT_LIST_TD_LI = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
+                const TS_PROJECT_LIST_TD_LI_BTN                 = DOM.createButton(TS_PROJECT_LIST_TD_LI, 'project-btn');
+                    const TS_PROJECT_LIST_TD_LI_BTN_IMG  = DOM.createImage(TS_PROJECT_LIST_TD_LI_BTN, todayIcon, 'Today Icon', 'project-image');
+                    const TS_PROJECT_LIST_TD_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_TD_LI_BTN, 'Today', 'project-title');
+                const TS_PROJECT_LIST_TD_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_TD_LI, 'num-todos-container');
+                    const TS_PROJECT_LIST_TD_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_TD_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
+            const TS_PROJECT_LIST_TW_LI = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
+                const TS_PROJECT_LIST_TW_LI_BTN                 = DOM.createButton(TS_PROJECT_LIST_TW_LI, 'project-btn');
+                    const TS_PROJECT_LIST_TW_LI_BTN_IMG  = DOM.createImage(TS_PROJECT_LIST_TW_LI_BTN, thisWeekIcon, 'This Week Icon', 'project-image');
+                    const TS_PROJECT_LIST_TW_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_TW_LI_BTN, 'This Week', 'project-title');
+                const TS_PROJECT_LIST_TW_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_TW_LI, 'num-todos-container');
+                    const TS_PROJECT_LIST_TW_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_TW_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
+            const TS_PROJECT_LIST_ALL_LI          = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
+                const TS_PROJECT_LIST_ALL_LI_BTN                 = DOM.createButton(TS_PROJECT_LIST_ALL_LI, 'project-btn');
+                    const TS_PROJECT_LIST_ALL_LI_BTN_IMG  = DOM.createImage(TS_PROJECT_LIST_ALL_LI_BTN, allTimeIcon, 'All Time Icon', 'project-image');
+                    const TS_PROJECT_LIST_ALL_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_ALL_LI_BTN, 'All', 'project-title');
+                const TS_PROJECT_LIST_ALL_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_ALL_LI, 'num-todos-container');
+                    const TS_PROJECT_LIST_ALL_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_ALL_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
+    // Custom Project List for 'User-Specific' Todos
+    const PROJECT_LIST_CONTAINER_US = DOM.createDiv(PROJECT_PANE, 'project-list-container');
+        const US_PROJECT_LIST_HEADER = DOM.createDiv(PROJECT_LIST_CONTAINER_US, 'project-header');
+            const US_PROJECT_LIST_HEADER_MAIN = DOM.createDiv(US_PROJECT_LIST_HEADER, 'project-header-main');
+                const US_PROJECT_LIST_ICON  = DOM.createImage(US_PROJECT_LIST_HEADER_MAIN, myProjectsIcon, 'My Projects Icon');
+                const US_PROJECT_LIST_TITLE = DOM.createSpan(US_PROJECT_LIST_HEADER_MAIN, 'My Projects');
+        const UL_PROJECT_LIST_UL     = DOM.createUL(PROJECT_LIST_CONTAINER_US, 'project-list');
+            // Figure out a naming convention for these custom project elements
+
+
+const TODO_PANE         = DOM.createDiv(MAIN, 'todo-pane');
+const PROJECT_EDIT_PANE = DOM.createDiv(MAIN, 'project-edit-pane', 'hide');
+const TODO_EDIT_PANE    = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
+
+
+
+
+
+
 
 // Footer
 const FOOTER = DOM.createFooter(CONTENT);
