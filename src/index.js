@@ -114,7 +114,6 @@ const US_PROJECT_LIST_ICON = DOM.createImage(US_PROJECT_LIST_HEADER_MAIN, myProj
 const US_PROJECT_LIST_TITLE = DOM.createSpan(US_PROJECT_LIST_HEADER_MAIN, 'My Projects');
 const UL_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_US, 'project-list');
 
-
 // +++++ TODO PANE +++++
 const TODO_PANE = DOM.createDiv(MAIN, 'todo-pane');
 // TODO OPTIONS BAR
