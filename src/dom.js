@@ -91,10 +91,24 @@ function createForm(attachTo, action='', ...classes) {
     attachTo.appendChild(formEl);
     return formEl;
 }
-// TODO:
-// createInput
-// createLabel
+function createInput(attachTo, type, name, value, ...classes) {
+    let inputEl = document.createElement('input');
+    inputEl.type = type;
+    inputEl.name = name;
+    inputEl.value = value;
+    inputEl = classify(inputEl, classes);
+    attachTo.appendChild(inputEl);
+    return inputEl;
+}
 
+function createLabel(attachTo, labelFor, labelText, ...classes) {
+    let labelEl = document.createElement('label');
+    labelEl.innerText = labelText;
+    labelEl.htmlFor = labelFor;
+    labelEl = classify(labelEl, classes);
+    attachTo.appendChild(labelEl);
+    return labelEl;
+}
 
 // GET Functions - Used to grab nodes that exist by default or have already been created using the functions above
 function getHTML() {
@@ -131,7 +145,7 @@ function setInnerText(element, text) {
 // Export
 export default {
     // CREATE functions
-    createFavicon, createTitle, createHeader, createMain, createFooter, createDiv, createButton, createImage, createSpan, createAnchor, createUL, createOL, createLI, createForm,
+    createFavicon, createTitle, createHeader, createMain, createFooter, createDiv, createButton, createImage, createSpan, createAnchor, createUL, createOL, createLI, createForm, createLabel, createInput,
     // GET functions
     getHTML, getHead, getBody,
     // HELPER functions

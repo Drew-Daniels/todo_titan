@@ -141,11 +141,16 @@ const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_IMG = DOM.createImage(TODO_OPTIONS_LI_
 const TODO_LIST        = DOM.createUL(TODO_PANE, 'todo-list');
 
 // PROJECT EDIT PANE
-const PROJECT_EDIT_PANE = DOM.createDiv(MAIN, 'project-edit-pane');
+const PROJECT_EDIT_PANE = DOM.createDiv(MAIN, 'project-edit-pane', 'hide');
 const PROJECT_EDIT_PANE_FORM = DOM.createForm(PROJECT_EDIT_PANE);
 const PROJECT_EDIT_PANE_FORM_HEADER = DOM.createSpan(PROJECT_EDIT_PANE_FORM, 'Edit Project', 'form-header', 'fancy-header');
 const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'edit-project-title-section', 'form-section');
+const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_LABEL = DOM.createLabel(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION, 'project-title', 'Project Title:','project-title-label');
+const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT = DOM.createInput(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION, 'text', 'project-title', 'Current Project Name');
+
 const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'submission-container');
+const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN = DOM.createButton(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER, 'submit-changes-btn', 'fancy-btn');
+const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN_IMG = DOM.createImage(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitIcon);
 
 // TODO EDIT PANE
 const TODO_EDIT_PANE    = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
