@@ -109,6 +109,16 @@ function createLabel(attachTo, labelFor, labelText, ...classes) {
     attachTo.appendChild(labelEl);
     return labelEl;
 }
+function createTextArea(attachTo, name, cols='30', rows='10', text='Default Text', ...classes) {
+    let textAreaEl = document.createElement('textarea');
+    textAreaEl.name = name;
+    textAreaEl.cols = cols;
+    textAreaEl.rows = rows;
+    textAreaEl.innerText = text;
+    textAreaEl = classify(textAreaEl, classes);
+    attachTo.appendChild(textAreaEl);
+    return textAreaEl;
+}
 
 // GET Functions - Used to grab nodes that exist by default or have already been created using the functions above
 function getHTML() {
@@ -145,7 +155,7 @@ function setInnerText(element, text) {
 // Export
 export default {
     // CREATE functions
-    createFavicon, createTitle, createHeader, createMain, createFooter, createDiv, createButton, createImage, createSpan, createAnchor, createUL, createOL, createLI, createForm, createLabel, createInput,
+    createFavicon, createTitle, createHeader, createMain, createFooter, createDiv, createButton, createImage, createSpan, createAnchor, createUL, createOL, createLI, createForm, createLabel, createInput, createTextArea,
     // GET functions
     getHTML, getHead, getBody,
     // HELPER functions

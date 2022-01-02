@@ -403,7 +403,7 @@ textarea {
   flex-direction: column;
 }
 
-#add-task-btn {
+.add-task-btn {
   width: 100%;
   display: flex;
   justify-content: center;
