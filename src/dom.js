@@ -214,20 +214,25 @@ function drawTodo(attachTo, todo) {
     let taskList = createUL(line2, 'task-list');
     let tasks = todo.getTasks();
     tasks.forEach(task => {
-        let taskEl = createLI(taskList, 'task');
-        let taskCheckbox = createButton(taskEl, 'task-checkbox');
-        let taskImg;
-        if (task.isComplete === false) {
-            taskImg = taskIncompleteIcon;
-        } else {
-            taskImg = taskCompleteIcon;
-        }
-        let taskCheckboxImg = createImage(taskCheckbox, taskImg);
-        let taskTitle = createSpan(taskEl, task.getTitle());
+        drawTask(taskList, task);
     });
 
     attachTo.appendChild(todoEl);
     return todoEl;
+}
+
+function drawTask(attachTo, task) {
+    let taskEl = createLI(attachTo, 'task');
+    let taskCheckbox = createButton(taskEl, 'task-checkbox');
+    let taskImg;
+    if (task.isComplete === false) {
+        taskImg = taskIncompleteIcon;
+    } else {
+        taskImg = taskCompleteIcon;
+    }
+    let taskCheckboxImg = createImage(taskCheckbox, taskImg);
+    let taskTitle = createSpan(taskEl, task.getTitle());
+    return taskEl;
 }
 
 // GET Functions - Used to grab nodes that exist by default or have already been created using the functions above
