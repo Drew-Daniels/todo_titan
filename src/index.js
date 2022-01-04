@@ -250,10 +250,72 @@ GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 
 // UI Functions
-const testProject = new App.Project('First project', []);
-const testTask = new App.Task('First task', false);
-const testTodo = new App.Todo('First Todo','low', '2021-12-31', false, [testTask], 'Some random notes', );
 
+// Update Functions
+function fillProjectForm(project) {
+    let title = project.getTitle();
+    let titleEl = PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT;
 
-DOM.drawProject(US_PROJECT_LIST_UL, testProject, projectListIcon);
-DOM.drawTodo(TODO_LIST, testTodo);
+    titleEl.value = title;
+}
+
+function fillTodoForm(todo) {
+    // attribute values
+    let title = todo.getTitle();
+    let dueDate = todo.getDueDate();
+    let priority = todo.getPriority();
+    let tasks = todo.getTasks();
+    let notes = todo.getNotes();
+
+    // element references
+    let titleEl = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT;
+    let dueDateEl = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT;
+    let priorityEl;
+    switch (priority) {
+        case 'low':
+            priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3_INPUT;
+            break;
+        case 'medium':
+            priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2_INPUT;
+            break;
+        case 'high':
+            priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_INPUT;
+            break;
+    }
+    let tasksList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
+    let notesEl = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA;
+
+    // assignment
+    titleEl.value = title;
+    dueDateEl.value = dueDate;
+    tasks.forEach(task => {
+        let taskTitle = task.getTitle();
+        let taskLI = DOM.createLI(tasksList, 'task');
+        let taskBtn = DOM.createButton(taskLI, 'task-checkbox');
+        let taskImg = DOM.createImage(taskBtn, taskIncompleteIcon);
+        let taskInput = DOM.createInput(taskLI,'text', 'tasks', taskTitle);
+        let taskDeleteBtn = DOM.createButton(taskLI);
+        let taskDeleteBtnImg = DOM.createImage(taskDeleteBtn, taskDeleteIcon, 'Task Delete Icon');
+    })
+    priorityEl.checked=true;
+    notesEl.value = notes;
+
+}
+
+// TEST values
+const testProject1 = new App.Project('First project', []);
+const testTask1 = new App.Task('First task', false);
+const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false, [testTask1], 'Some random notes',testProject1);
+
+const testProject2 = new App.Project('Cooking Wishlist', []);
+const testTask2 = new App.Task('Get recommendations from Hayden', false);
+const testTask3 = new App.Task('Research maintenance required', false);
+const testTask4 = new App.Task('Get more counterspace', false);
+
+const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false, [testTask2, testTask3, testTask4], 'All this stuff is unnecessary', testProject2);
+
+DOM.drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
+DOM.drawTodo(TODO_LIST, testTodo1);
+
+fillProjectForm(testProject2);
+fillTodoForm(testTodo2);

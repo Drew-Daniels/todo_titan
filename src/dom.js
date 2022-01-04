@@ -71,6 +71,7 @@ function createDiv(attachTo, ...classes) {
 }
 function createButton(attachTo, ...classes) {
     let buttonEl = document.createElement('button');
+    buttonEl.type = 'button';
     buttonEl = classify(buttonEl, classes);
     attachTo.appendChild(buttonEl);
     return buttonEl;
