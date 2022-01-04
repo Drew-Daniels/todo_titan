@@ -1,5 +1,42 @@
 'use strict';
 
+// TODO:
+// using draw/erase naming convention to denote the dom-changes that these functions will initiate when provided an object
+// such as a task, todo, or project
+
+// drawTodo
+// eraseTodo
+// drawProject
+// eraseProject
+// drawTask
+// eraseTask
+// drawTodoCt
+
+// drawTodos
+// eraseTodos
+// drawTasks
+// drawProjects
+// updateProjectForm
+// updateTodoForm
+    // updateTodoTitle
+    // updateTodoDueDate
+    // updateTodoPriority
+    // updateTodoTasks
+    // updateTodoNotes
+
+// Option form actions
+// hideCompleteTodos
+// displayCompleteTodos
+
+// unhideProjectEditForm
+// hideProjectEditForm
+
+// unhideTodoEditForm
+// hideTodoEditForm
+
+// closeProjectEditForm
+// closeTodoEditForm
+
 // Import styling
 import './stylesheets/style.css';
 
@@ -36,6 +73,7 @@ import todoIncompleteIcon from './icons/todo-incomplete-icon.svg';
 
 // Import DOM Elements
 import DOM from './dom';
+import App from './app';
 
 // Set Constants
 const TITLE_TEXT = 'Todo Titan';
@@ -112,7 +150,7 @@ const US_PROJECT_LIST_HEADER = DOM.createDiv(PROJECT_LIST_CONTAINER_US, 'project
 const US_PROJECT_LIST_HEADER_MAIN = DOM.createDiv(US_PROJECT_LIST_HEADER, 'project-header-main');
 const US_PROJECT_LIST_ICON = DOM.createImage(US_PROJECT_LIST_HEADER_MAIN, myProjectsIcon, 'My Projects Icon');
 const US_PROJECT_LIST_TITLE = DOM.createSpan(US_PROJECT_LIST_HEADER_MAIN, 'My Projects');
-const UL_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_US, 'project-list');
+const US_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_US, 'project-list');
 
 // +++++ TODO PANE +++++
 const TODO_PANE = DOM.createDiv(MAIN, 'todo-pane');
@@ -211,3 +249,11 @@ const GITHUB_PROFILE_ANCHOR = DOM.createAnchor(GITHUB_PROFILE_CONTAINER, GITHUB_
 GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 
+// UI Functions
+const testProject = new App.Project('First project', []);
+const testTask = new App.Task('First task', false);
+const testTodo = new App.Todo('First Todo','low', '2021-12-31', false, [testTask], 'Some random notes', );
+
+
+DOM.drawProject(US_PROJECT_LIST_UL, testProject, projectListIcon);
+DOM.drawTodo(TODO_LIST, testTodo);
