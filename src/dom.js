@@ -161,7 +161,7 @@ function drawProject(attachTo, project) {
     let projectElTitle = createSpan(projectElBtn, project.getTitle(),'project-title');
     let numTodosContainer = createDiv(projectEl, 'num-todos-container');
     let numTodos = createSpan(numTodosContainer, project.getCtTodos(), 'num-todos');
-
+    
     attachTo.appendChild(projectEl);
     return
 }
@@ -179,6 +179,7 @@ function drawTodo(attachTo, todo) {
         todoImg = todoIncompleteIcon;
     } else {
         todoImg = todoCompleteIcon;
+        todoEl = classify(todoEl, ['todo-complete']);
     }
     let checkboxBtnImg = createImage(todoCheckBoxBtn, todoImg);
     let todoTitle = createSpan(col1, todo.getTitle(), 'todo-title');
@@ -221,7 +222,6 @@ function drawTodo(attachTo, todo) {
     attachTo.appendChild(todoEl);
     return todoEl;
 }
-
 function drawTask(attachTo, task) {
     let taskEl = createLI(attachTo, 'task');
     let taskCheckbox = createButton(taskEl, 'task-checkbox');
@@ -258,6 +258,12 @@ function addClasses(element, ...classes) {
 function classify(element, classes) {
     if (classes.length !== 0) {
         element.classList.add(...classes);
+    }
+    return element;
+}
+function declassify(element, classToRemove) {
+    if (classes.length !== 0) {
+        element.classList.remove(classToRemove);
     }
     return element;
 }

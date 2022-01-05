@@ -250,6 +250,30 @@ GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 
 // UI Functions
+function applyBtnFunction(btn, fn) {
+    btn.onClick = fn;
+}
+function drawTaskEdit(task=undefined) {
+    let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
+    let title;
+    let taskImg;
+    if (task === undefined) {
+        title = 'New Task';
+    } else {
+        title = task.getTitle();
+        if (task.isComplete === true) {
+            taskImg = taskCompleteIcon;
+        } else {
+            taskImg = taskIncompleteIcon;
+        }
+    }
+    let LI = DOM.createLI(taskList, 'task');
+    let btn = DOM.createButton(LI, 'task-checkbox');
+    let img = DOM.createImage(btn, taskImg);
+    let input = DOM.createInput(LI,'text', 'tasks', title);
+    let deleteBtn = DOM.createButton(LI);
+    let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
+}
 
 // Update Functions
 function fillProjectForm(project) {
@@ -282,40 +306,45 @@ function fillTodoForm(todo) {
             priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_INPUT;
             break;
     }
-    let tasksList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
     let notesEl = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA;
 
     // assignment
     titleEl.value = title;
     dueDateEl.value = dueDate;
-    tasks.forEach(task => {
-        let taskTitle = task.getTitle();
-        let taskLI = DOM.createLI(tasksList, 'task');
-        let taskBtn = DOM.createButton(taskLI, 'task-checkbox');
-        let taskImg = DOM.createImage(taskBtn, taskIncompleteIcon);
-        let taskInput = DOM.createInput(taskLI,'text', 'tasks', taskTitle);
-        let taskDeleteBtn = DOM.createButton(taskLI);
-        let taskDeleteBtnImg = DOM.createImage(taskDeleteBtn, taskDeleteIcon, 'Task Delete Icon');
-    })
+    tasks.forEach(task => drawTaskEdit(task))
     priorityEl.checked=true;
     notesEl.value = notes;
 
 }
 
 // TEST values
-const testProject1 = new App.Project('First project', []);
-const testTask1 = new App.Task('First task', false);
-const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false, [testTask1], 'Some random notes',testProject1);
+const testProject1 = new App.Project('First project');
+const testProject2 = new App.Project('Cooking Wishlist');
 
-const testProject2 = new App.Project('Cooking Wishlist', []);
+const testTask1 = new App.Task('First task', false);
+const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false);
+const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false);
+const testTodo3 = new App.Todo('Buy rice cooker', 'high', '2021-12-31', true);
+
 const testTask2 = new App.Task('Get recommendations from Hayden', false);
 const testTask3 = new App.Task('Research maintenance required', false);
-const testTask4 = new App.Task('Get more counterspace', false);
+const testTask4 = new App.Task('Get more counterspace', true);
 
-const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false, [testTask2, testTask3, testTask4], 'All this stuff is unnecessary', testProject2);
+
+testProject1.addTodo(testTodo1);
+
+testProject2.addTodo(testTodo2);
+testProject2.addTodo(testTodo3);
+
+testTodo1.addTask(testTask1);
+testTodo2.addTask(testTask2);
+testTodo2.addTask(testTask3);
+testTodo2.addTask(testTask4);
 
 DOM.drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
 DOM.drawTodo(TODO_LIST, testTodo1);
+DOM.drawTodo(TODO_LIST, testTodo2);
+DOM.drawTodo(TODO_LIST, testTodo3);
 
 fillProjectForm(testProject2);
 fillTodoForm(testTodo2);
