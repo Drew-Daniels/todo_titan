@@ -326,6 +326,8 @@ const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false);
 const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false);
 const testTodo3 = new App.Todo('Buy rice cooker', 'high', '2021-12-31', true);
 
+testTodo2.addNotes('These are my first notes');
+
 const testTask2 = new App.Task('Get recommendations from Hayden', false);
 const testTask3 = new App.Task('Research maintenance required', false);
 const testTask4 = new App.Task('Get more counterspace', true);

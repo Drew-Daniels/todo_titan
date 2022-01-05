@@ -96,6 +96,9 @@ const APP = (() => {
     const hasNotes = {
         getNotes() {
             return this.notes;
+        },
+        addNotes(notes) {
+            this.notes = notes;
         }
     }
 
