@@ -262,7 +262,7 @@ function classify(element, classes) {
   return element;
 }
 function declassify(element, classToRemove) {
-  if (classes.length !== 0) {
+  if (classToRemove.length !== 0) {
     element.classList.remove(classToRemove);
   }
   return element;

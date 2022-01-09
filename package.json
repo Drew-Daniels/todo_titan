@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Drew-Daniels/todo_titan#readme",
   "devDependencies": {
     "css-loader": "^6.5.1",
+    "eslint": "^8.6.0",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.1",
     "webpack": "^5.65.0",
