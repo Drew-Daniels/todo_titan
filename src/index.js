@@ -18,11 +18,11 @@
 // drawProjects
 // updateProjectForm
 // updateTodoForm
-    // updateTodoTitle
-    // updateTodoDueDate
-    // updateTodoPriority
-    // updateTodoTasks
-    // updateTodoNotes
+  // updateTodoTitle
+  // updateTodoDueDate
+  // updateTodoPriority
+  // updateTodoTasks
+  // updateTodoNotes
 
 // Option form actions
 // hideCompleteTodos
@@ -116,7 +116,7 @@ const VIEW_PROJECTS_BUTTON_IMAGE = DOM.createImage(VIEW_PROJECTS_BUTTON, project
 // ++++++++++ Main ++++++++++
 const MAIN = DOM.createMain(CONTENT);
 // +++++ Project Pane +++++
-const PROJECT_PANE      = DOM.createDiv(MAIN, 'project-pane');
+const PROJECT_PANE    = DOM.createDiv(MAIN, 'project-pane');
 
 // Default Project List for 'Time-Sensitive' Todos
 const PROJECT_LIST_CONTAINER_TS = DOM.createDiv(PROJECT_PANE, 'project-list-container');
@@ -175,7 +175,7 @@ const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS
 const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_IMG = DOM.createImage(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, projectDeleteIcon, 'Delete this project icon', 'option-image');
 
 // TODO LIST
-const TODO_LIST        = DOM.createUL(TODO_PANE, 'todo-list');
+const TODO_LIST    = DOM.createUL(TODO_PANE, 'todo-list');
 
 // PROJECT EDIT PANE
 const PROJECT_EDIT_PANE = DOM.createDiv(MAIN, 'project-edit-pane', 'hide');
@@ -190,7 +190,7 @@ const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN = DOM.createButton(PROJECT
 const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN_IMG = DOM.createImage(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitIcon);
 
 // TODO EDIT PANE
-const TODO_EDIT_PANE    = DOM.createDiv(MAIN, 'todo-edit-pane');
+const TODO_EDIT_PANE  = DOM.createDiv(MAIN, 'todo-edit-pane');
 const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, '');
 const TODO_EDIT_PANE_FORM_HEADER = DOM.createSpan(TODO_EDIT_PANE_FORM, 'Edit Todo', 'form-header', 'fancy-header');
 
@@ -251,69 +251,69 @@ GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 // UI Functions
 function applyBtnFunction(btn, fn) {
-    btn.onClick = fn;
+  btn.onClick = fn;
 }
 function drawTaskEdit(task=undefined) {
-    let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
-    let title;
-    let taskImg;
-    if (task === undefined) {
-        title = 'New Task';
+  let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
+  let title;
+  let taskImg;
+  if (task === undefined) {
+    title = 'New Task';
+  } else {
+    title = task.getTitle();
+    if (task.isComplete === true) {
+      taskImg = taskCompleteIcon;
     } else {
-        title = task.getTitle();
-        if (task.isComplete === true) {
-            taskImg = taskCompleteIcon;
-        } else {
-            taskImg = taskIncompleteIcon;
-        }
+      taskImg = taskIncompleteIcon;
     }
-    let LI = DOM.createLI(taskList, 'task');
-    let btn = DOM.createButton(LI, 'task-checkbox');
-    let img = DOM.createImage(btn, taskImg);
-    let input = DOM.createInput(LI,'text', 'tasks', title);
-    let deleteBtn = DOM.createButton(LI);
-    let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
+  }
+  let LI = DOM.createLI(taskList, 'task');
+  let btn = DOM.createButton(LI, 'task-checkbox');
+  let img = DOM.createImage(btn, taskImg);
+  let input = DOM.createInput(LI,'text', 'tasks', title);
+  let deleteBtn = DOM.createButton(LI);
+  let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
 }
 
 // Update Functions
 function fillProjectForm(project) {
-    let title = project.getTitle();
-    let titleEl = PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT;
+  let title = project.getTitle();
+  let titleEl = PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT;
 
-    titleEl.value = title;
+  titleEl.value = title;
 }
 
 function fillTodoForm(todo) {
-    // attribute values
-    let title = todo.getTitle();
-    let dueDate = todo.getDueDate();
-    let priority = todo.getPriority();
-    let tasks = todo.getTasks();
-    let notes = todo.getNotes();
+  // attribute values
+  let title = todo.getTitle();
+  let dueDate = todo.getDueDate();
+  let priority = todo.getPriority();
+  let tasks = todo.getTasks();
+  let notes = todo.getNotes();
 
-    // element references
-    let titleEl = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT;
-    let dueDateEl = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT;
-    let priorityEl;
-    switch (priority) {
-        case 'low':
-            priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3_INPUT;
-            break;
-        case 'medium':
-            priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2_INPUT;
-            break;
-        case 'high':
-            priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_INPUT;
-            break;
-    }
-    let notesEl = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA;
+  // element references
+  let titleEl = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT;
+  let dueDateEl = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT;
+  let priorityEl;
+  switch (priority) {
+    case 'low':
+      priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3_INPUT;
+      break;
+    case 'medium':
+      priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2_INPUT;
+      break;
+    case 'high':
+      priorityEl = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_INPUT;
+      break;
+  }
+  let notesEl = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA;
 
-    // assignment
-    titleEl.value = title;
-    dueDateEl.value = dueDate;
-    tasks.forEach(task => drawTaskEdit(task))
-    priorityEl.checked=true;
-    notesEl.value = notes;
+  // assignment
+  titleEl.value = title;
+  dueDateEl.value = dueDate;
+  tasks.forEach(task => drawTaskEdit(task))
+  priorityEl.checked=true;
+  notesEl.value = notes;
 
 }
 
