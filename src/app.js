@@ -13,13 +13,13 @@ const APP = (() => {
       }
     }
     return projects;
-  };
+  }
   function setAllTodos() {
     for (let i=0; i < LISTS.length; i++) {
       const list = LISTS[i];
       list.setTodos();
     }
-  };
+  }
 
   // Shared Methods
   const hasID = {

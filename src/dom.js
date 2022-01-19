@@ -256,16 +256,23 @@ function addClasses(element, ...classes) {
   return element;
 }
 function classify(element, classes) {
+  // expects an array of class names
   if (classes.length !== 0) {
     element.classList.add(...classes);
   }
   return element;
 }
-function declassify(element, classToRemove) {
-  if (classToRemove.length !== 0) {
-    element.classList.remove(classToRemove);
+function declassify(element, classesToRemove) {
+  // expects an array of class names
+  if (classesToRemove.length !== 0) {
+    for (let i=0; i < classesToRemove.length; i++)
+    element.classList.remove(classesToRemove[i]);
   }
   return element;
+}
+function getClasses(element) {
+  const classList = element.className.split(' ');
+  return classList;
 }
 function attach(element, attachTo) {
   attachTo.appendChild(element);
@@ -281,7 +288,7 @@ export default {
   // GET functions
   getHTML, getHead, getBody,
   // HELPER functions
-  addClasses, attach, setInnerText,
+  addClasses, attach, setInnerText, classify, declassify, getClasses,
   // DRAW functions
   drawProject, drawTodo,
   };

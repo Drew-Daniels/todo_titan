@@ -158,7 +158,7 @@ const TODO_PANE = DOM.createDiv(MAIN, 'todo-pane');
 const TODO_OPTIONS_BAR = DOM.createDiv(TODO_PANE, 'todo-options-bar');
 const TODO_OPTIONS_LIST = DOM.createUL(TODO_OPTIONS_BAR, 'todo-options-list');
 const TODO_OPTIONS_LI_ADD_TODO = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
-const TODO_OPTIONS_LI_ADD_TODO_BTN = DOM.createButton(TODO_OPTIONS_LI_ADD_TODO, 'option-btn', 'fancy-btn');
+const TODO_OPTIONS_LI_ADD_TODO_BTN = DOM.createButton(TODO_OPTIONS_LI_ADD_TODO, 'option-btn', 'fancy-btn', 'add-todo-btn');
 const TODO_OPTIONS_LI_ADD_TODO_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_ADD_TODO_BTN, 'Add a Todo','todo-option-text')
 const TODO_OPTIONS_LI_ADD_TODO_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_ADD_TODO_BTN, addTodoIcon, 'Add Todo Icon', 'option-image');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
@@ -190,7 +190,7 @@ const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN = DOM.createButton(PROJECT
 const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN_IMG = DOM.createImage(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitIcon);
 
 // TODO EDIT PANE
-const TODO_EDIT_PANE  = DOM.createDiv(MAIN, 'todo-edit-pane');
+const TODO_EDIT_PANE  = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
 const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, '');
 const TODO_EDIT_PANE_FORM_HEADER = DOM.createSpan(TODO_EDIT_PANE_FORM, 'Edit Todo', 'form-header', 'fancy-header');
 
@@ -250,9 +250,6 @@ GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 
 // UI Functions
-function applyBtnFunction(btn, fn) {
-  btn.onClick = fn;
-}
 function drawTaskEdit(task=undefined) {
   let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
   let title;
@@ -317,36 +314,152 @@ function fillTodoForm(todo) {
 
 }
 
-// TEST values
-const testProject1 = new App.Project('First project');
-const testProject2 = new App.Project('Cooking Wishlist');
+function selfTest() {
 
-const testTask1 = new App.Task('First task', false);
-const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false);
-const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false);
-const testTodo3 = new App.Todo('Buy rice cooker', 'high', '2021-12-31', true);
+}
 
-testTodo2.addNotes('These are my first notes');
+// OPTION BUTTONS
+function addBtnFn(btn, fn, eventType='click') {
+  btn.addEventListener(eventType, fn);
+}
 
-const testTask2 = new App.Task('Get recommendations from Hayden', false);
-const testTask3 = new App.Task('Research maintenance required', false);
-const testTask4 = new App.Task('Get more counterspace', true);
+addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, toggleHideProjectEditPane)
+addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, toggleHideTodoEditPane);
+
+function toggleClass(element, toggleClass) {
+  let method;
+  let classes = DOM.getClasses(element);
+  if (classes.includes(toggleClass)) {
+    method = DOM.declassify;
+  }
+  else {
+    method = DOM.classify;
+  }
+  method(element, [toggleClass]);
+}
+
+function toggleHideProjectEditPane() {
+  let hideClass = 'hide';
+  toggleClass(PROJECT_EDIT_PANE, hideClass);
+}
+
+function toggleHideTodoEditPane() {
+  let hideClass = 'hide';
+  toggleClass(TODO_EDIT_PANE, hideClass);
+}
 
 
-testProject1.addTodo(testTodo1);
+// LOCAL STORAGE Functions
+function storageAvailable(type) {
+  var storage;
+  try {
+      storage = window[type];
+      var x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+  }
+  catch(e) {
+      return e instanceof DOMException && (
+          // everything except Firefox
+          e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+          // acknowledge QuotaExceededError only if there's something already stored
+          (storage && storage.length !== 0);
+  }
+}
 
-testProject2.addTodo(testTodo2);
-testProject2.addTodo(testTodo3);
+function getStorage() {
+  return window['localStorage'];
+}
 
-testTodo1.addTask(testTask1);
-testTodo2.addTask(testTask2);
-testTodo2.addTask(testTask3);
-testTodo2.addTask(testTask4);
+function getProjects() {
+  let projectStorage;
+  let projects;
+  if (storageAvailable('localStorage')) {
+    let locStorage = getStorage();
+    projectStorage = locStorage.getItem('userProjects');
+    if (!(projectStorage === null)) {
+      projects = JSON.parse(projectStorage);
+    }
+  } else {
+    projects = [];
+  }
+  return projects;
+}
 
-DOM.drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
-DOM.drawTodo(TODO_LIST, testTodo1);
-DOM.drawTodo(TODO_LIST, testTodo2);
-DOM.drawTodo(TODO_LIST, testTodo3);
+function addProject(title) {
+  const project = new App.Project(title);
+  return project;
+}
 
-fillProjectForm(testProject2);
-fillTodoForm(testTodo2);
+function updateProject(title, project) {
+  project.title = title;
+  return project;
+}
+
+function addTodo(title, priority, dueDate, isComplete, tasks, notes, project) {
+  const todo = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, project)
+  project.addTodo(todo);
+  return todo;
+}
+
+function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todo) {
+  todo.title = title;
+  todo.priority = priority;
+  todo.dueDate = dueDate;
+  todo.isComplete = isComplete;
+  return todo;
+}
+
+function addTask(taskTitle, isComplete, todo) {
+  const task = new App.Task(taskTitle, isComplete);
+  todo.addTask(task);
+  return task;
+}
+
+function updateTask(title, isComplete, task) {
+  task.title = title;
+  task.isComplete = isComplete;
+  return task;
+}
+
+// const testProject1 = new App.Project('First project');
+// const testProject2 = new App.Project('Cooking Wishlist');
+
+// const testTask1 = new App.Task('First task', false);
+// const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false);
+// const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false);
+// const testTodo3 = new App.Todo('Buy rice cooker', 'high', '2021-12-31', true);
+
+// testTodo2.addNotes('These are my first notes');
+
+// const testTask2 = new App.Task('Get recommendations from Hayden', false);
+// const testTask3 = new App.Task('Research maintenance required', false);
+// const testTask4 = new App.Task('Get more counterspace', true);
+
+
+// testProject1.addTodo(testTodo1);
+
+// testProject2.addTodo(testTodo2);
+// testProject2.addTodo(testTodo3);
+
+// testTodo1.addTask(testTask1);
+// testTodo2.addTask(testTask2);
+// testTodo2.addTask(testTask3);
+// testTodo2.addTask(testTask4);
+
+// DOM.drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
+// DOM.drawProject(US_PROJECT_LIST_UL, testProject2, projectListIcon);
+// DOM.drawTodo(TODO_LIST, testTodo1);
+// DOM.drawTodo(TODO_LIST, testTodo2);
+// DOM.drawTodo(TODO_LIST, testTodo3);
+
+// fillProjectForm(testProject2);
+// fillTodoForm(testTodo2);
