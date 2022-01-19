@@ -70,6 +70,7 @@ import todoEditIcon from './icons/todo-edit-icon.svg';
 import todoExpandLessIcon from './icons/todo-expand-less-icon.svg';
 import todoExpandMoreIcon from './icons/todo-expand-more-icon.svg';
 import todoIncompleteIcon from './icons/todo-incomplete-icon.svg';
+import addProjectIcon from './icons/add-project-icon.svg';
 
 // Import DOM Elements
 import DOM from './dom';
@@ -119,7 +120,7 @@ const MAIN = DOM.createMain(CONTENT);
 const PROJECT_PANE    = DOM.createDiv(MAIN, 'project-pane');
 
 // Default Project List for 'Time-Sensitive' Todos
-const PROJECT_LIST_CONTAINER_TS = DOM.createDiv(PROJECT_PANE, 'project-list-container');
+const PROJECT_LIST_CONTAINER_TS = DOM.createDiv(PROJECT_PANE, 'project-list-container', 'time-specified-projects');
 const TS_PROJECT_LIST_HEADER = DOM.createDiv(PROJECT_LIST_CONTAINER_TS, 'project-header');
 const TS_PROJECT_LIST_HEADER_MAIN = DOM.createDiv(TS_PROJECT_LIST_HEADER, 'project-header-main');
 const TS_PROJECT_LIST_ICON = DOM.createImage(TS_PROJECT_LIST_HEADER_MAIN, timeSensitiveTaskIcon, 'Time Sensitive Task Icon');
@@ -145,12 +146,17 @@ const TS_PROJECT_LIST_ALL_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST
 const TS_PROJECT_LIST_ALL_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_ALL_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
 
 // Custom Project List for 'User-Specific' Todos
-const PROJECT_LIST_CONTAINER_US = DOM.createDiv(PROJECT_PANE, 'project-list-container');
+const PROJECT_LIST_CONTAINER_US = DOM.createDiv(PROJECT_PANE, 'project-list-container', 'user-specified-projects');
 const US_PROJECT_LIST_HEADER = DOM.createDiv(PROJECT_LIST_CONTAINER_US, 'project-header');
 const US_PROJECT_LIST_HEADER_MAIN = DOM.createDiv(US_PROJECT_LIST_HEADER, 'project-header-main');
 const US_PROJECT_LIST_ICON = DOM.createImage(US_PROJECT_LIST_HEADER_MAIN, myProjectsIcon, 'My Projects Icon');
 const US_PROJECT_LIST_TITLE = DOM.createSpan(US_PROJECT_LIST_HEADER_MAIN, 'My Projects');
 const US_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_US, 'project-list');
+
+const US_PROJECT_LIST_ADD_PROJECT_PANE = DOM.createDiv(PROJECT_PANE, 'add-project-btn-container')
+const US_PROJECT_LIST_ADD_PROJECT_BTN = DOM.createButton(US_PROJECT_LIST_ADD_PROJECT_PANE, 'add-project-btn', 'fancy-btn')
+const US_PROJECT_LIST_ADD_PROJECT_BTN_IMG = DOM.createImage(US_PROJECT_LIST_ADD_PROJECT_BTN, addProjectIcon);
+const US_PROJECT_LIST_ADD_PROJECT_BTN_SPAN = DOM.createSpan(US_PROJECT_LIST_ADD_PROJECT_BTN, 'Add a New Project')
 
 // +++++ TODO PANE +++++
 const TODO_PANE = DOM.createDiv(MAIN, 'todo-pane');
@@ -323,8 +329,13 @@ function addBtnFn(btn, fn, eventType='click') {
   btn.addEventListener(eventType, fn);
 }
 
+addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, toggleHideProjectEditPane)
 addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, toggleHideProjectEditPane)
 addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, toggleHideTodoEditPane);
+// Add 'Hide Complete Todos' functionality here
+// addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'function here');
+// Add 'Delete this Project' functionality here
+// addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'function here');
 
 function toggleClass(element, toggleClass) {
   let method;

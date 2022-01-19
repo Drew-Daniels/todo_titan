@@ -122,7 +122,7 @@ button {
 form {
   background-color: #F9FDF6;
   border: 0.06em solid #609931;
-  border-radius: 1em 1em 1em 1em;
+  border-radius: 1em;
   margin-right: 1em;
   padding-bottom: 1em;
 }
@@ -202,9 +202,11 @@ textarea {
   flex-basis: 28%;
   background-color: #F9FDF6;
   border: 0.06em solid #609931;
-  border-radius: 1em 1em 1em 1em;
+  border-radius: 1em;
   margin-left: 1em;
   margin-right: 1em;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-list {
@@ -401,6 +403,21 @@ textarea {
 .priority-level-container {
   display: flex;
   flex-direction: column;
+}
+
+.add-project-btn-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+  border-radius: 0 0 1em 1em;
+}
+
+.add-project-btn {
+  background-color: #B6E394;
+  padding: 1em;
+  margin-bottom: 1em;
 }
 
 .add-task-btn {
