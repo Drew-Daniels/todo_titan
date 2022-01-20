@@ -192,7 +192,7 @@ const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_LABEL = DOM.createLabel(PROJECT_
 const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT = DOM.createInput(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION, 'text', 'project-title', 'Current Project Name');
 
 const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'submission-container');
-const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN = DOM.createButton(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER, 'submit-changes-btn', 'fancy-btn');
+const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN = DOM.createButton(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER, 'submit-project-changes-btn','submit-changes-btn', 'fancy-btn');
 const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN_IMG = DOM.createImage(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitIcon);
 
 // TODO EDIT PANE
@@ -238,7 +238,7 @@ const TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_LABEL = DOM.createLabel(TODO_EDIT_PANE
 const TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA = DOM.createTextArea(TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_SECTION,'todo-notes', '30', '10', undefined);
 
 const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_CONTAINER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'submission-container');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_CONTAINER, 'submit-changes-btn', 'fancy-btn');
+const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_CONTAINER, 'submit-todo-changes-btn', 'submit-changes-btn', 'fancy-btn');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN_IMG = DOM.createImage(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitIcon, 'Submit Icon');
 
 // Footer
@@ -254,6 +254,7 @@ GITHUB_PROFILE_CONTAINER.innerText = GITHUB_PROFILE_CONTAINER_TEXT;
 const GITHUB_PROFILE_ANCHOR = DOM.createAnchor(GITHUB_PROFILE_CONTAINER, GITHUB_PROFILE_URL, 'github-profile-link');
 GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
+const HIDE_CLASS = 'hide';
 
 // UI Functions
 function drawTaskEdit(task=undefined) {
@@ -329,13 +330,36 @@ function addBtnFn(btn, fn, eventType='click') {
   btn.addEventListener(eventType, fn);
 }
 
-addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, toggleHideProjectEditPane)
-addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, toggleHideProjectEditPane)
+function isHidden(element) {
+  const classes = DOM.getClasses(element);
+  const result = classes.includes(HIDE_CLASS);
+  return result;
+}
+
+
+addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, toggleHideProjectEditPane);
 addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, toggleHideTodoEditPane);
+addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, unhideProjectEditPane);
+
+// Form listeners
+addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, hideProjectEditPane);
+addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, hideTodoEditPane);
 // Add 'Hide Complete Todos' functionality here
 // addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'function here');
 // Add 'Delete this Project' functionality here
 // addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'function here');
+
+function unhideElement(element, hideClass) {
+  if (isHidden(element)) {
+    DOM.declassify(element, [hideClass]);
+  }
+}
+
+function hideElement(element, hideClass) {
+  if (!(isHidden(element))) {
+    DOM.classify(element, [hideClass]);
+  }
+}
 
 function toggleClass(element, toggleClass) {
   let method;
@@ -349,16 +373,37 @@ function toggleClass(element, toggleClass) {
   method(element, [toggleClass]);
 }
 
+// PROJECT EDIT PANE
+// ENSURES TOGGLED
 function toggleHideProjectEditPane() {
-  let hideClass = 'hide';
-  toggleClass(PROJECT_EDIT_PANE, hideClass);
+  toggleClass(PROJECT_EDIT_PANE, HIDE_CLASS);
 }
 
+// ENSURES UNHIDDEN
+function unhideProjectEditPane() {
+  unhideElement(PROJECT_EDIT_PANE, HIDE_CLASS);
+}
+
+// ENSURES HIDDEN
+function hideProjectEditPane() {
+  hideElement(PROJECT_EDIT_PANE, HIDE_CLASS);
+}
+
+// TODO EDIT PANE
+// ENSURES TOGGLED
 function toggleHideTodoEditPane() {
-  let hideClass = 'hide';
-  toggleClass(TODO_EDIT_PANE, hideClass);
+  toggleClass(TODO_EDIT_PANE, HIDE_CLASS);
 }
 
+// ENSURES UNHIDDEN
+function unhideTodoEditPane() {
+  unhideElement(TODO_EDIT_PANE, HIDE_CLASS);
+}
+
+// ENSURES HIDDEN
+function hideTodoEditPane() {
+  hideElement(TODO_EDIT_PANE, HIDE_CLASS);
+}
 
 // LOCAL STORAGE Functions
 function storageAvailable(type) {
