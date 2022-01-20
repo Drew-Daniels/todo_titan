@@ -168,7 +168,7 @@ const TODO_OPTIONS_LI_ADD_TODO_BTN = DOM.createButton(TODO_OPTIONS_LI_ADD_TODO, 
 const TODO_OPTIONS_LI_ADD_TODO_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_ADD_TODO_BTN, 'Add a Todo','todo-option-text')
 const TODO_OPTIONS_LI_ADD_TODO_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_ADD_TODO_BTN, addTodoIcon, 'Add Todo Icon', 'option-image');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
-const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN = DOM.createButton(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS, 'option-btn', 'fancy-btn');
+const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN = DOM.createButton(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS, 'option-btn', 'fancy-btn', 'toggle-show-hide-complete-todos-btn');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos','todo-option-text')
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, hideCompleteTodosIcon, 'Hide Complete Todos Icon', 'option-image');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
@@ -255,6 +255,10 @@ const GITHUB_PROFILE_ANCHOR = DOM.createAnchor(GITHUB_PROFILE_CONTAINER, GITHUB_
 GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 const HIDE_CLASS = 'hide';
+const PROJECT_EDIT_HEADER_CREATE_TEXT = 'Create Project';
+const PROJECT_EDIT_HEADER_EDIT_TEXT = 'Edit Project';
+const TODO_EDIT_HEADER_CREATE_TEXT = 'Create Todo';
+const TODO_EDIT_HEADER_EDIT_TEXT = 'Edit Todo';
 
 // UI Functions
 function drawTaskEdit(task=undefined) {
@@ -336,10 +340,18 @@ function isHidden(element) {
   return result;
 }
 
+// Project Add and Project Edit button listeners
+addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, stageAddProjectForm);
+addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, stageEditProjectForm);
 
-addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, toggleHideProjectEditPane);
-addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, toggleHideTodoEditPane);
-addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, unhideProjectEditPane);
+// Todo Option button listeners
+addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, stageAddTodoForm);
+// add listener to the addTodoBtn that will function similar to stageAddProjectForm only modified to be for stageAddTodoForm
+
+
+// hideCompleteTodos here
+// deleteThisProject here
+
 
 // Form listeners
 addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, hideProjectEditPane);
@@ -348,6 +360,31 @@ addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, hideTodoEditPane);
 // addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'function here');
 // Add 'Delete this Project' functionality here
 // addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'function here');
+
+
+function updateTextContent(ele, newText) {
+  ele.textContent = newText;
+}
+
+function updateValue(ele, value) {
+  ele.value = value;
+}
+
+function setProjectEditHeaderToCreate() {
+  updateTextContent(PROJECT_EDIT_PANE_FORM_HEADER, PROJECT_EDIT_HEADER_CREATE_TEXT);
+}
+
+function setTodoEditHeaderToCreate() {
+  updateTextContent(TODO_EDIT_PANE_FORM_HEADER, TODO_EDIT_HEADER_CREATE_TEXT);
+}
+
+function setProjectTitleInputCreateMode() {
+  updateValue(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT, "New Project");
+}
+
+function setProjectEditHeaderToEdit() {
+  updateTextContent(PROJECT_EDIT_PANE_FORM_HEADER, PROJECT_EDIT_HEADER_EDIT_TEXT);
+}
 
 function unhideElement(element, hideClass) {
   if (isHidden(element)) {
@@ -371,6 +408,29 @@ function toggleClass(element, toggleClass) {
     method = DOM.classify;
   }
   method(element, [toggleClass]);
+}
+
+function stageAddProjectForm() {
+  setProjectEditHeaderToCreate();
+  setProjectTitleInputCreateMode();
+  // set project submit button event listener to create mode
+  unhideProjectEditPane();
+}
+
+function stageEditProjectForm() {
+  setProjectEditHeaderToEdit();
+  // set project submit button event listener to edit mode
+  // prefill ProjectTitle text with the actual text from the currently selected project
+  toggleHideProjectEditPane();
+}
+
+function stageAddTodoForm() {
+  setTodoEditHeaderToCreate();
+  const todo = new App.Todo();
+  fillTodoForm(todo);
+
+  //add event listener here for to save todo
+  unhideTodoEditPane();
 }
 
 // PROJECT EDIT PANE
@@ -450,21 +510,21 @@ function getProjects() {
   return projects;
 }
 
-function addProject(title) {
-  const project = new App.Project(title);
-  return project;
-}
+// function addProject(title) {
+//   const project = new App.Project(title);
+//   return project;
+// }
 
 function updateProject(title, project) {
   project.title = title;
   return project;
 }
 
-function addTodo(title, priority, dueDate, isComplete, tasks, notes, project) {
-  const todo = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, project)
-  project.addTodo(todo);
-  return todo;
-}
+// function addTodo(title, priority, dueDate, isComplete, tasks, notes, project) {
+//   const todo = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, project)
+//   project.addTodo(todo);
+//   return todo;
+// }
 
 function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todo) {
   todo.title = title;
@@ -486,36 +546,36 @@ function updateTask(title, isComplete, task) {
   return task;
 }
 
-// const testProject1 = new App.Project('First project');
-// const testProject2 = new App.Project('Cooking Wishlist');
+const testProject1 = new App.Project('First project');
+const testProject2 = new App.Project('Cooking Wishlist');
 
-// const testTask1 = new App.Task('First task', false);
-// const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false);
-// const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false);
-// const testTodo3 = new App.Todo('Buy rice cooker', 'high', '2021-12-31', true);
+const testTask1 = new App.Task('First task', false);
+const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false);
+const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false);
+const testTodo3 = new App.Todo('Buy rice cooker', 'high', '2021-12-31', true);
 
-// testTodo2.addNotes('These are my first notes');
+testTodo2.addNotes('These are my first notes');
 
-// const testTask2 = new App.Task('Get recommendations from Hayden', false);
-// const testTask3 = new App.Task('Research maintenance required', false);
-// const testTask4 = new App.Task('Get more counterspace', true);
+const testTask2 = new App.Task('Get recommendations from Hayden', false);
+const testTask3 = new App.Task('Research maintenance required', false);
+const testTask4 = new App.Task('Get more counterspace', true);
 
 
-// testProject1.addTodo(testTodo1);
+testProject1.addTodo(testTodo1);
 
-// testProject2.addTodo(testTodo2);
-// testProject2.addTodo(testTodo3);
+testProject2.addTodo(testTodo2);
+testProject2.addTodo(testTodo3);
 
-// testTodo1.addTask(testTask1);
-// testTodo2.addTask(testTask2);
-// testTodo2.addTask(testTask3);
-// testTodo2.addTask(testTask4);
+testTodo1.addTask(testTask1);
+testTodo2.addTask(testTask2);
+testTodo2.addTask(testTask3);
+testTodo2.addTask(testTask4);
 
-// DOM.drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
-// DOM.drawProject(US_PROJECT_LIST_UL, testProject2, projectListIcon);
-// DOM.drawTodo(TODO_LIST, testTodo1);
-// DOM.drawTodo(TODO_LIST, testTodo2);
-// DOM.drawTodo(TODO_LIST, testTodo3);
+DOM.drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
+DOM.drawProject(US_PROJECT_LIST_UL, testProject2, projectListIcon);
+DOM.drawTodo(TODO_LIST, testTodo1);
+DOM.drawTodo(TODO_LIST, testTodo2);
+DOM.drawTodo(TODO_LIST, testTodo3);
 
 // fillProjectForm(testProject2);
 // fillTodoForm(testTodo2);
