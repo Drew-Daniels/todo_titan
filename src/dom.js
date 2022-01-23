@@ -166,6 +166,10 @@ function drawProject(attachTo, project) {
   return
 }
 
+function eraseProject() {
+
+}
+
 function drawTodo(attachTo, todo) {
   let todoEl = createLI(attachTo, 'todo');
 
@@ -222,6 +226,11 @@ function drawTodo(attachTo, todo) {
   attachTo.appendChild(todoEl);
   return todoEl;
 }
+
+function eraseTodo() {
+
+}
+
 function drawTask(attachTo, task) {
   let taskEl = createLI(attachTo, 'task');
   let taskCheckbox = createButton(taskEl, 'task-checkbox');
@@ -234,6 +243,10 @@ function drawTask(attachTo, task) {
   let taskCheckboxImg = createImage(taskCheckbox, taskImg);
   let taskTitle = createSpan(taskEl, task.getTitle());
   return taskEl;
+}
+
+function eraseTask() {
+  
 }
 
 // GET Functions - Used to grab nodes that exist by default or have already been created using the functions above

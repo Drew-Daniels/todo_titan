@@ -326,10 +326,6 @@ function fillTodoForm(todo) {
 
 }
 
-function selfTest() {
-
-}
-
 // OPTION BUTTONS
 function addBtnFn(btn, fn, eventType='click') {
   btn.addEventListener(eventType, fn);
@@ -379,6 +375,16 @@ function deactivateBtnFn(btn, eventType, fn) {
   btn.removeEventListener(eventType, fn);
 }
 
+function hideAllTodos() {
+  const todoNodes = document.querySelectorAll('.todo');
+  todoNodes.forEach(function ensureTodoHidden(todoNode) {
+    const classes = DOM.getClasses(todoNode);
+    if (!(classes.includes(HIDE_CLASS))) {
+      DOM.classify(todoNode, [HIDE_CLASS]);
+    }
+  })
+}
+
 function completeTodosHidden() {
   const todoNodes = document.getElementsByClassName('todo-complete');
   const todo = todoNodes[0];
@@ -425,27 +431,14 @@ addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, stageEditProjectForm);
 // Todo Option button listeners
 addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, stageAddTodoForm);
 
-
-
-// hideCompleteTodos here
-// deleteThisProject here
-
-
 // Form listeners
-addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, hideProjectEditPane);
-addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, hideTodoEditPane);
-// Add 'Hide Complete Todos' functionality here
+addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitCreateProjectForm);
+addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitCreateTodoForm);
 addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
 // Add 'Delete this Project' functionality here
-// addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'function here');
-
 
 function updateTextContent(ele, newText) {
   ele.textContent = newText;
-}
-
-function updateValue(ele, value) {
-  ele.value = value;
 }
 
 function setProjectEditHeaderToCreate() {
@@ -454,10 +447,6 @@ function setProjectEditHeaderToCreate() {
 
 function setTodoEditHeaderToCreate() {
   updateTextContent(TODO_EDIT_PANE_FORM_HEADER, TODO_EDIT_HEADER_CREATE_TEXT);
-}
-
-function setProjectTitleInputCreateMode() {
-  updateValue(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT, "New Project");
 }
 
 function setProjectEditHeaderToEdit() {
@@ -494,9 +483,12 @@ function toggleClass(element, toggleClass) {
 
 function stageAddProjectForm() {
   setProjectEditHeaderToCreate();
-  setProjectTitleInputCreateMode();
+  // setProjectTitleInputCreateMode();
+  let project = new App.Project();
+  fillProjectForm(project);
   // set project submit button event listener to create mode
   unhideProjectEditPane();
+  project = null;
 }
 
 function stageEditProjectForm() {
@@ -508,11 +500,10 @@ function stageEditProjectForm() {
 
 function stageAddTodoForm() {
   setTodoEditHeaderToCreate();
-  const todo = new App.Todo();
+  let todo = new App.Todo();
   fillTodoForm(todo);
-
-  //add event listener here for to save todo
   unhideTodoEditPane();
+  todo = null;
 }
 
 // PROJECT EDIT PANE
@@ -531,6 +522,12 @@ function hideProjectEditPane() {
   hideElement(PROJECT_EDIT_PANE, HIDE_CLASS);
 }
 
+function resetProjectEditForm() {
+  let project = new App.Project();
+  fillProjectForm(project);
+  project = null;
+}
+
 // TODO EDIT PANE
 // ENSURES TOGGLED
 function toggleHideTodoEditPane() {
@@ -545,6 +542,53 @@ function unhideTodoEditPane() {
 // ENSURES HIDDEN
 function hideTodoEditPane() {
   hideElement(TODO_EDIT_PANE, HIDE_CLASS);
+}
+
+function resetTodoEditPane() {
+  let todo = new App.Todo();
+  fillTodoForm(todo);
+  todo = null;
+}
+
+function submitCreateProjectForm() {
+  // GET values
+  let title = PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT.value;
+  // HIDE form
+  hideProjectEditPane();
+  // RESET form
+  resetProjectEditForm();
+  // CREATE project
+  const project = new App.Project(title);
+  // DRAW project
+  console.log(project);
+  DOM.drawProject(US_PROJECT_LIST_UL, project);
+  // HIDE todos - since none will be for the NEW project
+  hideAllTodos();
+  // HIGHLIGHT new project - i.e., show it is selected by highlighting it
+
+}
+
+function submitCreateTodoForm() {
+  // GET values
+  let title;
+  let dueDate;
+  let priority;
+  let tasks;
+  let isComplete
+  let notes;
+  title = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT.value;
+  dueDate = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value;
+  // todo.priority = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORI
+  // todo.tasks = TODO_
+  // update the values for this todo by what was gathered from the form
+  // HIDE form
+  hideTodoEditPane();
+  // RESET form
+  resetTodoEditPane();
+  // CREATE todo
+  const todo = new App.Todo(title, priority, dueDate, isComplete, tasks, notes);
+  // DRAW todo
+  DOM.drawTodo(TODO_LIST, todo);
 }
 
 // LOCAL STORAGE Functions
