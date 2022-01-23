@@ -255,6 +255,7 @@ const GITHUB_PROFILE_ANCHOR = DOM.createAnchor(GITHUB_PROFILE_CONTAINER, GITHUB_
 GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 const HIDE_CLASS = 'hide';
+const SHOW_CLASS = 'show';
 const PROJECT_EDIT_HEADER_CREATE_TEXT = 'Create Project';
 const PROJECT_EDIT_HEADER_EDIT_TEXT = 'Edit Project';
 const TODO_EDIT_HEADER_CREATE_TEXT = 'Create Todo';
@@ -340,13 +341,90 @@ function isHidden(element) {
   return result;
 }
 
+function switchClass(btn, classOne, classTwo) {
+  const classes = DOM.getClasses(btn);
+  if (classes.includes(classOne)) {
+    DOM.declassify(btn, [classOne]);
+    DOM.classify(btn, [classTwo]);
+  } else {
+    DOM.declassify(btn, [classTwo]);
+    DOM.classify(btn, [classOne]);
+  }
+}
+
+function updateBtnText(btn, newBtnText) {
+  const childNodes = btn.children;
+  const childArr = [...childNodes];
+  childArr.forEach(function(childEl) {
+    console.log(childEl.tagName);
+    if (childEl.tagName === 'SPAN') {
+      childEl.innerHTML = newBtnText;
+    }
+  })
+}
+
+/**
+ * Replaces an event listener with another
+ */
+function switchButtonFn(btn, eventType, fn1, fn2) {
+  deactivateBtnFn(btn, eventType, fn1);
+  activateBtnFn(btn, eventType, fn2);
+}
+
+function activateBtnFn(btn, eventType, fn) {
+  btn.addEventListener(eventType, fn);
+}
+
+function deactivateBtnFn(btn, eventType, fn) {
+  btn.removeEventListener(eventType, fn);
+}
+
+function completeTodosHidden() {
+  const todoNodes = document.getElementsByClassName('todo-complete');
+  const todo = todoNodes[0];
+  const classes = [...todo.classList]
+  let result;
+  if (classes.includes(HIDE_CLASS)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+function toggleShowHideCompleteTodos() {
+  if (completeTodosHidden()) {
+    showCompleteTodos();
+    updateBtnText(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos');
+  } else {
+    hideCompleteTodos();
+    updateBtnText(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Show Complete Todos');
+  }
+}
+
+function hideCompleteTodos() {
+  const todoNodes = document.querySelectorAll('.todo-complete');
+  todoNodes.forEach(function(todoNode) {
+    DOM.declassify(todoNode, [SHOW_CLASS]);
+    DOM.classify(todoNode, [HIDE_CLASS]);
+  })
+}
+
+function showCompleteTodos() {
+  const todoNodes = document.querySelectorAll('.todo-complete');
+  todoNodes.forEach(function(todoNode) {
+    DOM.declassify(todoNode, [HIDE_CLASS]);
+    DOM.classify(todoNode, [SHOW_CLASS]);
+  })
+}
+
 // Project Add and Project Edit button listeners
 addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, stageAddProjectForm);
 addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, stageEditProjectForm);
 
 // Todo Option button listeners
 addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, stageAddTodoForm);
-// add listener to the addTodoBtn that will function similar to stageAddProjectForm only modified to be for stageAddTodoForm
+
 
 
 // hideCompleteTodos here
@@ -357,7 +435,7 @@ addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, stageAddTodoForm);
 addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, hideProjectEditPane);
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, hideTodoEditPane);
 // Add 'Hide Complete Todos' functionality here
-// addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'function here');
+addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
 // Add 'Delete this Project' functionality here
 // addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'function here');
 
@@ -397,7 +475,11 @@ function hideElement(element, hideClass) {
     DOM.classify(element, [hideClass]);
   }
 }
-
+/**
+ * Used to add/remove a given class from an element - different from switchClass, which alternates between 2 classes
+ * @param {*} element 
+ * @param {*} toggleClass 
+ */
 function toggleClass(element, toggleClass) {
   let method;
   let classes = DOM.getClasses(element);

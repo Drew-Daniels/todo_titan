@@ -387,6 +387,10 @@ textarea {
   display: none;
 }
 
+.show {
+  display: block;
+}
+
 .todo-checkbox {
   flex: 0 0 4em;
 }

@@ -265,8 +265,9 @@ function classify(element, classes) {
 function declassify(element, classesToRemove) {
   // expects an array of class names
   if (classesToRemove.length !== 0) {
-    for (let i=0; i < classesToRemove.length; i++)
-    element.classList.remove(classesToRemove[i]);
+    for (let i=0; i < classesToRemove.length; i++) {
+      element.classList.remove(classesToRemove[i]);
+    }
   }
   return element;
 }
