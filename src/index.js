@@ -212,15 +212,15 @@ const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_SECTION = DOM.createDiv(TODO_EDIT_P
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LABEL = DOM.createSpan(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_SECTION, 'Priority:', 'todo-priority-level-label');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_CONTAINER = DOM.createDiv(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_SECTION, 'priority-level-container');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1 = DOM.createDiv(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_CONTAINER, 'priority-level-line');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1, 'radio', 'priority-level', 'high-priority');
+const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1, 'radio', 'priority-level', 'high');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1, 'priority-level-1', 'High');
 
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2 = DOM.createDiv(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_CONTAINER, 'priority-level-line');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2, 'radio', 'priority-level', 'high-priority');
+const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2, 'radio', 'priority-level', 'medium');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2, 'priority-level-2', 'Medium');
 
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3 = DOM.createDiv(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_CONTAINER, 'priority-level-line');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3, 'radio', 'priority-level', 'high-priority');
+const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3, 'radio', 'priority-level', 'low');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3, 'priority-level-3', 'Low');
 
 
@@ -256,29 +256,32 @@ GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 const HIDE_CLASS = 'hide';
 const SHOW_CLASS = 'show';
+const HIGHLIGHTED_CLASS = 'highlighted';
 const PROJECT_EDIT_HEADER_CREATE_TEXT = 'Create Project';
 const PROJECT_EDIT_HEADER_EDIT_TEXT = 'Edit Project';
 const TODO_EDIT_HEADER_CREATE_TEXT = 'Create Todo';
 const TODO_EDIT_HEADER_EDIT_TEXT = 'Edit Todo';
 
 // UI Functions
-function drawTaskEdit(task=undefined) {
+function drawNewTask() {
+  let task = new App.Task();
+  drawTask(task);
+  task = null;
+}
+
+function drawTask(task) {
   let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
   let title;
   let taskImg;
-  if (task === undefined) {
-    title = 'New Task';
+  title = task.getTitle();
+  if (task.isComplete === true) {
+    taskImg = taskCompleteIcon;
   } else {
-    title = task.getTitle();
-    if (task.isComplete === true) {
-      taskImg = taskCompleteIcon;
-    } else {
-      taskImg = taskIncompleteIcon;
-    }
+    taskImg = taskIncompleteIcon;
   }
   let LI = DOM.createLI(taskList, 'task');
   let btn = DOM.createButton(LI, 'task-checkbox');
-  let img = DOM.createImage(btn, taskImg);
+  let img = DOM.createImage(btn, taskImg, 'task-complete');
   let input = DOM.createInput(LI,'text', 'tasks', title);
   let deleteBtn = DOM.createButton(LI);
   let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
@@ -385,6 +388,16 @@ function hideAllTodos() {
   })
 }
 
+function hideAllTasks() {
+  const taskNodes = document.querySelectorAll('.task-list');
+  taskNodes.forEach(function ensureTaskHidden(taskNode) {
+    const classes = DOM.getClasses(taskNode);
+    if (!(classes.includes(HIDE_CLASS))) {
+      DOM.classify(taskNode, [HIDE_CLASS]);
+    }
+  })
+}
+
 function completeTodosHidden() {
   const todoNodes = document.getElementsByClassName('todo-complete');
   const todo = todoNodes[0];
@@ -436,6 +449,7 @@ addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitCreateProjectFor
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitCreateTodoForm);
 addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
 // Add 'Delete this Project' functionality here
+addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
 
 function updateTextContent(ele, newText) {
   ele.textContent = newText;
@@ -559,13 +573,29 @@ function submitCreateProjectForm() {
   resetProjectEditForm();
   // CREATE project
   const project = new App.Project(title);
+  // UNHIGHLIGHT the project with 'selected' class currently applied
+  clearProjectHighlight();
   // DRAW project
-  console.log(project);
   DOM.drawProject(US_PROJECT_LIST_UL, project);
   // HIDE todos - since none will be for the NEW project
   hideAllTodos();
   // HIGHLIGHT new project - i.e., show it is selected by highlighting it
+  // highlight the last project in the list - since this will be the newly created one
+  highlightLatestProject();
+}
 
+function highlightLatestProject() {
+  const projectTitles = document.querySelectorAll('.project-title');
+  let ctProjects = projectTitles.length;
+  const latestProjectTitle = projectTitles[--ctProjects];
+  DOM.classify(latestProjectTitle, ['highlighted']);
+}
+
+function clearProjectHighlight() {
+  const selectedProjectTitle = document.querySelector('.highlighted');
+  if (!(selectedProjectTitle === null)) {
+    DOM.declassify(selectedProjectTitle, ['highlighted'])
+  }
 }
 
 function submitCreateTodoForm() {
@@ -578,9 +608,29 @@ function submitCreateTodoForm() {
   let notes;
   title = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT.value;
   dueDate = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value;
-  // todo.priority = TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORI
-  // todo.tasks = TODO_
-  // update the values for this todo by what was gathered from the form
+  priority = document.querySelector('input[name="priority-level"]:checked').value;
+  // let taskNodes = document.querySelectorAll('.form-section > ul.task-list > li.task')
+  // taskNodes.forEach(function getTaskInfo(taskNode) {
+  //   let taskIsComplete;
+  //   let taskTitle;
+  //   let childNodes = taskNodes.childNodes;
+  //   childNodes.forEach(function(childNode) {
+  //     let tagName = childNode.tagName;
+  //     let classes = DOM.getClasses(childNode);
+  //     if (tagName === 'BUTTON') {
+  //       // get button img here and check if class 'task-complete' applied
+  //     } else if (tagName === 'SPAN') {
+
+  //     } else {
+
+  //     }
+  //   })
+  // })
+  // within each task node:
+    // create a new Task
+    // get 'title' from 
+
+  notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value;
   // HIDE form
   hideTodoEditPane();
   // RESET form
@@ -705,3 +755,4 @@ DOM.drawTodo(TODO_LIST, testTodo3);
 
 // fillProjectForm(testProject2);
 // fillTodoForm(testTodo2);
+hideAllTasks();

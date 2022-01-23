@@ -246,7 +246,7 @@ function drawTask(attachTo, task) {
 }
 
 function eraseTask() {
-  
+
 }
 
 // GET Functions - Used to grab nodes that exist by default or have already been created using the functions above
