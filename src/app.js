@@ -1,7 +1,6 @@
 const APP = (() => {
   const TODOS = [];
   const LISTS = [];
-  let _projects;
 
   // module level functions
   function getProjects() {
@@ -14,27 +13,11 @@ const APP = (() => {
     }
     return projects;
   }
-  function setAllTodos() {
-    for (let i=0; i < LISTS.length; i++) {
-      const list = LISTS[i];
-      list.setTodos();
-    }
-  }
 
   // Shared Methods
-  const hasID = {
-    getID() {
-      return this.id;
-    }
-  }
   const hasTitle = {
     getTitle() {
       return this.title;
-    }
-  }
-  const hasBody = {
-    getBody() {
-      return this.body;
     }
   }
 
@@ -191,7 +174,7 @@ const APP = (() => {
     const index = LISTS.findIndex(list);
     LISTS.splice(index, 1);
   }
-  return {Project, Todo, Task, getLists, getTodos}
+  return {Project, Todo, Task, getProjects, getLists, getTodos}
 })();
 
 export default APP;

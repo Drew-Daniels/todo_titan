@@ -509,6 +509,10 @@ function stageEditProjectForm() {
   setProjectEditHeaderToEdit();
   // set project submit button event listener to edit mode
   // prefill ProjectTitle text with the actual text from the currently selected project
+  const currProject = getSelectedProject();
+  const currProjectTitleInput = document.querySelector('input.project-title');
+  currProjectTitleInput.value = currProject.getTitle();
+  // apply changes to the project on submit
   toggleHideProjectEditPane();
 }
 
@@ -584,6 +588,26 @@ function submitCreateProjectForm() {
   highlightLatestProject();
 }
 
+/**
+ * 
+ * @returns the currently highlighted project as an object, so that that project object can be used and manipulated
+ */
+function getSelectedProject() {
+  // first, find the name of the project that is currently 'selected'
+  const selectedProjectName = document.querySelector('.project span.project-title.highlighted');
+  console.log(selectedProjectName);
+  const projectArray = App.getProjects();
+  console.log(projectArray);
+  let project;
+  projectArray.forEach(function (projectObj) {
+    if (projectObj.getTitle() === selectedProjectName) {
+      project = projectObj;
+    }
+  })
+  // const selectedProject = App.projects()
+  return project;
+}
+
 function highlightLatestProject() {
   const projectTitles = document.querySelectorAll('.project-title');
   let ctProjects = projectTitles.length;
@@ -639,6 +663,8 @@ function submitCreateTodoForm() {
   const todo = new App.Todo(title, priority, dueDate, isComplete, tasks, notes);
   // DRAW todo
   DOM.drawTodo(TODO_LIST, todo);
+  // Add button functionality (listeners) after Todo is drawn
+
 }
 
 // LOCAL STORAGE Functions
