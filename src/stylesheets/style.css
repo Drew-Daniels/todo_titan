@@ -371,6 +371,10 @@ textarea {
   margin-right: 2.4em;
 }
 
+.todo-is-complete-label {
+  margin-right: 1.6em;
+}
+
 .todo-priority-level-label {
   margin-right: 3em;
 }
