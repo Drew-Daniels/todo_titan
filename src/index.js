@@ -72,6 +72,7 @@ import todoExpandMoreIcon from './icons/todo-expand-more-icon.svg';
 import todoIncompleteIcon from './icons/todo-incomplete-icon.svg';
 import addProjectIcon from './icons/add-project-icon.svg';
 
+
 // Import DOM Elements
 import DOM from './dom';
 import App from './app';
@@ -263,29 +264,114 @@ const TODO_EDIT_HEADER_CREATE_TEXT = 'Create Todo';
 const TODO_EDIT_HEADER_EDIT_TEXT = 'Edit Todo';
 
 // UI Functions
+function drawProject(attachTo, project) {
+  let projectEl = DOM.createLI(attachTo, 'project');
+  projectEl.id = project.getID();
+  let projectElBtn = DOM.createButton(projectEl, 'project-btn');
+  let projectElImg = DOM.createImage(projectElBtn, projectListIcon,'project-image');
+  let projectElTitle = DOM.createSpan(projectElBtn, project.getTitle(),'project-title');
+  let numTodosContainer = DOM.createDiv(projectEl, 'num-todos-container');
+  let numTodos = DOM.createSpan(numTodosContainer, project.getCtTodos(), 'num-todos');
+
+  attachTo.appendChild(projectEl);
+  return
+}
+function drawTodo(attachTo, todo) {
+  let todoEl = DOM.createLI(attachTo, 'todo');
+  todoEl.id = todo.getID();
+  // +++ line 1 +++
+  let line1 = DOM.createDiv(todoEl, 'todo-line-1');
+  // col 1
+  let col1 = DOM.createDiv(line1, 'todo-col-base', 'todo-col-1');
+  let todoCheckBoxBtn = DOM.createButton(col1, 'todo-checkbox');
+  let todoImg;
+  if (todo.isComplete === false) {
+    todoImg = todoIncompleteIcon;
+  } else {
+    todoImg = todoCompleteIcon;
+    todoEl = DOM.classify(todoEl, ['todo-complete']);
+  }
+  let checkboxBtnImg = DOM.createImage(todoCheckBoxBtn, todoImg);
+  let todoTitle = DOM.createSpan(col1, todo.getTitle(), 'todo-title');
+
+  // col 2
+  let col2 = DOM.createDiv(line1, 'todo-col-base', 'todo-col-2');
+  // TODO: format the date
+  let dueDate = DOM.createSpan(col2, todo.getDueDate(),'todo-due-date');
+  let expanderContainer = DOM.createDiv(col2, 'expander-container');
+  let expandMoreBtn = DOM.createButton(expanderContainer, 'expander-btn');
+  let expandMoreBtnImg = DOM.createImage(expandMoreBtn, todoExpandMoreIcon);
+  let expandLessBtn = DOM.createButton(expanderContainer, 'hide');
+  let expandLessBtnImg = DOM.createImage(expandLessBtn, todoExpandLessIcon);
+
+  let editBtn = DOM.createButton(col2, 'edit-todo-btn');
+  let editBtnImg = DOM.createImage(col2, todoEditIcon)
+  editBtn.appendChild(editBtnImg);
+
+  let priorityImgURL;
+  switch (todo.getPriority()) {
+    case 'low':
+      priorityImgURL = lowPriorityIcon;
+      break;
+    case 'medium':
+      //something
+      priorityImgURL = mediumPriorityIcon;
+      break;
+    case 'high':
+      priorityImgURL = highPriorityIcon;
+      break;
+  }
+  let priorityImg = DOM.createImage(col2, priorityImgURL);
+  // +++ line 2 +++
+  let line2 = DOM.createDiv(todoEl, 'todo-line-2');
+  let taskList = DOM.createUL(line2, 'task-list');
+  let tasks = todo.getTasks();
+  tasks.forEach(task => {
+    drawTask(taskList, task);
+  });
+
+  attachTo.appendChild(todoEl);
+  return todoEl;
+}
+
+function drawTask(attachTo, task) {
+  let taskEl = DOM.createLI(attachTo, 'task');
+  let taskCheckbox = DOM.createButton(taskEl, 'task-checkbox');
+  let taskImg;
+  if (task.isComplete === false) {
+    taskImg = taskIncompleteIcon;
+  } else {
+    taskImg = taskCompleteIcon;
+  }
+  let taskCheckboxImg = DOM.createImage(taskCheckbox, taskImg);
+  let taskTitle = DOM.createSpan(taskEl, task.getTitle());
+  return taskEl;
+}
+
+
 function drawNewTask() {
   let task = new App.Task();
   drawTask(task);
   task = null;
 }
 
-function drawTask(task) {
-  let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
-  let title;
-  let taskImg;
-  title = task.getTitle();
-  if (task.isComplete === true) {
-    taskImg = taskCompleteIcon;
-  } else {
-    taskImg = taskIncompleteIcon;
-  }
-  let LI = DOM.createLI(taskList, 'task');
-  let btn = DOM.createButton(LI, 'task-checkbox');
-  let img = DOM.createImage(btn, taskImg, 'task-complete');
-  let input = DOM.createInput(LI,'text', 'tasks', title);
-  let deleteBtn = DOM.createButton(LI);
-  let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
-}
+// function drawTask(task) {
+//   let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
+//   let title;
+//   let taskImg;
+//   title = task.getTitle();
+//   if (task.isComplete === true) {
+//     taskImg = taskCompleteIcon;
+//   } else {
+//     taskImg = taskIncompleteIcon;
+//   }
+//   let LI = DOM.createLI(taskList, 'task');
+//   let btn = DOM.createButton(LI, 'task-checkbox');
+//   let img = DOM.createImage(btn, taskImg, 'task-complete');
+//   let input = DOM.createInput(LI,'text', 'tasks', title);
+//   let deleteBtn = DOM.createButton(LI);
+//   let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
+// }
 
 // Update Functions
 function fillProjectForm(project) {
@@ -583,7 +669,7 @@ function submitCreateProjectForm() {
   // UNHIGHLIGHT the project with 'selected' class currently applied
   clearProjectHighlight();
   // DRAW project
-  DOM.drawProject(US_PROJECT_LIST_UL, project);
+  drawProject(US_PROJECT_LIST_UL, project);
   // HIDE todos - since none will be for the NEW project
   hideAllTodos();
   // HIGHLIGHT new project - i.e., show it is selected by highlighting it
@@ -663,8 +749,23 @@ function submitCreateTodoForm() {
   // CREATE todo
   const todo = new App.Todo(title, priority, dueDate, isComplete, tasks, notes);
   // DRAW todo
-  DOM.drawTodo(TODO_LIST, todo);
+  drawTodo(TODO_LIST, todo);
   // Add button functionality (listeners) after Todo is drawn
+
+}
+
+function addTodoListeners() {
+  const taskExpanderBtns = document.querySelectorAll('expander-btn');
+  // do something with expander buttons
+  taskExpanderBtns.forEach(function (taskExpander) {
+    showTasks();
+  })
+  const editTodoBtns = document.querySelectorAll('edit-todo-btn');
+}
+
+function showTasks() {
+  let todoLI = this.parent;
+  console.log(todoLI);
 
 }
 
@@ -774,11 +875,11 @@ testTodo2.addTask(testTask2);
 testTodo2.addTask(testTask3);
 testTodo2.addTask(testTask4);
 
-DOM.drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
-DOM.drawProject(US_PROJECT_LIST_UL, testProject2, projectListIcon);
-DOM.drawTodo(TODO_LIST, testTodo1);
-DOM.drawTodo(TODO_LIST, testTodo2);
-DOM.drawTodo(TODO_LIST, testTodo3);
+drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
+drawProject(US_PROJECT_LIST_UL, testProject2, projectListIcon);
+drawTodo(TODO_LIST, testTodo1);
+drawTodo(TODO_LIST, testTodo2);
+drawTodo(TODO_LIST, testTodo3);
 
 // fillProjectForm(testProject2);
 // fillTodoForm(testTodo2);

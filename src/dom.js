@@ -1,36 +1,5 @@
 'use strict';
 
-// Import Icons
-import todoTitanIcon from './icons/todo-titan-icon.svg';
-import addTodoIcon from './icons/add-todo-icon.svg';
-import allTimeIcon from './icons/all-time-icon.svg';
-import circleIcon from './icons/circle-icon.svg';
-import createNewProjectIcon from './icons/create-new-project-icon.svg';
-import githubIcon from './icons/github-icon.png';
-import hideCompleteTodosIcon from './icons/hide-complete-todos-icon.svg';
-import highPriorityIcon from './icons/high-priority-icon.svg';
-import mediumPriorityIcon from './icons/medium-priority-icon.svg';
-import lowPriorityIcon from './icons/low-priority-icon.svg';
-import myProjectsIcon from './icons/my-projects-icon.svg';
-import projectDeleteIcon from './icons/project-delete-icon.svg';
-import projectEditIcon from './icons/project-edit-icon.svg';
-import projectListIcon from './icons/project-list-icon.svg';
-import stepsListIcon from './icons/steps-list-icon.svg';
-import submitIcon from './icons/submit-icon.svg';
-import taskAddIcon from './icons/task-add-icon.svg';
-import taskCompleteIcon from './icons/task-complete-icon.svg';
-import taskDeleteIcon from './icons/task-delete-icon.svg';
-import taskIncompleteIcon from './icons/task-incomplete-icon.svg';
-import thisWeekIcon from './icons/this-week-icon.svg';
-import timeSensitiveTaskIcon from './icons/time-sensitive-task-icon.svg';
-import todayIcon from './icons/today-icon.svg';
-import todoCompleteIcon from './icons/todo-complete-icon.svg';
-import todoDeleteIcon from './icons/todo-delete-icon.svg';
-import todoEditIcon from './icons/todo-edit-icon.svg';
-import todoExpandLessIcon from './icons/todo-expand-less-icon.svg';
-import todoExpandMoreIcon from './icons/todo-expand-more-icon.svg';
-import todoIncompleteIcon from './icons/todo-incomplete-icon.svg';
-
 // Create Functions
 function createFavicon(faviconPath, attachTo) {
   let faviconEl = document.createElement('link');
@@ -152,103 +121,6 @@ function createTextArea(attachTo, name, cols='30', rows='10', text='Default Text
   return textAreaEl;
 }
 
-// draw functions
-function drawProject(attachTo, project) {
-  let projectEl = createLI(attachTo, 'project');
-
-  let projectElBtn = createButton(projectEl, 'project-btn');
-  let projectElImg = createImage(projectElBtn, projectListIcon,'project-image');
-  let projectElTitle = createSpan(projectElBtn, project.getTitle(),'project-title');
-  let numTodosContainer = createDiv(projectEl, 'num-todos-container');
-  let numTodos = createSpan(numTodosContainer, project.getCtTodos(), 'num-todos');
-
-  attachTo.appendChild(projectEl);
-  return
-}
-
-function eraseProject() {
-
-}
-
-function drawTodo(attachTo, todo) {
-  let todoEl = createLI(attachTo, 'todo');
-
-  // +++ line 1 +++
-  let line1 = createDiv(todoEl, 'todo-line-1');
-  // col 1
-  let col1 = createDiv(line1, 'todo-col-base', 'todo-col-1');
-  let todoCheckBoxBtn = createButton(col1, 'todo-checkbox');
-  let todoImg;
-  if (todo.isComplete === false) {
-    todoImg = todoIncompleteIcon;
-  } else {
-    todoImg = todoCompleteIcon;
-    todoEl = classify(todoEl, ['todo-complete']);
-  }
-  let checkboxBtnImg = createImage(todoCheckBoxBtn, todoImg);
-  let todoTitle = createSpan(col1, todo.getTitle(), 'todo-title');
-
-  // col 2
-  let col2 = createDiv(line1, 'todo-col-base', 'todo-col-2');
-  // TODO: format the date
-  let dueDate = createSpan(col2, todo.getDueDate(),'todo-due-date');
-  let expanderContainer = createDiv(col2, 'expander-container');
-  let expandMoreBtn = createButton(expanderContainer);
-  let expandMoreBtnImg = createImage(expandMoreBtn, todoExpandMoreIcon);
-  let expandLessBtn = createButton(expanderContainer, 'hide');
-  let expandLessBtnImg = createImage(expandLessBtn, todoExpandLessIcon);
-
-  let editBtn = createButton(col2);
-  let editBtnImg = createImage(col2, todoEditIcon)
-
-  let priorityImgURL;
-  switch (todo.getPriority()) {
-    case 'low':
-      priorityImgURL = lowPriorityIcon;
-      break;
-    case 'medium':
-      //something
-      priorityImgURL = mediumPriorityIcon;
-      break;
-    case 'high':
-      priorityImgURL = highPriorityIcon;
-      break;
-  }
-  let priorityImg = createImage(col2, priorityImgURL);
-  // +++ line 2 +++
-  let line2 = createDiv(todoEl, 'todo-line-2');
-  let taskList = createUL(line2, 'task-list');
-  let tasks = todo.getTasks();
-  tasks.forEach(task => {
-    drawTask(taskList, task);
-  });
-
-  attachTo.appendChild(todoEl);
-  return todoEl;
-}
-
-function eraseTodo() {
-
-}
-
-function drawTask(attachTo, task) {
-  let taskEl = createLI(attachTo, 'task');
-  let taskCheckbox = createButton(taskEl, 'task-checkbox');
-  let taskImg;
-  if (task.isComplete === false) {
-    taskImg = taskIncompleteIcon;
-  } else {
-    taskImg = taskCompleteIcon;
-  }
-  let taskCheckboxImg = createImage(taskCheckbox, taskImg);
-  let taskTitle = createSpan(taskEl, task.getTitle());
-  return taskEl;
-}
-
-function eraseTask() {
-
-}
-
 // GET Functions - Used to grab nodes that exist by default or have already been created using the functions above
 function getHTML() {
   let htmlEl = document.querySelector('html');
@@ -303,6 +175,4 @@ export default {
   getHTML, getHead, getBody,
   // HELPER functions
   addClasses, attach, setInnerText, classify, declassify, getClasses,
-  // DRAW functions
-  drawProject, drawTodo,
   };
