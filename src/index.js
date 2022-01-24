@@ -34,6 +34,7 @@ import todoExpandLessIcon from './icons/todo-expand-less-icon.svg';
 import todoExpandMoreIcon from './icons/todo-expand-more-icon.svg';
 import todoIncompleteIcon from './icons/todo-incomplete-icon.svg';
 import addProjectIcon from './icons/add-project-icon.svg';
+import discardChangesIcon from './icons/discard-changes-icon.svg';
 
 
 // Import DOM Elements
@@ -150,7 +151,11 @@ const TODO_LIST    = DOM.createUL(TODO_PANE, 'todo-list');
 // PROJECT EDIT PANE
 const PROJECT_EDIT_PANE = DOM.createDiv(MAIN, 'project-edit-pane', 'hide');
 const PROJECT_EDIT_PANE_FORM = DOM.createForm(PROJECT_EDIT_PANE);
-const PROJECT_EDIT_PANE_FORM_HEADER = DOM.createSpan(PROJECT_EDIT_PANE_FORM, 'Edit Project', 'form-header', 'fancy-header');
+const PROJECT_EDIT_PANE_FORM_HEADER = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'form-header', 'fancy-header');
+const PROJECT_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(PROJECT_EDIT_PANE_FORM_HEADER, 'Edit Project');
+const PROJECT_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(PROJECT_EDIT_PANE_FORM_HEADER, 'discard-project-btn');
+const PROJECT_EDIT_PANE_FORM_DISCARD_BTN_IMG = DOM.createImage(PROJECT_EDIT_PANE_FORM_DISCARD_BTN, discardChangesIcon, 'something');
+
 const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'edit-project-title-section', 'form-section');
 const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_LABEL = DOM.createLabel(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION, 'project-title', 'Project Title:','project-title-label');
 const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT = DOM.createInput(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION, 'text', 'project-title', 'Current Project Name');
@@ -162,7 +167,10 @@ const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN_IMG = DOM.createImage(PROJ
 // ============ TODO EDIT PANE =========================
 const TODO_EDIT_PANE  = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
 const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, '');
-const TODO_EDIT_PANE_FORM_HEADER = DOM.createSpan(TODO_EDIT_PANE_FORM, 'Edit Todo', 'form-header', 'fancy-header');
+const TODO_EDIT_PANE_FORM_HEADER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-header', 'fancy-header');
+const TODO_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM_HEADER, 'Edit Todo');
+const TODO_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_HEADER, 'discard-todo-btn');
+const TODO_EDIT_PANE_FORM_DISCARD_BTN_IMG = DOM.createImage(TODO_EDIT_PANE_FORM_DISCARD_BTN, discardChangesIcon, 'something');
 
 // TODO title
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'edit-todo-title-section', 'form-section');
@@ -545,11 +553,11 @@ function updateTextContent(ele, newText) {
 }
 
 function setProjectEditHeaderToCreate() {
-  updateTextContent(PROJECT_EDIT_PANE_FORM_HEADER, PROJECT_EDIT_HEADER_CREATE_TEXT);
+  updateTextContent(PROJECT_EDIT_PANE_FORM_HEADER_SPAN, PROJECT_EDIT_HEADER_CREATE_TEXT);
 }
 
 function setTodoEditHeaderToCreate() {
-  updateTextContent(TODO_EDIT_PANE_FORM_HEADER, TODO_EDIT_HEADER_CREATE_TEXT);
+  updateTextContent(TODO_EDIT_PANE_FORM_HEADER_SPAN, TODO_EDIT_HEADER_CREATE_TEXT);
 }
 
 function setProjectEditHeaderToEdit() {
@@ -899,37 +907,4 @@ function updateTask(title, isComplete, task) {
   return task;
 }
 
-// const testProject1 = createProject('First project');
-// const testProject2 = createProject('Cooking Wishlist');
-
-// const testTask1 = new App.Task('First task', false);
-// const testTodo1 = createTodo('First Todo','low', '2021-12-31', false);
-// const testTodo2 = createTodo('Espresso Machine','low', '2021-12-31', false);
-// const testTodo3 = createTodo('Buy rice cooker', 'high', '2021-12-31', true);
-
-// testTodo2.addNotes('These are my first notes');
-
-// const testTask2 = new App.Task('Get recommendations from Hayden', false);
-// const testTask3 = new App.Task('Research maintenance required', false);
-// const testTask4 = new App.Task('Get more counterspace', true);
-
-
-// testProject1.addTodo(testTodo1);
-
-// testProject2.addTodo(testTodo2);
-// testProject2.addTodo(testTodo3);
-
-// testTodo1.addTask(testTask1);
-// testTodo2.addTask(testTask2);
-// testTodo2.addTask(testTask3);
-// testTodo2.addTask(testTask4);
-
-// drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
-// drawProject(US_PROJECT_LIST_UL, testProject2, projectListIcon);
-// drawTodo(TODO_LIST, testTodo1);
-// drawTodo(TODO_LIST, testTodo2);
-// drawTodo(TODO_LIST, testTodo3);
-
-// fillProjectForm(testProject2);
-// fillTodoForm(testTodo2);
 hideAllTasks();
