@@ -59,16 +59,28 @@ const APP = (() => {
     getCtTodos() {
       return this._todos.length;
     },
-    getCtTodosCond(getComplete=false) {
+    getCtTodosComplete() {
+      return this.getCtTodosConditional(true);
+    },
+    getCtTodosIncomplete() {
+      return this.getCtTodosConditional(false);
+    },
+    /**
+     * 
+     * @param {true | false} isCompleteCondition 
+     * @returns Count of todos within a project instance that meet the specified condition of 'true' or 'false'
+     */
+    getCtTodosConditional(isCompleteCondition) {
       let ct = 0;
-      const tds = this.todos;
-      for (let i = 0; i < tds.length; i++) { 
-        const td = tds[i];
-        if (td.isComplete === getComplete) {
+      const todos = this._todos;
+      console.log(todos);
+      for (let i=0; i < todos.length; i++) {
+        const todo = todos[i];
+        if (todo.isComplete === isCompleteCondition) {
           ct++;
         }
       }
-      return ct;
+      return ct++;
     },
     addTodo(todo) {
       this._todos.push(todo);

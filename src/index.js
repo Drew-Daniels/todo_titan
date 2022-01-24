@@ -250,7 +250,7 @@ function updateCtTodos() {
   projectEls.forEach(function(projectEl) {
     const projectID = projectEl.id;
     const projectObj = getProjectByID(projectID);
-    const ctTodos = projectObj.getCtTodos();
+    const ctTodos = projectObj.getCtTodosIncomplete();
 
     const numTodosSpan = projectEl.querySelector('span.num-todos');
     numTodosSpan.textContent = ctTodos;
@@ -561,7 +561,7 @@ function setTodoEditHeaderToCreate() {
 }
 
 function setProjectEditHeaderToEdit() {
-  updateTextContent(PROJECT_EDIT_PANE_FORM_HEADER, PROJECT_EDIT_HEADER_EDIT_TEXT);
+  updateTextContent(PROJECT_EDIT_PANE_FORM_HEADER_SPAN, PROJECT_EDIT_HEADER_EDIT_TEXT);
 }
 
 function unhideElement(element, hideClass) {
@@ -606,10 +606,9 @@ function stageAddProjectForm() {
 
 function stageEditProjectForm() {
   setProjectEditHeaderToEdit();
-  // set project submit button event listener to edit mode
-  // prefill ProjectTitle text with the actual text from the currently selected project
   const currProject = getSelectedProject();
-  const currProjectTitleInput = document.querySelector('input.project-title');
+  console.log(currProject);
+  const currProjectTitleInput = document.querySelector('input[name=project-title]');
   currProjectTitleInput.value = currProject.getTitle();
   // apply changes to the project on submit
   toggleHideProjectEditPane();
