@@ -1,42 +1,5 @@
 'use strict';
 
-// TODO:
-// using draw/erase naming convention to denote the dom-changes that these functions will initiate when provided an object
-// such as a task, todo, or project
-
-// drawTodo
-// eraseTodo
-// drawProject
-// eraseProject
-// drawTask
-// eraseTask
-// drawTodoCt
-
-// drawTodos
-// eraseTodos
-// drawTasks
-// drawProjects
-// updateProjectForm
-// updateTodoForm
-  // updateTodoTitle
-  // updateTodoDueDate
-  // updateTodoPriority
-  // updateTodoTasks
-  // updateTodoNotes
-
-// Option form actions
-// hideCompleteTodos
-// displayCompleteTodos
-
-// unhideProjectEditForm
-// hideProjectEditForm
-
-// unhideTodoEditForm
-// hideTodoEditForm
-
-// closeProjectEditForm
-// closeTodoEditForm
-
 // Import styling
 import './stylesheets/style.css';
 
@@ -121,30 +84,30 @@ const MAIN = DOM.createMain(CONTENT);
 const PROJECT_PANE    = DOM.createDiv(MAIN, 'project-pane');
 
 // Default Project List for 'Time-Sensitive' Todos
-const PROJECT_LIST_CONTAINER_TS = DOM.createDiv(PROJECT_PANE, 'project-list-container', 'time-specified-projects');
-const TS_PROJECT_LIST_HEADER = DOM.createDiv(PROJECT_LIST_CONTAINER_TS, 'project-header');
-const TS_PROJECT_LIST_HEADER_MAIN = DOM.createDiv(TS_PROJECT_LIST_HEADER, 'project-header-main');
-const TS_PROJECT_LIST_ICON = DOM.createImage(TS_PROJECT_LIST_HEADER_MAIN, timeSensitiveTaskIcon, 'Time Sensitive Task Icon');
-const TS_PROJECT_LIST_TITLE = DOM.createSpan(TS_PROJECT_LIST_HEADER_MAIN, 'Overview');
-const TS_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_TS, 'project-list');
-const TS_PROJECT_LIST_TD_LI = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
-const TS_PROJECT_LIST_TD_LI_BTN = DOM.createButton(TS_PROJECT_LIST_TD_LI, 'project-btn');
-const TS_PROJECT_LIST_TD_LI_BTN_IMG = DOM.createImage(TS_PROJECT_LIST_TD_LI_BTN, todayIcon, 'Today Icon', 'project-image');
-const TS_PROJECT_LIST_TD_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_TD_LI_BTN, 'Today', 'project-title');
-const TS_PROJECT_LIST_TD_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_TD_LI, 'num-todos-container');
-const TS_PROJECT_LIST_TD_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_TD_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
-const TS_PROJECT_LIST_TW_LI = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
-const TS_PROJECT_LIST_TW_LI_BTN = DOM.createButton(TS_PROJECT_LIST_TW_LI, 'project-btn');
-const TS_PROJECT_LIST_TW_LI_BTN_IMG = DOM.createImage(TS_PROJECT_LIST_TW_LI_BTN, thisWeekIcon, 'This Week Icon', 'project-image');
-const TS_PROJECT_LIST_TW_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_TW_LI_BTN, 'This Week', 'project-title');
-const TS_PROJECT_LIST_TW_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_TW_LI, 'num-todos-container');
-const TS_PROJECT_LIST_TW_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_TW_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
-const TS_PROJECT_LIST_ALL_LI = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
-const TS_PROJECT_LIST_ALL_LI_BTN = DOM.createButton(TS_PROJECT_LIST_ALL_LI, 'project-btn');
-const TS_PROJECT_LIST_ALL_LI_BTN_IMG  = DOM.createImage(TS_PROJECT_LIST_ALL_LI_BTN, allTimeIcon, 'All Time Icon', 'project-image');
-const TS_PROJECT_LIST_ALL_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_ALL_LI_BTN, 'All', 'project-title');
-const TS_PROJECT_LIST_ALL_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_ALL_LI, 'num-todos-container');
-const TS_PROJECT_LIST_ALL_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_ALL_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
+// const PROJECT_LIST_CONTAINER_TS = DOM.createDiv(PROJECT_PANE, 'project-list-container', 'time-specified-projects');
+// const TS_PROJECT_LIST_HEADER = DOM.createDiv(PROJECT_LIST_CONTAINER_TS, 'project-header');
+// const TS_PROJECT_LIST_HEADER_MAIN = DOM.createDiv(TS_PROJECT_LIST_HEADER, 'project-header-main');
+// const TS_PROJECT_LIST_ICON = DOM.createImage(TS_PROJECT_LIST_HEADER_MAIN, timeSensitiveTaskIcon, 'Time Sensitive Task Icon');
+// const TS_PROJECT_LIST_TITLE = DOM.createSpan(TS_PROJECT_LIST_HEADER_MAIN, 'Overview');
+// const TS_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_TS, 'project-list');
+// const TS_PROJECT_LIST_TD_LI = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
+// const TS_PROJECT_LIST_TD_LI_BTN = DOM.createButton(TS_PROJECT_LIST_TD_LI, 'project-btn');
+// const TS_PROJECT_LIST_TD_LI_BTN_IMG = DOM.createImage(TS_PROJECT_LIST_TD_LI_BTN, todayIcon, 'Today Icon', 'project-image');
+// const TS_PROJECT_LIST_TD_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_TD_LI_BTN, 'Today', 'project-title');
+// const TS_PROJECT_LIST_TD_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_TD_LI, 'num-todos-container');
+// const TS_PROJECT_LIST_TD_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_TD_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
+// const TS_PROJECT_LIST_TW_LI = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
+// const TS_PROJECT_LIST_TW_LI_BTN = DOM.createButton(TS_PROJECT_LIST_TW_LI, 'project-btn');
+// const TS_PROJECT_LIST_TW_LI_BTN_IMG = DOM.createImage(TS_PROJECT_LIST_TW_LI_BTN, thisWeekIcon, 'This Week Icon', 'project-image');
+// const TS_PROJECT_LIST_TW_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_TW_LI_BTN, 'This Week', 'project-title');
+// const TS_PROJECT_LIST_TW_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_TW_LI, 'num-todos-container');
+// const TS_PROJECT_LIST_TW_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_TW_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
+// const TS_PROJECT_LIST_ALL_LI = DOM.createLI(TS_PROJECT_LIST_UL, 'project');
+// const TS_PROJECT_LIST_ALL_LI_BTN = DOM.createButton(TS_PROJECT_LIST_ALL_LI, 'project-btn');
+// const TS_PROJECT_LIST_ALL_LI_BTN_IMG  = DOM.createImage(TS_PROJECT_LIST_ALL_LI_BTN, allTimeIcon, 'All Time Icon', 'project-image');
+// const TS_PROJECT_LIST_ALL_LI_BTN_SPAN = DOM.createSpan(TS_PROJECT_LIST_ALL_LI_BTN, 'All', 'project-title');
+// const TS_PROJECT_LIST_ALL_LI_NUM_TODOS_CONTAINER = DOM.createDiv(TS_PROJECT_LIST_ALL_LI, 'num-todos-container');
+// const TS_PROJECT_LIST_ALL_LI_NUM_TODOS = DOM.createSpan(TS_PROJECT_LIST_ALL_LI_NUM_TODOS_CONTAINER, '0', 'num-todos');
 
 // Custom Project List for 'User-Specific' Todos
 const PROJECT_LIST_CONTAINER_US = DOM.createDiv(PROJECT_PANE, 'project-list-container', 'user-specified-projects');
@@ -264,6 +227,20 @@ const TODO_EDIT_HEADER_CREATE_TEXT = 'Create Todo';
 const TODO_EDIT_HEADER_EDIT_TEXT = 'Edit Todo';
 
 // UI Functions
+function updateCtTodos() {
+  const projectEls = document.querySelectorAll('.project');
+  projectEls.forEach(function(projectEl) {
+    console.log(projectEl);
+    const projectID = projectEl.id;
+    console.log(projectID);
+    const projectObj = getProjectByID(projectID);
+    const ctTodos = projectObj.getCtTodos();
+
+    const numTodosSpan = projectEl.querySelector('span.num-todos');
+    numTodosSpan.textContent = ctTodos;
+  })
+}
+
 function drawProject(attachTo, project) {
   let projectEl = DOM.createLI(attachTo, 'project');
   projectEl.id = project.getID();
@@ -327,15 +304,23 @@ function drawTodo(attachTo, todo) {
   let taskList = DOM.createUL(line2, 'task-list');
   let tasks = todo.getTasks();
   tasks.forEach(task => {
-    drawTask(taskList, task);
+    drawTaskDisplayMode(taskList, task);
   });
 
   attachTo.appendChild(todoEl);
   return todoEl;
 }
 
-function drawTask(attachTo, task) {
+/**
+ * Used to add DOM task elements under a todo in the todo pane - similar to 'drawTaskEditMode' minus the delete button and the fact that the task title is displayed
+ * in SPAN rather than INPUT
+ * @param {*} attachTo 
+ * @param {*} task 
+ * @returns a fully drawn task elment for displaying in the todo pane
+ */
+function drawTaskDisplayMode(attachTo, task) {
   let taskEl = DOM.createLI(attachTo, 'task');
+
   let taskCheckbox = DOM.createButton(taskEl, 'task-checkbox');
   let taskImg;
   if (task.isComplete === false) {
@@ -345,33 +330,40 @@ function drawTask(attachTo, task) {
   }
   let taskCheckboxImg = DOM.createImage(taskCheckbox, taskImg);
   let taskTitle = DOM.createSpan(taskEl, task.getTitle());
+
   return taskEl;
 }
 
 
 function drawNewTask() {
   let task = new App.Task();
-  drawTask(task);
+  drawTaskEditMode(task);
   task = null;
 }
+/**
+ * Similar to 'drawTaskDisplayMode' only this version uses INPUT to display task title and adds an 'delete' button
+ * @param {*} task 
+ */
+function drawTaskEditMode(task) {
+  let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
+  let title;
+  let taskImg;
+  title = task.getTitle();
+  if (task.isComplete === true) {
+    taskImg = taskCompleteIcon;
+  } else {
+    taskImg = taskIncompleteIcon;
+  }
+  let taskEl = DOM.createLI(taskList, 'task');
 
-// function drawTask(task) {
-//   let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
-//   let title;
-//   let taskImg;
-//   title = task.getTitle();
-//   if (task.isComplete === true) {
-//     taskImg = taskCompleteIcon;
-//   } else {
-//     taskImg = taskIncompleteIcon;
-//   }
-//   let LI = DOM.createLI(taskList, 'task');
-//   let btn = DOM.createButton(LI, 'task-checkbox');
-//   let img = DOM.createImage(btn, taskImg, 'task-complete');
-//   let input = DOM.createInput(LI,'text', 'tasks', title);
-//   let deleteBtn = DOM.createButton(LI);
-//   let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
-// }
+  let btn = DOM.createButton(taskEl, 'task-checkbox');
+  let img = DOM.createImage(btn, taskImg, 'task-complete');
+  let input = DOM.createInput(taskEl,'text', 'tasks', title);
+  let deleteBtn = DOM.createButton(taskEl);
+  let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
+
+  return taskEl;
+}
 
 // Update Functions
 function fillProjectForm(project) {
@@ -409,7 +401,7 @@ function fillTodoForm(todo) {
   // assignment
   titleEl.value = title;
   dueDateEl.value = dueDate;
-  tasks.forEach(task => drawTaskEdit(task))
+  tasks.forEach(task => drawTaskEditMode(task))
   priorityEl.checked=true;
   notesEl.value = notes;
 
@@ -515,7 +507,9 @@ function hideCompleteTodos() {
 }
 
 function showCompleteTodos() {
-  const todoNodes = document.querySelectorAll('.todo-complete');
+  // Only unhide complete todos IF THEY ARE FOR the currently selected project
+  const selectedProject = document.querySelector('.project.selected');
+  const todoNodes = selectedProject.querySelectorAll('.todo-complete');
   todoNodes.forEach(function(todoNode) {
     DOM.declassify(todoNode, [HIDE_CLASS]);
     DOM.classify(todoNode, [SHOW_CLASS]);
@@ -656,56 +650,52 @@ function resetTodoEditPane() {
   fillTodoForm(todo);
   todo = null;
 }
-
+/**
+ * Routes calls to GET project values to SEND to 'createProject()'
+ */
 function submitCreateProjectForm() {
   // GET values
   let title = PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT.value;
-  // HIDE form
-  hideProjectEditPane();
-  // RESET form
-  resetProjectEditForm();
-  // CREATE project
-  const project = new App.Project(title);
-  // UNHIGHLIGHT the project with 'selected' class currently applied
-  clearProjectHighlight();
-  // DRAW project
-  drawProject(US_PROJECT_LIST_UL, project);
-  // HIDE todos - since none will be for the NEW project
-  hideAllTodos();
-  // HIGHLIGHT new project - i.e., show it is selected by highlighting it
-  // highlight the last project in the list - since this will be the newly created one
-  highlightLatestProject();
+  let projectEl = createProject(title);
+  return projectEl;
 }
 
 /**
  * 
- * @returns the currently highlighted project as an object, so that that project object can be used and manipulated
+ * @returns the currently 'selected' project as an object, so that that project object can be used and manipulated
  */
 function getSelectedProject() {
   // first, find the name of the project that is currently 'selected'
-  const selectedProjectName = document.querySelector('.project span.project-title.highlighted');
+  const selectedProjectEl = document.querySelector('.project.selected');
+  const selectedProjectElID = selectedProjectEl.id;
   const projectArray = App.getProjects();
   let project;
   projectArray.forEach(function (projectObj) {
-    if (projectObj.getTitle() === selectedProjectName) {
+    if (projectObj.getID() === selectedProjectElID) {
       project = projectObj;
     }
   })
-  // const selectedProject = App.projects()
   return project;
 }
 
-function highlightLatestProject() {
-  const projectTitles = document.querySelectorAll('.project-title');
-  let ctProjects = projectTitles.length;
-  const latestProjectTitle = projectTitles[--ctProjects];
-  DOM.classify(latestProjectTitle, ['highlighted']);
+function selectProject() {
+  const project = this.parent;
+  clearProjectSelection();
+  DOM.classify(project, ['selected']);
+  // unhide all INCOMPLETE todos that are specifically FOR this project
 }
 
-function clearProjectHighlight() {
-  const selectedProjectTitle = document.querySelector('.highlighted');
-  if (!(selectedProjectTitle === null)) {
-    DOM.declassify(selectedProjectTitle, ['highlighted'])
+function selectNewProject() {
+  const projects = document.querySelectorAll('.project');
+  let ctProjects = projects.length;
+  const latestProject = projects[--ctProjects];
+  DOM.classify(latestProject, ['selected']);
+}
+
+function clearProjectSelection() {
+  const selectedProject = document.querySelector('.project.selected');
+  if (!(selectedProject === null)) {
+    DOM.declassify(selectedProject, ['selected'])
   }
 }
 
@@ -717,6 +707,7 @@ function submitCreateTodoForm() {
   let tasks;
   let isComplete
   let notes;
+  let projectID;
   title = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT.value;
   dueDate = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value;
   priority = document.querySelector('input[name="priority-level"]:checked').value;
@@ -740,18 +731,12 @@ function submitCreateTodoForm() {
   // within each task node:
     // create a new Task
     // get 'title' from 
-
   notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value;
-  // HIDE form
-  hideTodoEditPane();
-  // RESET form
-  resetTodoEditPane();
-  // CREATE todo
-  const todo = new App.Todo(title, priority, dueDate, isComplete, tasks, notes);
-  // DRAW todo
-  drawTodo(TODO_LIST, todo);
-  // Add button functionality (listeners) after Todo is drawn
+  // 
+  let selectedProjectID = getSelectedProjectID();
 
+  createTodo(title, priority, dueDate, isComplete, tasks, notes, selectedProjectID);
+  updateCtTodos();
 }
 
 function addTodoListeners() {
@@ -799,36 +784,80 @@ function getStorage() {
   return window['localStorage'];
 }
 
-function getProjects() {
-  let projectStorage;
-  let projects;
-  if (storageAvailable('localStorage')) {
-    let locStorage = getStorage();
-    projectStorage = locStorage.getItem('userProjects');
-    if (!(projectStorage === null)) {
-      projects = JSON.parse(projectStorage);
-    }
-  } else {
-    projects = [];
-  }
-  return projects;
-}
-
-// function addProject(title) {
-//   const project = new App.Project(title);
-//   return project;
+// function getProjects() {
+//   let projectStorage;
+//   let projects;
+//   if (storageAvailable('localStorage')) {
+//     let locStorage = getStorage();
+//     projectStorage = locStorage.getItem('userProjects');
+//     if (!(projectStorage === null)) {
+//       projects = JSON.parse(projectStorage);
+//     }
+//   } else {
+//     projects = [];
+//   }
+//   return projects;
 // }
+
+/**
+ * Used to route calls necessary to create a NEW instance of a project where the attributes are PASSED in
+ * AGNOSTIC of forms or anything used to GET the title - is only passed a value from some other fn
+ * @param {*} title 
+ * @returns 
+ */
+function createProject(title) {
+  // HIDE form
+  hideProjectEditPane();
+  // RESET form to default
+  resetProjectEditForm();
+  // UNHIGHLIGHT the project with 'selected' class currently applied
+  clearProjectSelection();
+  // CREATE project instance
+  const projectObj = new App.Project(title);
+  // DRAW project
+  const projectEl = drawProject(US_PROJECT_LIST_UL, projectObj)
+  // HIDE todos - since none will be for the NEW project
+  hideAllTodos();
+  // SELECT latest project
+  selectNewProject();
+
+  console.log(App.getProjects());
+  return projectEl;
+}
 
 function updateProject(title, project) {
   project.title = title;
   return project;
 }
 
-// function addTodo(title, priority, dueDate, isComplete, tasks, notes, project) {
-//   const todo = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, project)
-//   project.addTodo(todo);
-//   return todo;
-// }
+function getSelectedProjectID() {
+  const selectedProject = getSelectedProject();
+  return selectedProject.getID();
+}
+
+function getProjectByID(projectID) {
+  const projectObj = App.getProject(projectID);
+  return projectObj;
+}
+
+function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
+  // HIDE form
+  hideTodoEditPane();
+  // RESET form
+  resetTodoEditPane();
+  // GET selected project
+  const selectedProjectID = getSelectedProjectID();
+  const project = getProjectByID(selectedProjectID);
+  console.log(project);
+  // CREATE todo
+  const todoObj = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, selectedProjectID);
+  // DRAW todo
+  const todoEl = drawTodo(TODO_LIST, todoObj);
+  // ADD todo to project
+  project.addTodo(todoObj);
+  
+  return todoEl;
+}
 
 function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todo) {
   todo.title = title;
@@ -850,36 +879,36 @@ function updateTask(title, isComplete, task) {
   return task;
 }
 
-const testProject1 = new App.Project('First project');
-const testProject2 = new App.Project('Cooking Wishlist');
+// const testProject1 = createProject('First project');
+// const testProject2 = createProject('Cooking Wishlist');
 
-const testTask1 = new App.Task('First task', false);
-const testTodo1 = new App.Todo('First Todo','low', '2021-12-31', false);
-const testTodo2 = new App.Todo('Espresso Machine','low', '2021-12-31', false);
-const testTodo3 = new App.Todo('Buy rice cooker', 'high', '2021-12-31', true);
+// const testTask1 = new App.Task('First task', false);
+// const testTodo1 = createTodo('First Todo','low', '2021-12-31', false);
+// const testTodo2 = createTodo('Espresso Machine','low', '2021-12-31', false);
+// const testTodo3 = createTodo('Buy rice cooker', 'high', '2021-12-31', true);
 
-testTodo2.addNotes('These are my first notes');
+// testTodo2.addNotes('These are my first notes');
 
-const testTask2 = new App.Task('Get recommendations from Hayden', false);
-const testTask3 = new App.Task('Research maintenance required', false);
-const testTask4 = new App.Task('Get more counterspace', true);
+// const testTask2 = new App.Task('Get recommendations from Hayden', false);
+// const testTask3 = new App.Task('Research maintenance required', false);
+// const testTask4 = new App.Task('Get more counterspace', true);
 
 
-testProject1.addTodo(testTodo1);
+// testProject1.addTodo(testTodo1);
 
-testProject2.addTodo(testTodo2);
-testProject2.addTodo(testTodo3);
+// testProject2.addTodo(testTodo2);
+// testProject2.addTodo(testTodo3);
 
-testTodo1.addTask(testTask1);
-testTodo2.addTask(testTask2);
-testTodo2.addTask(testTask3);
-testTodo2.addTask(testTask4);
+// testTodo1.addTask(testTask1);
+// testTodo2.addTask(testTask2);
+// testTodo2.addTask(testTask3);
+// testTodo2.addTask(testTask4);
 
-drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
-drawProject(US_PROJECT_LIST_UL, testProject2, projectListIcon);
-drawTodo(TODO_LIST, testTodo1);
-drawTodo(TODO_LIST, testTodo2);
-drawTodo(TODO_LIST, testTodo3);
+// drawProject(US_PROJECT_LIST_UL, testProject1, projectListIcon);
+// drawProject(US_PROJECT_LIST_UL, testProject2, projectListIcon);
+// drawTodo(TODO_LIST, testTodo1);
+// drawTodo(TODO_LIST, testTodo2);
+// drawTodo(TODO_LIST, testTodo3);
 
 // fillProjectForm(testProject2);
 // fillTodoForm(testTodo2);

@@ -214,7 +214,7 @@ textarea {
   padding-left: 1em;
 }
 
-.highlighted {
+.project.selected span.project-title {
   background-color: #D4F0BE;
 }
 

@@ -9,6 +9,17 @@ const APP = (() => {
     return PROJECTS;
   }
 
+  function getProject(desiredProjectID) {
+    let projectObj;
+    PROJECTS.forEach(function(project) {
+      const currProjectID = project.getID();
+      if (currProjectID === desiredProjectID) {
+        projectObj = project;
+      }
+    })
+    return projectObj;
+  }
+
   function getTodos() {
     return TODOS;
   }
@@ -17,6 +28,7 @@ const APP = (() => {
     const index = TODOS.findIndex(todo);
     TODOS.splice(index, 1);
   }
+
   function delProject(projectToDelete) {
     const srchID = projectToDelete.getID();
     for (let i=0; i < PROJECTS.length; i++) {
@@ -26,6 +38,7 @@ const APP = (() => {
       }
     }
   }
+
   // SHARED Methods
   const hasID = {
     getID() {
@@ -102,8 +115,22 @@ const APP = (() => {
   }
 
   const hasProject = {
+    getProjectID() {
+      return this.projectID;
+    },
     getProject() {
       return this.project;
+    },
+    setProject(projectID) {
+      let projectObj;
+      for (let i=0; i < PROJECTS.length; i++) {
+        projectObj = PROJECTS[i];
+        if (projectObj.getID() === projectID) {
+          this.project = projectObj;
+        }
+      }
+      // Ensure this todo is added to parent project's array of todos
+      projectObj.push(this);
     }
   }
 
@@ -120,7 +147,7 @@ const APP = (() => {
   mixin(Task.prototype, hasTitle, {constructor: Task})
 
   // Todo
-  function Todo(title='New Todo', priority='low', dueDate, isComplete=false, tasks=Array(), notes='', project) {
+  function Todo(title='New Todo', priority='low', dueDate, isComplete=false, tasks=Array(), notes='', projectID) {
     this.id = uuidv4();
     this.title = title;
     this.priority = priority;
@@ -128,7 +155,7 @@ const APP = (() => {
     this.isComplete = isComplete;
     this.tasks = tasks;
     this.notes = notes;
-    this.project = project;
+    this.projectID = projectID;
 
     TODOS.push(this);
   }
@@ -162,7 +189,8 @@ const APP = (() => {
     Todo, 
     Task,
     // GET
-    getProjects, 
+    getProjects,
+    getProject,
     getTodos,
     // DEL
     delProject,
