@@ -1,33 +1,50 @@
+import { v4 as uuidv4 } from 'uuid';
+
 const APP = (() => {
   const TODOS = [];
-  const LISTS = [];
+  const PROJECTS = [];
 
   // module level functions
   function getProjects() {
-    const projects = [];
-    for (let i=0; i < LISTS.length; i++) {
-      let list = LISTS[i];
-      if (list instanceof Project) {
-        projects.push(list);
-      }
-    }
-    return projects;
+    return PROJECTS;
   }
 
-  // Shared Methods
+  function getTodos() {
+    return TODOS;
+  }
+
+  function delTodo(todo) {
+    const index = TODOS.findIndex(todo);
+    TODOS.splice(index, 1);
+  }
+  function delProject(projectToDelete) {
+    const srchID = projectToDelete.getID();
+    for (let i=0; i < PROJECTS.length; i++) {
+      const currID = PROJECTS[i].getID();
+      if (currID === srchID) {
+        PROJECTS.splice(i, 1);
+      }
+    }
+  }
+  // SHARED Methods
+  const hasID = {
+    getID() {
+      return this.id;
+    }
+  }
   const hasTitle = {
     getTitle() {
       return this.title;
     }
   }
 
-  // List Methods
+  // PROJECT Methods
   const hasTodos = {
     getTitle() {
       return this.title;
     },
     getCtTodos() {
-      return this.todos.length;
+      return this._todos.length;
     },
     getCtTodosCond(getComplete=false) {
       let ct = 0;
@@ -41,13 +58,12 @@ const APP = (() => {
       return ct;
     },
     addTodo(todo) {
-      this.todos.push(todo);
+      this._todos.push(todo);
     },
   }
 
-  // ToDo Methods
+  // TODO Methods
   const hasDueDate = {
-    // parenthesis' required to return an object literal exp.
     getDueDate() {
       return this.dueDate;
     }
@@ -105,48 +121,30 @@ const APP = (() => {
 
   // Todo
   function Todo(title='New Todo', priority='low', dueDate, isComplete=false, tasks=Array(), notes='', project) {
+    this.id = uuidv4();
     this.title = title;
-    this.priority  = priority;
-    this.dueDate   = dueDate;
-    this.isComplete  = isComplete;
-    this.tasks     = tasks;
-    this.notes     = notes;
-    this.project   = project;
+    this.priority = priority;
+    this.dueDate = dueDate;
+    this.isComplete = isComplete;
+    this.tasks = tasks;
+    this.notes = notes;
+    this.project = project;
 
     TODOS.push(this);
   }
-  mixin(Todo.prototype, hasTitle, hasPriority, hasDueDate, hasTasks, hasNotes, hasProject, {constructor: Todo});
-
-  function List(title='New List', todos=Array()) {
-    this.title  = title;
-    this._todos = todos;
-
-    Object.defineProperty(this, 'todos', {
-      get() {
-        this.setTodos();
-        return this._todos;
-      },
-      set(todos) {
-        this._todos = todos;
-      }
-    });
-
-    LISTS.push(this);
-  }
-  mixin(List.prototype, hasTitle, hasTodos, {constructor: List});
+  mixin(Todo.prototype, hasID, hasTitle, hasPriority, hasDueDate, hasTasks, hasNotes, hasProject, {constructor: Todo});
 
   // Project
   function Project(title='New Project', todos=Array()) {
-    List.apply(this, [title, todos]);
+    this.id = uuidv4()
+    this.title = title;
+    this._todos = todos;
+    
+    PROJECTS.push(this);
   }
-  Project.prototype = Object.create(List.prototype, {
-    constructor: {
-      configurable: true,
-      enumerable: true,
-      value: Project,
-      writable: true,
-    }
-  })
+
+  mixin(Project.prototype, hasID, hasTitle, hasTodos, {constructor: Project});
+
   Project.prototype.setTodos = function() {
     const that = this;
     const projTitle = that.title;
@@ -159,22 +157,17 @@ const APP = (() => {
     that.todos = myTodos;
   }
 
-  // Module level functions
-  function getLists() {
-    return LISTS;
+  return {
+    Project, 
+    Todo, 
+    Task,
+    // GET
+    getProjects, 
+    getTodos,
+    // DEL
+    delProject,
+    delTodo,
   }
-  function getTodos() {
-    return TODOS;
-  }
-  function delTodo(todo) {
-    const index = TODOS.findIndex(todo);
-    TODOS.splice(index, 1);
-  }
-  function delList(list) {
-    const index = LISTS.findIndex(list);
-    LISTS.splice(index, 1);
-  }
-  return {Project, Todo, Task, getProjects, getLists, getTodos}
 })();
 
 export default APP;

@@ -355,7 +355,6 @@ function updateBtnText(btn, newBtnText) {
   const childNodes = btn.children;
   const childArr = [...childNodes];
   childArr.forEach(function(childEl) {
-    console.log(childEl.tagName);
     if (childEl.tagName === 'SPAN') {
       childEl.innerHTML = newBtnText;
     }
@@ -496,13 +495,16 @@ function toggleClass(element, toggleClass) {
 }
 
 function stageAddProjectForm() {
+  // UPDATE Project Header from default of 'Edit Project' to 'Create Project'
   setProjectEditHeaderToCreate();
-  // setProjectTitleInputCreateMode();
+  // CREATE a temp instance of a Project to use to fill out the form
   let project = new App.Project();
   fillProjectForm(project);
+  App.delProject(project);
   // set project submit button event listener to create mode
   unhideProjectEditPane();
   project = null;
+  console.log(App.getProjects());
 }
 
 function stageEditProjectForm() {
@@ -543,6 +545,7 @@ function hideProjectEditPane() {
 function resetProjectEditForm() {
   let project = new App.Project();
   fillProjectForm(project);
+  App.delProject(project);
   project = null;
 }
 
@@ -595,9 +598,7 @@ function submitCreateProjectForm() {
 function getSelectedProject() {
   // first, find the name of the project that is currently 'selected'
   const selectedProjectName = document.querySelector('.project span.project-title.highlighted');
-  console.log(selectedProjectName);
   const projectArray = App.getProjects();
-  console.log(projectArray);
   let project;
   projectArray.forEach(function (projectObj) {
     if (projectObj.getTitle() === selectedProjectName) {
