@@ -29,8 +29,8 @@ const APP = (() => {
     TODOS.splice(index, 1);
   }
 
-  function delProject(projectToDelete) {
-    const srchID = projectToDelete.getID();
+  function delProject(projectID) {
+    const srchID = projectID;
     for (let i=0; i < PROJECTS.length; i++) {
       const currID = PROJECTS[i].getID();
       if (currID === srchID) {
@@ -73,7 +73,6 @@ const APP = (() => {
     getCtTodosConditional(isCompleteCondition) {
       let ct = 0;
       const todos = this._todos;
-      console.log(todos);
       for (let i=0; i < todos.length; i++) {
         const todo = todos[i];
         if (todo.isComplete === isCompleteCondition) {

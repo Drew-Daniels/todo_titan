@@ -119,9 +119,9 @@ const US_PROJECT_LIST_TITLE = DOM.createSpan(US_PROJECT_LIST_HEADER_MAIN, 'My Pr
 const US_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_US, 'project-list');
 
 const US_PROJECT_LIST_ADD_PROJECT_PANE = DOM.createDiv(PROJECT_PANE, 'add-project-btn-container')
-const US_PROJECT_LIST_ADD_PROJECT_BTN = DOM.createButton(US_PROJECT_LIST_ADD_PROJECT_PANE, 'add-project-btn', 'fancy-btn')
+const US_PROJECT_LIST_ADD_PROJECT_BTN = DOM.createButton(US_PROJECT_LIST_ADD_PROJECT_PANE, 'add-project-btn', 'fancy-btn');
 const US_PROJECT_LIST_ADD_PROJECT_BTN_IMG = DOM.createImage(US_PROJECT_LIST_ADD_PROJECT_BTN, addProjectIcon);
-const US_PROJECT_LIST_ADD_PROJECT_BTN_SPAN = DOM.createSpan(US_PROJECT_LIST_ADD_PROJECT_BTN, 'Add a New Project')
+const US_PROJECT_LIST_ADD_PROJECT_BTN_SPAN = DOM.createSpan(US_PROJECT_LIST_ADD_PROJECT_BTN, 'Add a New Project');
 
 // +++++ TODO PANE +++++
 const TODO_PANE = DOM.createDiv(MAIN, 'todo-pane');
@@ -130,19 +130,19 @@ const TODO_OPTIONS_BAR = DOM.createDiv(TODO_PANE, 'todo-options-bar');
 const TODO_OPTIONS_LIST = DOM.createUL(TODO_OPTIONS_BAR, 'todo-options-list');
 const TODO_OPTIONS_LI_ADD_TODO = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
 const TODO_OPTIONS_LI_ADD_TODO_BTN = DOM.createButton(TODO_OPTIONS_LI_ADD_TODO, 'option-btn', 'fancy-btn', 'add-todo-btn');
-const TODO_OPTIONS_LI_ADD_TODO_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_ADD_TODO_BTN, 'Add a Todo','todo-option-text')
+const TODO_OPTIONS_LI_ADD_TODO_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_ADD_TODO_BTN, 'Add a Todo','todo-option-text');
 const TODO_OPTIONS_LI_ADD_TODO_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_ADD_TODO_BTN, addTodoIcon, 'Add Todo Icon', 'option-image');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN = DOM.createButton(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS, 'option-btn', 'fancy-btn', 'toggle-show-hide-complete-todos-btn');
-const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos','todo-option-text')
+const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos','todo-option-text');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, hideCompleteTodosIcon, 'Hide Complete Todos Icon', 'option-image');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
-const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_EDIT_THIS_PROJECT, 'option-btn', 'fancy-btn');
-const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, 'Edit this project','todo-option-text')
+const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_EDIT_THIS_PROJECT, 'option-btn', 'fancy-btn', 'edit-project-btn');
+const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, 'Edit this project','todo-option-text');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, projectEditIcon, 'Project Edit Icon', 'option-image');
 const TODO_OPTIONS_LI_DELETE_THIS_PROJECT = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
-const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_DELETE_THIS_PROJECT, 'option-btn', 'fancy-btn');
-const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'Delete this project','todo-option-text')
+const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_DELETE_THIS_PROJECT, 'option-btn', 'fancy-btn', 'delete-project-btn');
+const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'Delete this project','todo-option-text');
 const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_IMG = DOM.createImage(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, projectDeleteIcon, 'Delete this project icon', 'option-image');
 
 // TODO LIST
@@ -175,7 +175,7 @@ const TODO_EDIT_PANE_FORM_DISCARD_BTN_IMG = DOM.createImage(TODO_EDIT_PANE_FORM_
 // TODO title
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'edit-todo-title-section', 'form-section');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION, 'todo-title', 'Todo Title:', 'todo-title-label');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION, 'text', 'todo-title', 'Current Todo Title')
+const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION, 'text', 'todo-title', 'Current Todo Title');
 
 // TODO isComplete
 const TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-section');
@@ -228,7 +228,7 @@ const FOOTER = DOM.createFooter(CONTENT);
 DOM.setInnerText(FOOTER, FOOTER_TEXT);
 
 const GITHUB_PROJECT_ANCHOR = DOM.createAnchor(FOOTER, GITHUB_PROJECT_URL);
-const GITHUB_IMG = DOM.createImage(GITHUB_PROJECT_ANCHOR, githubIcon, 'Github Icon', 'github-icon')
+const GITHUB_IMG = DOM.createImage(GITHUB_PROJECT_ANCHOR, githubIcon, 'Github Icon', 'github-icon');
 
 const GITHUB_PROFILE_CONTAINER = DOM.createDiv(FOOTER, 'github-profile-container');
 GITHUB_PROFILE_CONTAINER.innerText = GITHUB_PROFILE_CONTAINER_TEXT;
@@ -532,6 +532,14 @@ function showCompleteTodos() {
   })
 }
 
+function deleteSelectedProject() {
+  const selectedProjectID = getSelectedProjectID();
+  const selectedProjectEl = getSelectedProjectEl();
+  selectedProjectEl.parentNode.removeChild(selectedProjectEl);
+  // delete from App here
+  App.delProject(selectedProjectID);
+}
+
 // Project Add and Project Edit button listeners
 addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, stageAddProjectForm);
 addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, stageEditProjectForm);
@@ -545,6 +553,7 @@ addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitCreateProjectFor
 addBtnFn(TODO_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetTodoEditForm);
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitCreateTodoForm);
 addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
+addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
 // Add 'Delete this Project' functionality here
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
 
@@ -598,7 +607,7 @@ function stageAddProjectForm() {
   // CREATE a temp instance of a Project to use to fill out the form
   let project = new App.Project();
   fillProjectForm(project);
-  App.delProject(project);
+  App.delProject(project.getID());
   // set project submit button event listener to create mode
   unhideProjectEditPane();
   project = null;
@@ -607,7 +616,6 @@ function stageAddProjectForm() {
 function stageEditProjectForm() {
   setProjectEditHeaderToEdit();
   const currProject = getSelectedProject();
-  console.log(currProject);
   const currProjectTitleInput = document.querySelector('input[name=project-title]');
   currProjectTitleInput.value = currProject.getTitle();
   // apply changes to the project on submit
@@ -641,7 +649,7 @@ function hideProjectEditPane() {
 function resetProjectEditForm() {
   let project = new App.Project();
   fillProjectForm(project);
-  App.delProject(project);
+  App.delProject(project.getID());
   project = null;
 }
 
@@ -862,6 +870,11 @@ function getSelectedProjectID() {
 function getProjectByID(projectID) {
   const projectObj = App.getProject(projectID);
   return projectObj;
+}
+
+function getSelectedProjectEl() {
+  const projectEl = document.querySelector('.project.selected');
+  return projectEl;
 }
 
 function addTodoEventListeners(todoEl) {
