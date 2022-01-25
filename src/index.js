@@ -137,11 +137,11 @@ const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN = DOM.createButton(TODO_OPTIONS_LI
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos','todo-option-text');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, hideCompleteTodosIcon, 'Hide Complete Todos Icon', 'option-image');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
-const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_EDIT_THIS_PROJECT, 'option-btn', 'fancy-btn', 'edit-project-btn');
+const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_EDIT_THIS_PROJECT, 'option-btn', 'fancy-btn', 'edit-project-btn', 'hide');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, 'Edit this project','todo-option-text');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, projectEditIcon, 'Project Edit Icon', 'option-image');
 const TODO_OPTIONS_LI_DELETE_THIS_PROJECT = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
-const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_DELETE_THIS_PROJECT, 'option-btn', 'fancy-btn', 'delete-project-btn');
+const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_DELETE_THIS_PROJECT, 'option-btn', 'fancy-btn', 'delete-project-btn', 'hide');
 const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'Delete this project','todo-option-text');
 const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_IMG = DOM.createImage(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, projectDeleteIcon, 'Delete this project icon', 'option-image');
 
@@ -268,7 +268,8 @@ function drawProject(attachTo, project) {
   let numTodos = DOM.createSpan(numTodosContainer, project.getCtTodos(), 'num-todos');
 
   attachTo.appendChild(projectEl);
-  return
+
+  return projectEl;
 }
 function drawTodo(attachTo, todo) {
   let todoEl = DOM.createLI(attachTo, 'todo');
@@ -416,6 +417,7 @@ function fillTodoForm(todo) {
 
   // element references
   let titleEl = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT;
+  let isCompleteEl = TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT;
   let dueDateEl = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT;
   let priorityEl;
   switch (priority) {
@@ -433,6 +435,7 @@ function fillTodoForm(todo) {
 
   // assignment
   titleEl.value = title;
+  isCompleteEl.checked = false;
   dueDateEl.value = dueDate;
   tasks.forEach(task => drawTaskEditMode(task))
   priorityEl.checked=true;
@@ -511,16 +514,25 @@ function hideAllTasks() {
 function completeTodosHidden() {
   const todoNodes = document.getElementsByClassName('todo-complete');
   const todo = todoNodes[0];
-  const classes = [...todo.classList]
-  let result;
-  if (classes.includes(HIDE_CLASS)) {
-    result = true;
+  if (!todo) {
+    return;
   } else {
-    result = false;
+      let result;
+      const classes = [...todo.classList]
+      if (classes.includes(HIDE_CLASS)) {
+        result = true;
+      } else {
+        result = false;
+      }
+      return result;
+    }
   }
-  return result;
-}
 
+/**
+ * Checks to see if any complete todo is hidden. 
+ * If TRUE, all completed todos are unhidden. 
+ * If FALSE, all completed todos are hidden.
+ */
 function toggleShowHideCompleteTodos() {
   if (completeTodosHidden()) {
     showCompleteTodos();
@@ -555,6 +567,13 @@ function deleteSelectedProject() {
   selectedProjectEl.parentNode.removeChild(selectedProjectEl);
   // delete from App here
   App.delProject(selectedProjectID);
+  // try to select the last project available here
+
+  // check if any projects - if none, hide 'edit' and 'delete' project buttons
+  if (!(projectsExist())) {
+    hideEditThisProjectBtn();
+    hideDeleteThisProjectBtn();
+  }
 }
 
 // Project Add and Project Edit button listeners
@@ -712,12 +731,43 @@ function resetTodoEditPane() {
   todo = null;
 }
 /**
+ * Returns true if any '.project' elements are found - false otherwise
+ */
+function projectsExist() {
+  const projectsFound = document.querySelectorAll('.project');
+  console.log(projectsFound);
+  return (projectsFound ? true : false);
+}
+
+function hideEditThisProjectBtn() {
+  if (!(projectsExist())) {
+    DOM.classify(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, [HIDE_CLASS]);
+  }
+}
+function hideDeleteThisProjectBtn() {
+  if (!(projectsExist())) {
+    DOM.classify(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, [HIDE_CLASS]);
+  }
+}
+function unhideEditThisProjectBtn() {
+  DOM.declassify(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, [HIDE_CLASS]);
+}
+function unhideDeleteThisProjectBtn() {
+  DOM.declassify(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, [HIDE_CLASS]);
+}
+
+/**
  * Routes calls to GET project values to SEND to 'createProject()'
  */
 function submitCreateProjectForm() {
   // GET values
   let title = PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT.value;
   let projectEl = createProject(title);
+  // UNHIDE "Edit this Project" and "Delete this Project" btns
+  if (projectsExist()) {
+    unhideEditThisProjectBtn();
+    unhideDeleteThisProjectBtn();
+  }
   return projectEl;
 }
 
@@ -739,11 +789,37 @@ function getSelectedProject() {
   return project;
 }
 
+function getTodoIDs(projectID) {
+  const project = getProjectByID(projectID);
+  const todos = project.getTodos();
+  let todoID;
+  let todoIDs = [];
+  todos.forEach(function(todo) {
+    todoID = todo.getID();
+    todoIDs.push(todoID);
+  })
+  return todoIDs;
+}
+
+function unhideTodos(projectID) {
+  const todoIDs = getTodoIDs(projectID);
+  const todoEls = document.querySelectorAll('.todo');
+  console.log(todoEls);
+  todoEls.forEach(function(todoEl) {
+    if (todoIDs.includes(todoEl.id)) {
+      DOM.declassify(todoEl, [HIDE_CLASS]);
+    }
+  })
+}
+
 function selectProject() {
-  const project = this.parent;
+  const projectEl = this.parentNode;
   clearProjectSelection();
-  DOM.classify(project, ['selected']);
-  // unhide all INCOMPLETE todos that are specifically FOR this project
+  DOM.classify(projectEl, ['selected']);
+  // HIDE all todos
+  hideAllTodos();
+  // UNHIDE all INCOMPLETE todos that are specifically for this project
+  unhideTodos(projectEl.id);
 }
 
 function selectNewProject() {
@@ -774,29 +850,25 @@ function submitCreateTodoForm() {
   dueDate = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value;
   isComplete = TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT.checked;
   let taskNodes = document.querySelectorAll('.form-section > ul.task-list > li.task')
-  taskNodes.forEach(function getTaskInfo(taskNode) {
+  taskNodes.forEach(function (taskNode) {
+    // GET task completion status
     let taskIsComplete;
-    let taskTitle;
-    // check if task complete by looking to see if 'task-complete' class is present on the li.task
     let taskClasses = DOM.getClasses(taskNode);
     if (taskClasses.includes(TASK_COMPLETE_CLASS)) {
       taskIsComplete = true;
     } else {
       taskIsComplete = false;
     }
-    // get the task title from getting the value of the input
-    taskTitle = taskNode.querySelector('input').value;
-
-    task = App.Task(taskTitle, taskIsComplete);
+    // GET task title
+    let taskTitle = taskNode.querySelector('input').value;
+    // CREATE task instance
+    task = new App.Task(taskTitle, taskIsComplete);
+    // ADD task to 'tasks' array
     tasks.push(task);
   })
-  // within each task node:
-    // create a new Task
-    // get 'title' from 
   notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value;
   // 
   let selectedProjectID = getSelectedProjectID();
-
   createTodo(title, priority, dueDate, isComplete, tasks, notes, selectedProjectID);
   updateCtTodos();
 }
@@ -880,6 +952,8 @@ function createProject(title) {
   hideAllTodos();
   // SELECT latest project
   selectNewProject();
+  // ADD event listeners here
+  addBtnFn(projectEl.querySelector('button.project-btn'), selectProject, 'click');
 
   return projectEl;
 }
@@ -919,15 +993,15 @@ function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
   // GET selected project
   const selectedProjectID = getSelectedProjectID();
   const project = getProjectByID(selectedProjectID);
-
   // CREATE todo
   const todoObj = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, selectedProjectID);
   // ADD todo to project
   project.addTodo(todoObj);
   // DRAW todo
   const todoEl = drawTodo(TODO_LIST, todoObj);
-  // ADD Todo event listeners
-
+  // hide tasks by default
+  hideAllTasks();
+  // ADD Todo event listeners here
 
   return todoEl;
 }

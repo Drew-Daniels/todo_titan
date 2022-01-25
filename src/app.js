@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { format } from 'date-fns';
 
 const APP = (() => {
   const TODOS = [];
@@ -55,6 +56,9 @@ const APP = (() => {
   const hasTodos = {
     getTitle() {
       return this.title;
+    },
+    getTodos() {
+      return this._todos;
     },
     getCtTodos() {
       return this._todos.length;
@@ -158,7 +162,7 @@ const APP = (() => {
   mixin(Task.prototype, hasTitle, {constructor: Task})
 
   // Todo
-  function Todo(title='New Todo', priority='low', dueDate, isComplete=false, tasks=Array(), notes='', projectID) {
+  function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, tasks=Array(), notes='', projectID) {
     this.id = uuidv4();
     this.title = title;
     this.priority = priority;
