@@ -239,6 +239,7 @@ GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 const HIDE_CLASS = 'hide';
 const SHOW_CLASS = 'show';
 const HIGHLIGHTED_CLASS = 'highlighted';
+const TASK_COMPLETE_CLASS = 'task-complete';
 const PROJECT_EDIT_HEADER_CREATE_TEXT = 'Create Project';
 const PROJECT_EDIT_HEADER_EDIT_TEXT = 'Edit Project';
 const TODO_EDIT_HEADER_CREATE_TEXT = 'Create Todo';
@@ -294,7 +295,7 @@ function drawTodo(attachTo, todo) {
   let expanderContainer = DOM.createDiv(col2, 'expander-container');
   let expandMoreBtn = DOM.createButton(expanderContainer, 'expander-btn');
   let expandMoreBtnImg = DOM.createImage(expandMoreBtn, todoExpandMoreIcon);
-  let expandLessBtn = DOM.createButton(expanderContainer, 'hide');
+  let expandLessBtn = DOM.createButton(expanderContainer, 'minimizer-btn','hide');
   let expandLessBtnImg = DOM.createImage(expandLessBtn, todoExpandLessIcon);
 
   let editBtn = DOM.createButton(col2, 'edit-todo-btn');
@@ -350,10 +351,27 @@ function drawTaskDisplayMode(attachTo, task) {
   return taskEl;
 }
 
+function toggleTaskComplete() {
+  const that = this;
+  const taskEl = that.parentNode;
+  const taskImg = that.firstChild;
+  const classes = DOM.getClasses(taskEl);
+  if (classes.includes(TASK_COMPLETE_CLASS)) {
+    DOM.declassify(taskEl, ['task-complete'])
+    // change image to empty checkbox here
+    taskImg.src = taskIncompleteIcon;
+  } else {
+    DOM.classify(taskEl, ['task-complete']);
+    // change image to checked checkbox here
+    taskImg.src = taskCompleteIcon;
+  }
+}
 
 function drawNewTask() {
   let task = new App.Task();
-  drawTaskEditMode(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST, task);
+  let taskEl = drawTaskEditMode(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST, task);
+  let taskCheckboxBtn = taskEl.querySelector('button.task-checkbox-btn');
+  addBtnFn(taskCheckboxBtn, toggleTaskComplete, 'click');
   task = null;
 }
 /**
@@ -371,13 +389,12 @@ function drawTaskEditMode(attachTo, task) {
   }
   let taskEl = DOM.createLI(attachTo, 'task');
 
-  let btn = DOM.createButton(taskEl, 'task-checkbox');
-  let img = DOM.createImage(btn, taskImg, 'task-complete');
+  let btn = DOM.createButton(taskEl, 'task-checkbox-btn');
+  let img = DOM.createImage(btn, taskImg, 'task-checkbox-img');
   let input = DOM.createInput(taskEl,'text', 'tasks', title);
   let deleteBtn = DOM.createButton(taskEl);
   let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
 
-  console.log(taskEl);
   return taskEl;
 }
 
@@ -556,6 +573,10 @@ addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
 addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
 
+function revealTasks() {
+
+}
+
 function updateTextContent(ele, newText) {
   ele.textContent = newText;
 }
@@ -621,8 +642,15 @@ function stageEditProjectForm() {
   toggleHideProjectEditPane();
 }
 
+function clearTasksFromTodoForm(taskList) {
+  while (taskList.firstChild) {
+    taskList.removeChild(taskList.lastChild);
+  }
+}
+
 function stageAddTodoForm() {
   setTodoEditHeaderToCreate();
+  clearTasksFromTodoForm(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST);
   let todo = new App.Todo();
   fillTodoForm(todo);
   unhideTodoEditPane();
@@ -737,31 +765,31 @@ function submitCreateTodoForm() {
   let title;
   let dueDate;
   let priority;
-  let tasks;
+  let task;
+  let tasks = [];
   let isComplete
   let notes;
-  let projectID;
   title = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT.value;
   priority = document.querySelector('input[name="priority-level"]:checked').value;
   dueDate = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value;
   isComplete = TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT.checked;
-  // let taskNodes = document.querySelectorAll('.form-section > ul.task-list > li.task')
-  // taskNodes.forEach(function getTaskInfo(taskNode) {
-  //   let taskIsComplete;
-  //   let taskTitle;
-  //   let childNodes = taskNodes.childNodes;
-  //   childNodes.forEach(function(childNode) {
-  //     let tagName = childNode.tagName;
-  //     let classes = DOM.getClasses(childNode);
-  //     if (tagName === 'BUTTON') {
-  //       // get button img here and check if class 'task-complete' applied
-  //     } else if (tagName === 'SPAN') {
+  let taskNodes = document.querySelectorAll('.form-section > ul.task-list > li.task')
+  taskNodes.forEach(function getTaskInfo(taskNode) {
+    let taskIsComplete;
+    let taskTitle;
+    // check if task complete by looking to see if 'task-complete' class is present on the li.task
+    let taskClasses = DOM.getClasses(taskNode);
+    if (taskClasses.includes(TASK_COMPLETE_CLASS)) {
+      taskIsComplete = true;
+    } else {
+      taskIsComplete = false;
+    }
+    // get the task title from getting the value of the input
+    taskTitle = taskNode.querySelector('input').value;
 
-  //     } else {
-
-  //     }
-  //   })
-  // })
+    task = App.Task(taskTitle, taskIsComplete);
+    tasks.push(task);
+  })
   // within each task node:
     // create a new Task
     // get 'title' from 
