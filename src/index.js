@@ -353,15 +353,14 @@ function drawTaskDisplayMode(attachTo, task) {
 
 function drawNewTask() {
   let task = new App.Task();
-  drawTaskEditMode(task);
+  drawTaskEditMode(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST, task);
   task = null;
 }
 /**
  * Similar to 'drawTaskDisplayMode' only this version uses INPUT to display task title and adds an 'delete' button
  * @param {*} task 
  */
-function drawTaskEditMode(task) {
-  let taskList = TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST;
+function drawTaskEditMode(attachTo, task) {
   let title;
   let taskImg;
   title = task.getTitle();
@@ -370,7 +369,7 @@ function drawTaskEditMode(task) {
   } else {
     taskImg = taskIncompleteIcon;
   }
-  let taskEl = DOM.createLI(taskList, 'task');
+  let taskEl = DOM.createLI(attachTo, 'task');
 
   let btn = DOM.createButton(taskEl, 'task-checkbox');
   let img = DOM.createImage(btn, taskImg, 'task-complete');
@@ -378,6 +377,7 @@ function drawTaskEditMode(task) {
   let deleteBtn = DOM.createButton(taskEl);
   let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
 
+  console.log(taskEl);
   return taskEl;
 }
 
@@ -482,7 +482,7 @@ function hideAllTodos() {
 }
 
 function hideAllTasks() {
-  const taskNodes = document.querySelectorAll('.task-list');
+  const taskNodes = document.querySelectorAll('.todo .task-list');
   taskNodes.forEach(function ensureTaskHidden(taskNode) {
     const classes = DOM.getClasses(taskNode);
     if (!(classes.includes(HIDE_CLASS))) {
@@ -554,7 +554,6 @@ addBtnFn(TODO_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetTodoEditForm);
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitCreateTodoForm);
 addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
 addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
-// Add 'Delete this Project' functionality here
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
 
 function updateTextContent(ele, newText) {
