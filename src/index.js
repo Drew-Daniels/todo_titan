@@ -408,6 +408,12 @@ function drawNewTask() {
   addBtnFn(taskCheckboxBtn, toggleTaskComplete, 'click');
   task = null;
 }
+
+function deleteTask() {
+  const task = this.parentNode;
+  deleteChildren(task);
+  task.remove();
+}
 /**
  * Similar to 'drawTaskDisplayMode' only this version uses INPUT to display task title and adds an 'delete' button
  * @param {*} task 
@@ -426,9 +432,11 @@ function drawTaskEditMode(attachTo, task) {
   let btn = DOM.createButton(taskEl, 'task-checkbox-btn');
   let img = DOM.createImage(btn, taskImg, 'task-checkbox-img');
   let input = DOM.createInput(taskEl,'text', 'tasks', title);
-  let deleteBtn = DOM.createButton(taskEl);
-  let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Icon');
-
+  let deleteBtn = DOM.createButton(taskEl, 'task-delete-btn');
+  let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Button Image', 'task-delete-btn-img');
+  // add event listener here
+  addBtnFn(deleteBtn, deleteTask);
+  
   return taskEl;
 }
 
