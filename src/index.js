@@ -237,8 +237,6 @@ const GITHUB_PROFILE_ANCHOR = DOM.createAnchor(GITHUB_PROFILE_CONTAINER, GITHUB_
 GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 
 const HIDE_CLASS = 'hide';
-const SHOW_CLASS = 'show';
-const HIGHLIGHTED_CLASS = 'highlighted';
 const TODO_COMPLETE_CLASS = 'todo-complete';
 const TASK_COMPLETE_CLASS = 'task-complete';
 const PROJECT_EDIT_HEADER_CREATE_TEXT = 'Create Project';
@@ -247,6 +245,9 @@ const TODO_EDIT_HEADER_CREATE_TEXT = 'Create Todo';
 const TODO_EDIT_HEADER_EDIT_TEXT = 'Edit Todo';
 const PROJECT_EDIT_PANE_FORM_CREATE_MODE_CLASS = 'mode-create';
 const PROJECT_EDIT_PANE_FORM_EDIT_MODE_CLASS = 'mode-edit';
+
+// OPTIONS
+let HIDE_COMPLETE_TODOS = false;
 
 // UI Functions
 /**Updates the count of number of Incomplete Todos */
@@ -538,22 +539,22 @@ function hideAllTasks() {
   })
 }
 
-function completeTodosHidden() {
-  const todoNodes = document.getElementsByClassName('todo-complete');
-  const todo = todoNodes[0];
-  if (!todo) {
-    return;
-  } else {
-      let result;
-      const classes = [...todo.classList]
-      if (classes.includes(HIDE_CLASS)) {
-        result = true;
-      } else {
-        result = false;
-      }
-      return result;
-    }
-  }
+// function completeTodosHidden() {
+//   const todoNodes = document.getElementsByClassName('todo-complete');
+//   const todo = todoNodes[0];
+//   if (!todo) {
+//     return;
+//   } else {
+//       let result;
+//       const classes = [...todo.classList]
+//       if (classes.includes(HIDE_CLASS)) {
+//         result = true;
+//       } else {
+//         result = false;
+//       }
+//       return result;
+//     }
+//   }
 
 /**
  * Checks to see if any complete todo is hidden. 
@@ -561,10 +562,12 @@ function completeTodosHidden() {
  * If FALSE, all completed todos are hidden.
  */
 function toggleShowHideCompleteTodos() {
-  if (completeTodosHidden()) {
+  if (HIDE_COMPLETE_TODOS) {
+    HIDE_COMPLETE_TODOS = false;
     showCompleteTodos();
     updateBtnText(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos');
   } else {
+    HIDE_COMPLETE_TODOS = true;
     hideCompleteTodos();
     updateBtnText(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Show Complete Todos');
   }
@@ -573,7 +576,6 @@ function toggleShowHideCompleteTodos() {
 function hideCompleteTodos() {
   const todoNodes = document.querySelectorAll('.todo-complete');
   todoNodes.forEach(function(todoNode) {
-    DOM.declassify(todoNode, [SHOW_CLASS]);
     hide(todoNode);
   })
 }
@@ -596,11 +598,11 @@ function unhideHideCompleteTodosBtn() {
 
 function showCompleteTodos() {
   // Only unhide complete todos IF THEY ARE FOR the currently selected project
-  const selectedProject = document.querySelector('.project.selected');
-  const todoNodes = selectedProject.querySelectorAll('.todo-complete');
-  todoNodes.forEach(function(todoNode) {
-    DOM.declassify(todoNode, [HIDE_CLASS]);
-    DOM.classify(todoNode, [SHOW_CLASS]);
+  const selectedProjectID = getSelectedProjectID();
+  const todoIDs = getTodoIDs(selectedProjectID);
+  todoIDs.forEach(function(todoID) {
+    const todoEl = document.querySelector('#' + todoID);
+    unhide(todoEl);
   })
 }
 
@@ -631,6 +633,8 @@ function deleteSelectedProject() {
     // select the last available project
     selectLastProject()
   } else {
+    hideAddTodoBtn();
+    hideHideCompleteTodosBtn();
     hideEditThisProjectBtn();
     hideDeleteThisProjectBtn();
   }
@@ -871,16 +875,6 @@ function submitProjectForm() {
     // do stuff with the project object here
     projectObj.title = title;
   }
-  // UNHIDE "Edit this Project" and "Delete this Project" btns
-  // if (projectsExist()) {
-  //   unhideEditThisProjectBtn();
-  //   unhideDeleteThisProjectBtn();
-  //     // check if 'Add a Todo' and 'Hide/Show Tasks Buttons' are hidden
-  //   if (isHidden(TODO_OPTIONS_LI_ADD_TODO_BTN)) {
-  //     unhideAddTodoBtn();
-  //     unhideHideCompleteTodosBtn();
-  //   }
-  // }
   unhideEditThisProjectBtn();
   unhideDeleteThisProjectBtn();
     // check if 'Add a Todo' and 'Hide/Show Tasks Buttons' are hidden
@@ -937,8 +931,12 @@ function selectProject() {
   DOM.classify(projectEl, ['selected']);
   // HIDE all todos
   hideAllTodos();
-  // UNHIDE all INCOMPLETE todos that are specifically for this project
+  // UNHIDE all todos that are specifically for this project
   unhideTodos(projectEl.id);
+  // REHIDE all complete todos if completeTodosHidden returns true
+  if (HIDE_COMPLETE_TODOS) {
+    hideCompleteTodos();
+  }
 }
 
 function selectLastProject() {
