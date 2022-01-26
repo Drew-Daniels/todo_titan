@@ -569,13 +569,15 @@ function deleteSelectedProject() {
   selectedProjectEl.parentNode.removeChild(selectedProjectEl);
   // delete from App here
   App.delProject(selectedProjectID);
-  // try to select the last project available here
-
   // check if any projects - if none, hide 'edit' and 'delete' project buttons
-  if (!(projectsExist())) {
+  if (projectsExist()) {
+    // select the last available project
+    selectLastProject()
+  } else {
     hideEditThisProjectBtn();
     hideDeleteThisProjectBtn();
   }
+  console.log(projectsExist());
 }
 
 // Project Add and Project Edit button listeners
@@ -749,7 +751,7 @@ function resetTodoEditPane() {
  * Returns true if any '.project' elements are found - false otherwise
 */
 function projectsExist() {
-  const projectsFound = document.querySelectorAll('.project');
+  const projectsFound = document.querySelectorAll('.project').length;
   return (projectsFound ? true : false);
 }
 
@@ -803,7 +805,7 @@ function submitProjectForm() {
       // HIDE todos - since none will be for the NEW project
       hideAllTodos();
       // SELECT latest project
-      selectNewProject();
+      selectLastProject();
   } else {
     // update project title
     const projectEl = getSelectedProjectEl();
@@ -873,7 +875,7 @@ function selectProject() {
   unhideTodos(projectEl.id);
 }
 
-function selectNewProject() {
+function selectLastProject() {
   const projects = document.querySelectorAll('.project');
   let ctProjects = projects.length;
   const latestProject = projects[--ctProjects];
@@ -924,17 +926,8 @@ function submitTodoForm() {
   updateCtTodos();
 }
 
-function addTodoListeners() {
-  const taskExpanderBtns = document.querySelectorAll('expander-btn');
-  // do something with expander buttons
-  taskExpanderBtns.forEach(function (taskExpander) {
-    showTasks();
-  })
-  const editTodoBtns = document.querySelectorAll('edit-todo-btn');
-}
-
 function showTasks() {
-  let todoLI = this.parent;
+  let todoLI = this.parentNode;
 }
 
 // LOCAL STORAGE Functions
