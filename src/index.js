@@ -239,6 +239,7 @@ GITHUB_PROFILE_ANCHOR.innerText = GITHUB_PROFILE_ANCHOR_TEXT;
 const HIDE_CLASS = 'hide';
 const SHOW_CLASS = 'show';
 const HIGHLIGHTED_CLASS = 'highlighted';
+const TODO_COMPLETE_CLASS = 'todo-complete';
 const TASK_COMPLETE_CLASS = 'task-complete';
 const PROJECT_EDIT_HEADER_CREATE_TEXT = 'Create Project';
 const PROJECT_EDIT_HEADER_EDIT_TEXT = 'Edit Project';
@@ -248,6 +249,7 @@ const PROJECT_EDIT_PANE_FORM_CREATE_MODE_CLASS = 'mode-create';
 const PROJECT_EDIT_PANE_FORM_EDIT_MODE_CLASS = 'mode-edit';
 
 // UI Functions
+/**Updates the count of number of Incomplete Todos */
 function updateCtTodos() {
   const projectEls = document.querySelectorAll('.project');
   projectEls.forEach(function(projectEl) {
@@ -291,6 +293,8 @@ function drawTodo(attachTo, todo) {
   let checkboxBtnImg = DOM.createImage(todoCheckBoxBtn, todoImg);
   let todoTitle = DOM.createSpan(col1, todo.getTitle(), 'todo-title');
 
+  // event listener
+  addBtnFn(todoCheckBoxBtn, toggleTodoComplete);
   // col 2
   let col2 = DOM.createDiv(line1, 'todo-col-base', 'todo-col-2');
   // TODO: format the date
@@ -354,6 +358,23 @@ function drawTaskDisplayMode(attachTo, task) {
   addBtnFn(taskCheckbox, toggleTaskComplete);
 
   return taskEl;
+}
+
+function toggleTodoComplete() {
+  const that = this;
+  const todoEl = that.parentNode.parentNode.parentNode;
+  const todoImg = that.firstChild;
+  const classes = DOM.getClasses(todoEl);
+  if (classes.includes(TODO_COMPLETE_CLASS)) {
+    DOM.declassify(todoEl, ['todo-complete'])
+    // change image to empty checkbox here
+    todoImg.src = todoIncompleteIcon;
+  } else {
+    DOM.classify(todoEl, ['todo-complete']);
+    // change image to checked checkbox here
+    todoImg.src = todoCompleteIcon;
+  }
+  updateCtTodos();
 }
 
 function toggleTaskComplete() {
@@ -565,11 +586,28 @@ function showCompleteTodos() {
   })
 }
 
+function deleteChildren(parentEl) {
+  while (parentEl.firstChild) {
+    parentEl.lastChild.remove();
+  }
+}
+
 function deleteSelectedProject() {
   const selectedProjectID = getSelectedProjectID();
   const selectedProjectEl = getSelectedProjectEl();
+  // gather all IDs for todos that belong to this project
+  const todoIDs = App.getTodoIDs(selectedProjectID);
+  // delete all todo elements that have an id included in this array
+  todoIDs.forEach(function(todoID) {
+    console.log('#' + todoID);
+    const todoEl = document.querySelector('#' + todoID);
+    deleteChildren(todoEl);
+    todoEl.remove();
+  })
+  // delete from DOM
+  deleteChildren(selectedProjectEl)
   selectedProjectEl.parentNode.removeChild(selectedProjectEl);
-  // delete from App here
+  // delete from APP
   App.delProject(selectedProjectID);
   // check if any projects - if none, hide 'edit' and 'delete' project buttons
   if (projectsExist()) {
@@ -579,7 +617,6 @@ function deleteSelectedProject() {
     hideEditThisProjectBtn();
     hideDeleteThisProjectBtn();
   }
-  console.log(projectsExist());
 }
 
 // Project Add and Project Edit button listeners

@@ -10,14 +10,9 @@ const APP = (() => {
     return PROJECTS;
   }
 
-  function getProject(desiredProjectID) {
-    let projectObj;
-    PROJECTS.forEach(function(project) {
-      const currProjectID = project.getID();
-      if (currProjectID === desiredProjectID) {
-        projectObj = project;
-      }
-    })
+  /** Returns a Project instance with the specified Project ID */
+  function getProject(projectID) {
+    let projectObj = getByID(projectID, PROJECTS);
     return projectObj;
   }
 
@@ -25,19 +20,62 @@ const APP = (() => {
     return TODOS;
   }
 
-  function delTodo(todo) {
-    const index = TODOS.findIndex(todo);
-    TODOS.splice(index, 1);
+  function getTodoIDs(projectID) {
+    const project = getProject(projectID);
+    const todoIDs = [];
+    const todos = project.getTodos();
+    todos.forEach(function(todo) {
+      const todoID = todo.getID();
+      todoIDs.push(todoID);
+    })
+    return todoIDs;
+  }
+  /** Returns a Todo instance with the specified Todo ID */
+  function getTodo(todoID) {
+    let todoObj = getByID(todoID, TODOS);
+    return todoObj;
   }
 
-  function delProject(projectID) {
-    const srchID = projectID;
-    for (let i=0; i < PROJECTS.length; i++) {
-      const currID = PROJECTS[i].getID();
-      if (currID === srchID) {
-        PROJECTS.splice(i, 1);
+  function getByID(ID, array) {
+    let obj;
+    array.forEach(function(arrayItem) {
+      const currID = arrayItem.getID();
+      if (currID === ID) {
+        obj = arrayItem;
+      }
+    })
+    return obj;
+  }
+
+  function deleteByID(ID, array) {
+    for (let i=0; i < array.length; i++) {
+      const currID = array[i].getID();
+      if (currID === ID) {
+        array.splice(i, 1);
       }
     }
+  }
+  /** Deletes a Todo instance from TODOS array */
+  function delTodo(todoID) {
+    // FIRST delete all tasks belonging to this todo
+    // const todo = getTodo(todoID);
+    // const tasks = todo.getTasks();
+    // tasks.forEach(function(task) {
+    //   APP.delTask
+    // })
+    // THEN delete the todo itself
+    deleteByID(todoID, TODOS);
+  }
+  /** Deletes a Project instance from PROJECTS array */
+  function delProject(projectID) {
+    // FIRST delete all todos belonging to this project
+    const project = getProject(projectID);
+    const todos = project.getTodos();
+    todos.forEach(function(todo) {
+      delTodo(todo.getID());
+    })
+    // THEN delete the project itself
+    deleteByID(projectID, PROJECTS);
   }
 
   // SHARED Methods
@@ -163,7 +201,7 @@ const APP = (() => {
 
   // Todo
   function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, tasks=Array(), notes='', projectID) {
-    this.id = uuidv4();
+    this.id = "i" + uuidv4();
     this.title = title;
     this.priority = priority;
     this.dueDate = dueDate;
@@ -207,6 +245,7 @@ const APP = (() => {
     getProjects,
     getProject,
     getTodos,
+    getTodoIDs,
     // DEL
     delProject,
     delTodo,
