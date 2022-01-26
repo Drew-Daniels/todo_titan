@@ -367,13 +367,15 @@ function toggleTodoComplete() {
   const classes = DOM.getClasses(todoEl);
   if (classes.includes(TODO_COMPLETE_CLASS)) {
     DOM.declassify(todoEl, ['todo-complete'])
-    // change image to empty checkbox here
     todoImg.src = todoIncompleteIcon;
   } else {
     DOM.classify(todoEl, ['todo-complete']);
-    // change image to checked checkbox here
     todoImg.src = todoCompleteIcon;
   }
+  // update App
+  const todoObj = App.getTodo(todoEl.id);
+  todoObj.isComplete = (!classes.includes(TODO_COMPLETE_CLASS));
+  // update DOM
   updateCtTodos();
 }
 

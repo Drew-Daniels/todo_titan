@@ -245,6 +245,7 @@ const APP = (() => {
     getProjects,
     getProject,
     getTodos,
+    getTodo,
     getTodoIDs,
     // DEL
     delProject,
