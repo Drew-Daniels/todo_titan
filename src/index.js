@@ -351,6 +351,8 @@ function drawTaskDisplayMode(attachTo, task) {
   let taskCheckboxImg = DOM.createImage(taskCheckbox, taskImg);
   let taskTitle = DOM.createSpan(taskEl, task.getTitle());
 
+  addBtnFn(taskCheckbox, toggleTaskComplete);
+
   return taskEl;
 }
 
