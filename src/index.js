@@ -150,7 +150,7 @@ const TODO_LIST    = DOM.createUL(TODO_PANE, 'todo-list');
 
 // PROJECT EDIT PANE
 const PROJECT_EDIT_PANE = DOM.createDiv(MAIN, 'project-edit-pane', 'hide');
-const PROJECT_EDIT_PANE_FORM = DOM.createForm(PROJECT_EDIT_PANE);
+const PROJECT_EDIT_PANE_FORM = DOM.createForm(PROJECT_EDIT_PANE, 'project-edit-form','mode-edit');
 const PROJECT_EDIT_PANE_FORM_HEADER = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'form-header', 'fancy-header');
 const PROJECT_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(PROJECT_EDIT_PANE_FORM_HEADER, 'Edit Project');
 const PROJECT_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(PROJECT_EDIT_PANE_FORM_HEADER, 'discard-project-btn');
@@ -166,7 +166,7 @@ const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN_IMG = DOM.createImage(PROJ
 
 // ============ TODO EDIT PANE =========================
 const TODO_EDIT_PANE  = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
-const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, '');
+const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, 'todo-edit-form', 'mode-edit');
 const TODO_EDIT_PANE_FORM_HEADER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-header', 'fancy-header');
 const TODO_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM_HEADER, 'Edit Todo');
 const TODO_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_HEADER, 'discard-todo-btn');
@@ -244,6 +244,8 @@ const PROJECT_EDIT_HEADER_CREATE_TEXT = 'Create Project';
 const PROJECT_EDIT_HEADER_EDIT_TEXT = 'Edit Project';
 const TODO_EDIT_HEADER_CREATE_TEXT = 'Create Todo';
 const TODO_EDIT_HEADER_EDIT_TEXT = 'Edit Todo';
+const PROJECT_EDIT_PANE_FORM_CREATE_MODE_CLASS = 'mode-create';
+const PROJECT_EDIT_PANE_FORM_EDIT_MODE_CLASS = 'mode-edit';
 
 // UI Functions
 function updateCtTodos() {
@@ -585,9 +587,10 @@ addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, stageAddTodoForm);
 
 // Form listeners
 addBtnFn(PROJECT_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetProjectEditForm);
-addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitCreateProjectForm);
+// differentiate between submission from 'create' versions of form to 'edit' versions of the form
+addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitProjectForm);
 addBtnFn(TODO_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetTodoEditForm);
-addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitCreateTodoForm);
+addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitTodoForm);
 addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
 addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
@@ -640,14 +643,25 @@ function toggleClass(element, toggleClass) {
   method(element, [toggleClass]);
 }
 
+function setProjectFormModeToCreate() {
+  DOM.classify(PROJECT_EDIT_PANE_FORM, [PROJECT_EDIT_PANE_FORM_EDIT_MODE_CLASS]);
+  DOM.classify(PROJECT_EDIT_PANE_FORM, [PROJECT_EDIT_PANE_FORM_CREATE_MODE_CLASS]);
+}
+
+function setProjectFormModeToEdit() {
+  DOM.declassify(PROJECT_EDIT_PANE_FORM, [PROJECT_EDIT_PANE_FORM_CREATE_MODE_CLASS]);
+  DOM.classify(PROJECT_EDIT_PANE_FORM, [PROJECT_EDIT_PANE_FORM_EDIT_MODE_CLASS]);
+}
+
 function stageAddProjectForm() {
   // UPDATE Project Header from default of 'Edit Project' to 'Create Project'
+  // setProjectFormModeToCreate();
   setProjectEditHeaderToCreate();
   // CREATE a temp instance of a Project to use to fill out the form
   let project = new App.Project();
   fillProjectForm(project);
   App.delProject(project.getID());
-  // set project submit button event listener to create mode
+  setProjectFormModeToCreate();
   unhideProjectEditPane();
   project = null;
 }
@@ -658,6 +672,7 @@ function stageEditProjectForm() {
   const currProjectTitleInput = document.querySelector('input[name=project-title]');
   currProjectTitleInput.value = currProject.getTitle();
   // apply changes to the project on submit
+  setProjectFormModeToEdit();
   toggleHideProjectEditPane();
 }
 
@@ -732,10 +747,9 @@ function resetTodoEditPane() {
 }
 /**
  * Returns true if any '.project' elements are found - false otherwise
- */
+*/
 function projectsExist() {
   const projectsFound = document.querySelectorAll('.project');
-  console.log(projectsFound);
   return (projectsFound ? true : false);
 }
 
@@ -756,13 +770,51 @@ function unhideDeleteThisProjectBtn() {
   DOM.declassify(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, [HIDE_CLASS]);
 }
 
+function projectFormModeIsCreate() {
+  const classes = DOM.getClasses(PROJECT_EDIT_PANE_FORM);
+  let result;
+  if (classes.includes(PROJECT_EDIT_PANE_FORM_CREATE_MODE_CLASS)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 /**
  * Routes calls to GET project values to SEND to 'createProject()'
  */
-function submitCreateProjectForm() {
+function submitProjectForm() {
   // GET values
   let title = PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT.value;
-  let projectEl = createProject(title);
+  // check mode of form here
+  // HIDE form
+  hideProjectEditPane();
+  // RESET form to default
+  resetProjectEditForm();
+  // ADD event listeners here
+  // if CREATE then create a new project
+  // if EDIT then simply edit the project
+  let projectEl;
+  if (projectFormModeIsCreate()) {
+    projectEl = createProject(title);
+      // UNHIGHLIGHT the project with 'selected' class currently applied
+      clearProjectSelection();
+      // HIDE todos - since none will be for the NEW project
+      hideAllTodos();
+      // SELECT latest project
+      selectNewProject();
+  } else {
+    // update project title
+    const projectEl = getSelectedProjectEl();
+    // do stuff with the project element here
+    const projectElTitleSpan = projectEl.querySelector('span.project-title');
+    projectElTitleSpan.textContent = title;
+
+    const projectObj = getSelectedProject();
+    // do stuff with the project object here
+    projectObj.title = title;
+  }
   // UNHIDE "Edit this Project" and "Delete this Project" btns
   if (projectsExist()) {
     unhideEditThisProjectBtn();
@@ -772,8 +824,8 @@ function submitCreateProjectForm() {
 }
 
 /**
- * 
- * @returns the currently 'selected' project as an object, so that that project object can be used and manipulated
+ * the currently 'selected' project as an object, so that that project object can be used and manipulated
+ * @returns Project
  */
 function getSelectedProject() {
   // first, find the name of the project that is currently 'selected'
@@ -804,7 +856,6 @@ function getTodoIDs(projectID) {
 function unhideTodos(projectID) {
   const todoIDs = getTodoIDs(projectID);
   const todoEls = document.querySelectorAll('.todo');
-  console.log(todoEls);
   todoEls.forEach(function(todoEl) {
     if (todoIDs.includes(todoEl.id)) {
       DOM.declassify(todoEl, [HIDE_CLASS]);
@@ -836,7 +887,7 @@ function clearProjectSelection() {
   }
 }
 
-function submitCreateTodoForm() {
+function submitTodoForm() {
   // GET values
   let title;
   let dueDate;
@@ -938,29 +989,11 @@ function getStorage() {
  * @returns 
  */
 function createProject(title) {
-  // HIDE form
-  hideProjectEditPane();
-  // RESET form to default
-  resetProjectEditForm();
-  // UNHIGHLIGHT the project with 'selected' class currently applied
-  clearProjectSelection();
-  // CREATE project instance
   const projectObj = new App.Project(title);
-  // DRAW project
   const projectEl = drawProject(US_PROJECT_LIST_UL, projectObj)
-  // HIDE todos - since none will be for the NEW project
-  hideAllTodos();
-  // SELECT latest project
-  selectNewProject();
-  // ADD event listeners here
   addBtnFn(projectEl.querySelector('button.project-btn'), selectProject, 'click');
 
   return projectEl;
-}
-
-function updateProject(title, project) {
-  project.title = title;
-  return project;
 }
 
 function getSelectedProjectID() {
@@ -976,13 +1009,6 @@ function getProjectByID(projectID) {
 function getSelectedProjectEl() {
   const projectEl = document.querySelector('.project.selected');
   return projectEl;
-}
-
-function addTodoEventListeners(todoEl) {
-  const todoCheckbox = todoEl.querySelector('.todo-checkbox');
-  todoCheckbox.addEventListener('click', function() {
-
-  })
 }
 
 function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
