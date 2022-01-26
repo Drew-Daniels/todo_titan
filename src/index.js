@@ -926,8 +926,38 @@ function submitTodoForm() {
   updateCtTodos();
 }
 
+/**
+ * Takes two buttons - reveals the first by removing the 'hide' class and hides the second by applying the 'hide' class
+ * @param {*} showButton 
+ * @param {*} hideButton 
+ */
+function showHideButtons(showButton, hideButton) {
+  DOM.declassify(showButton, [HIDE_CLASS]);
+  DOM.classify(hideButton, [HIDE_CLASS]);
+}
+
 function showTasks() {
-  let todoLI = this.parentNode;
+  let todoLine1 = this.parentNode.parentNode.parentNode;
+  let todoLine2 = todoLine1.nextSibling;
+  let taskList = todoLine2.querySelector('.task-list');
+  // SHOW tasks
+  DOM.declassify(taskList, [HIDE_CLASS]);
+  // SHOW minimizer button - HIDE expander button
+  const expanderBtn = todoLine1.querySelector('.expander-btn');
+  const minimizerBtn = todoLine1.querySelector('.minimizer-btn');
+  showHideButtons(minimizerBtn, expanderBtn);
+}
+
+function hideTasks() {
+  let todoLine1 = this.parentNode.parentNode.parentNode;
+  let todoLine2 = todoLine1.nextSibling;
+  let taskList = todoLine2.querySelector('.task-list');
+  // HIDE tasks
+  DOM.classify(taskList, [HIDE_CLASS]);
+  // SHOW expander button - HIDE minimizer button
+  const expanderBtn = todoLine1.querySelector('.expander-btn');
+  const minimizerBtn = todoLine1.querySelector('.minimizer-btn');
+  showHideButtons(expanderBtn, minimizerBtn);
 }
 
 // LOCAL STORAGE Functions
@@ -1021,6 +1051,11 @@ function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
   // hide tasks by default
   hideAllTasks();
   // ADD Todo event listeners here
+  const expanderBtn = todoEl.querySelector('.expander-btn');
+  const minimizerBtn = todoEl.querySelector('.minimizer-btn');
+
+  addBtnFn(expanderBtn, showTasks);
+  addBtnFn(minimizerBtn, hideTasks);
 
   return todoEl;
 }
