@@ -57,13 +57,6 @@ const APP = (() => {
   }
   /** Deletes a Todo instance from TODOS array */
   function delTodo(todoID) {
-    // FIRST delete all tasks belonging to this todo
-    // const todo = getTodo(todoID);
-    // const tasks = todo.getTasks();
-    // tasks.forEach(function(task) {
-    //   APP.delTask
-    // })
-    // THEN delete the todo itself
     deleteByID(todoID, TODOS);
   }
   /** Deletes a Project instance from PROJECTS array */

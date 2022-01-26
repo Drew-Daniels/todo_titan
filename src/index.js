@@ -166,11 +166,14 @@ const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN_IMG = DOM.createImage(PROJ
 
 // ============ TODO EDIT PANE =========================
 const TODO_EDIT_PANE  = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
-const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, 'todo-edit-form', 'mode-edit');
+const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, 'todo-edit-form');
 const TODO_EDIT_PANE_FORM_HEADER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-header', 'fancy-header');
 const TODO_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM_HEADER, 'Edit Todo');
 const TODO_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_HEADER, 'discard-todo-btn');
 const TODO_EDIT_PANE_FORM_DISCARD_BTN_IMG = DOM.createImage(TODO_EDIT_PANE_FORM_DISCARD_BTN, discardChangesIcon, 'something');
+
+// TODO id
+const TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM, '', 'hide');
 
 // TODO title
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'edit-todo-title-section', 'form-section');
@@ -291,7 +294,7 @@ function drawTodo(attachTo, todo) {
     todoImg = todoCompleteIcon;
     todoEl = DOM.classify(todoEl, ['todo-complete']);
   }
-  let checkboxBtnImg = DOM.createImage(todoCheckBoxBtn, todoImg);
+  let checkboxBtnImg = DOM.createImage(todoCheckBoxBtn, todoImg, 'Todo Complete Image', 'todo-checkbox-btn-img');
   let todoTitle = DOM.createSpan(col1, todo.getTitle(), 'todo-title');
 
   // event listener
@@ -323,7 +326,9 @@ function drawTodo(attachTo, todo) {
       priorityImgURL = highPriorityIcon;
       break;
   }
-  let priorityImg = DOM.createImage(col2, priorityImgURL);
+  let priorityBtn = DOM.createButton(col2, 'todo-priority-btn');
+  let priorityImg = DOM.createImage(priorityBtn, priorityImgURL, 'Todo Priority', 'todo-priority-btn-img');
+
   // +++ line 2 +++
   let line2 = DOM.createDiv(todoEl, 'todo-line-2');
   let taskList = DOM.createUL(line2, 'task-list');
@@ -346,15 +351,15 @@ function drawTodo(attachTo, todo) {
 function drawTaskDisplayMode(attachTo, task) {
   let taskEl = DOM.createLI(attachTo, 'task');
 
-  let taskCheckbox = DOM.createButton(taskEl, 'task-checkbox');
+  let taskCheckbox = DOM.createButton(taskEl, 'task-checkbox-btn');
   let taskImg;
   if (task.isComplete === false) {
     taskImg = taskIncompleteIcon;
   } else {
     taskImg = taskCompleteIcon;
   }
-  let taskCheckboxImg = DOM.createImage(taskCheckbox, taskImg);
-  let taskTitle = DOM.createSpan(taskEl, task.getTitle());
+  let taskCheckboxImg = DOM.createImage(taskCheckbox, taskImg, 'Task Checkbox Image', 'task-checkbox-btn-img');
+  let taskTitle = DOM.createSpan(taskEl, task.getTitle(), 'task-title');
 
   addBtnFn(taskCheckbox, toggleTaskComplete);
 
@@ -437,13 +442,16 @@ function fillProjectForm(project) {
 
 function fillTodoForm(todo) {
   // attribute values
+  let ID = todo.getID();
   let title = todo.getTitle();
+  let isComplete = todo.isComplete;
   let dueDate = todo.getDueDate();
   let priority = todo.getPriority();
   let tasks = todo.getTasks();
   let notes = todo.getNotes();
 
   // element references
+  let IDEl = TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN;
   let titleEl = TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT;
   let isCompleteEl = TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT;
   let dueDateEl = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT;
@@ -462,13 +470,13 @@ function fillTodoForm(todo) {
   let notesEl = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA;
 
   // assignment
+  IDEl.textContent = ID;
   titleEl.value = title;
-  isCompleteEl.checked = false;
+  isCompleteEl.checked = isComplete;
   dueDateEl.value = dueDate;
-  tasks.forEach(task => drawTaskEditMode(task))
+  tasks.forEach(task => drawTaskEditMode(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST, task))
   priorityEl.checked=true;
   notesEl.value = notes;
-
 }
 
 // OPTION BUTTONS
@@ -538,23 +546,6 @@ function hideAllTasks() {
     }
   })
 }
-
-// function completeTodosHidden() {
-//   const todoNodes = document.getElementsByClassName('todo-complete');
-//   const todo = todoNodes[0];
-//   if (!todo) {
-//     return;
-//   } else {
-//       let result;
-//       const classes = [...todo.classList]
-//       if (classes.includes(HIDE_CLASS)) {
-//         result = true;
-//       } else {
-//         result = false;
-//       }
-//       return result;
-//     }
-//   }
 
 /**
  * Checks to see if any complete todo is hidden. 
@@ -677,6 +668,10 @@ function setProjectEditHeaderToEdit() {
   updateTextContent(PROJECT_EDIT_PANE_FORM_HEADER_SPAN, PROJECT_EDIT_HEADER_EDIT_TEXT);
 }
 
+function setTodoEditHeaderToEdit() {
+  updateTextContent(TODO_EDIT_PANE_FORM_HEADER_SPAN, TODO_EDIT_HEADER_EDIT_TEXT);
+}
+
 function unhide(element) {
   if (isHidden(element)) {
     DOM.declassify(element, [HIDE_CLASS]);
@@ -749,6 +744,15 @@ function stageAddTodoForm() {
   fillTodoForm(todo);
   unhideTodoEditPane();
   todo = null;
+}
+
+function stageEditTodoForm() {
+  const todoEl = this.parentNode.parentNode.parentNode;
+  const todoObj = App.getTodo(todoEl.id);
+  setTodoEditHeaderToEdit();
+  clearTasksFromTodoForm(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST);
+  fillTodoForm(todoObj);
+  unhideTodoEditPane();
 }
 
 // PROJECT EDIT PANE
@@ -933,7 +937,7 @@ function selectProject() {
   hideAllTodos();
   // UNHIDE all todos that are specifically for this project
   unhideTodos(projectEl.id);
-  // REHIDE all complete todos if completeTodosHidden returns true
+  // REHIDE depending setting
   if (HIDE_COMPLETE_TODOS) {
     hideCompleteTodos();
   }
@@ -986,9 +990,12 @@ function submitTodoForm() {
     tasks.push(task);
   })
   notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value;
-  // 
-  let selectedProjectID = getSelectedProjectID();
-  createTodo(title, priority, dueDate, isComplete, tasks, notes, selectedProjectID);
+  // inspect the header to determine what the outcome of submitting of the form should be
+  if (TODO_EDIT_PANE_FORM_HEADER_SPAN.textContent === TODO_EDIT_HEADER_CREATE_TEXT) {
+    createTodo(title, priority, dueDate, isComplete, tasks, notes);
+  } else {
+    updateTodo(title, priority, dueDate, isComplete, tasks, notes, TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent);
+  }
   updateCtTodos();
 }
 
@@ -1120,19 +1127,75 @@ function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
   // ADD Todo event listeners here
   const expanderBtn = todoEl.querySelector('.expander-btn');
   const minimizerBtn = todoEl.querySelector('.minimizer-btn');
+  const editBtn = todoEl.querySelector('.edit-todo-btn');
 
   addBtnFn(expanderBtn, showTasks);
   addBtnFn(minimizerBtn, hideTasks);
+  addBtnFn(editBtn, stageEditTodoForm);
 
   return todoEl;
 }
 
-function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todo) {
-  todo.title = title;
-  todo.priority = priority;
-  todo.dueDate = dueDate;
-  todo.isComplete = isComplete;
-  return todo;
+function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) {
+  // HIDE form
+  hideTodoEditPane();
+  // RESET form
+  resetTodoEditPane();
+  // UPDATE App Data
+  const todoObj = App.getTodo(todoID);
+  todoObj.title = title;
+  todoObj.priority = priority;
+  todoObj.dueDate = dueDate;
+  todoObj.isComplete = isComplete;
+  todoObj.tasks = tasks;
+  todoObj.notes = notes;
+
+  // UPDATE DOM
+  // Get references
+  const todoEl = document.querySelector('#' + todoID);
+  const titleEl = todoEl.querySelector('.todo-title');
+  const dueDateEl = todoEl.querySelector('.todo-due-date');
+  const priorityBtnImg = todoEl.querySelector('.todo-priority-btn-img');
+  const isCompleteBtnImg = todoEl.querySelector('.todo-checkbox-btn-img');
+  const taskListEl = todoEl.querySelector('.task-list');
+
+  // Update DOM content using updated Todo values
+  // TITLE
+  titleEl.textContent = todoObj.getTitle();
+  // DUE DATE
+  dueDateEl.value = todoObj.getDueDate();
+  // PRIORITY
+  let priorityImgURL;
+  switch (todoObj.getPriority()) {
+    case 'low':
+      priorityImgURL = lowPriorityIcon;
+      break;
+    case 'medium':
+      //something
+      priorityImgURL = mediumPriorityIcon;
+      break;
+    case 'high':
+      priorityImgURL = highPriorityIcon;
+      break;
+  }
+  priorityBtnImg.src = priorityImgURL;
+  // IS COMPLETE
+  let checkboxImg;
+  if (todoObj.isComplete === false) {
+    checkboxImg = todoIncompleteIcon;
+    DOM.declassify(todoEl, ['todo-complete']);
+  } else {
+    checkboxImg = todoCompleteIcon;
+    DOM.classify(todoEl, ['todo-complete']);
+  }
+  isCompleteBtnImg.src = checkboxImg;
+  // TASKS
+  deleteChildren(taskListEl);
+  tasks.forEach(function(task) {
+    drawTaskDisplayMode(taskListEl, task);
+  })
+
+  return todoObj;
 }
 
 function addTask(taskTitle, isComplete, todo) {
