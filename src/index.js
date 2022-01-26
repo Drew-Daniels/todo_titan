@@ -129,11 +129,11 @@ const TODO_PANE = DOM.createDiv(MAIN, 'todo-pane');
 const TODO_OPTIONS_BAR = DOM.createDiv(TODO_PANE, 'todo-options-bar');
 const TODO_OPTIONS_LIST = DOM.createUL(TODO_OPTIONS_BAR, 'todo-options-list');
 const TODO_OPTIONS_LI_ADD_TODO = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
-const TODO_OPTIONS_LI_ADD_TODO_BTN = DOM.createButton(TODO_OPTIONS_LI_ADD_TODO, 'option-btn', 'fancy-btn', 'add-todo-btn');
+const TODO_OPTIONS_LI_ADD_TODO_BTN = DOM.createButton(TODO_OPTIONS_LI_ADD_TODO, 'option-btn', 'fancy-btn', 'add-todo-btn', 'hide');
 const TODO_OPTIONS_LI_ADD_TODO_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_ADD_TODO_BTN, 'Add a Todo','todo-option-text');
 const TODO_OPTIONS_LI_ADD_TODO_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_ADD_TODO_BTN, addTodoIcon, 'Add Todo Icon', 'option-image');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
-const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN = DOM.createButton(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS, 'option-btn', 'fancy-btn', 'toggle-show-hide-complete-todos-btn');
+const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN = DOM.createButton(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS, 'option-btn', 'fancy-btn', 'toggle-show-hide-complete-todos-btn', 'hide');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos','todo-option-text');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, hideCompleteTodosIcon, 'Hide Complete Todos Icon', 'option-image');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
@@ -521,7 +521,7 @@ function hideAllTodos() {
   todoNodes.forEach(function ensureTodoHidden(todoNode) {
     const classes = DOM.getClasses(todoNode);
     if (!(classes.includes(HIDE_CLASS))) {
-      DOM.classify(todoNode, [HIDE_CLASS]);
+      hide(todoNode);
     }
   })
 }
@@ -531,7 +531,7 @@ function hideAllTasks() {
   taskNodes.forEach(function ensureTaskHidden(taskNode) {
     const classes = DOM.getClasses(taskNode);
     if (!(classes.includes(HIDE_CLASS))) {
-      DOM.classify(taskNode, [HIDE_CLASS]);
+      hide(taskNode);
     }
   })
 }
@@ -572,8 +572,24 @@ function hideCompleteTodos() {
   const todoNodes = document.querySelectorAll('.todo-complete');
   todoNodes.forEach(function(todoNode) {
     DOM.declassify(todoNode, [SHOW_CLASS]);
-    DOM.classify(todoNode, [HIDE_CLASS]);
+    hide(todoNode);
   })
+}
+
+function hideAddTodoBtn() {
+  hide(TODO_OPTIONS_LI_ADD_TODO_BTN);
+}
+
+function hideHideCompleteTodosBtn() {
+  hide(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN);
+}
+
+function unhideAddTodoBtn() {
+  unhide(TODO_OPTIONS_LI_ADD_TODO_BTN);
+}
+
+function unhideHideCompleteTodosBtn() {
+  unhide(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN);
 }
 
 function showCompleteTodos() {
@@ -599,7 +615,6 @@ function deleteSelectedProject() {
   const todoIDs = App.getTodoIDs(selectedProjectID);
   // delete all todo elements that have an id included in this array
   todoIDs.forEach(function(todoID) {
-    console.log('#' + todoID);
     const todoEl = document.querySelector('#' + todoID);
     deleteChildren(todoEl);
     todoEl.remove();
@@ -656,16 +671,14 @@ function setProjectEditHeaderToEdit() {
   updateTextContent(PROJECT_EDIT_PANE_FORM_HEADER_SPAN, PROJECT_EDIT_HEADER_EDIT_TEXT);
 }
 
-function unhideElement(element, hideClass) {
+function unhide(element) {
   if (isHidden(element)) {
-    DOM.declassify(element, [hideClass]);
+    DOM.declassify(element, [HIDE_CLASS]);
   }
 }
 
-function hideElement(element, hideClass) {
-  if (!(isHidden(element))) {
-    DOM.classify(element, [hideClass]);
-  }
+function hide(element) {
+  DOM.classify(element, [HIDE_CLASS]);
 }
 /**
  * Used to add/remove a given class from an element - different from switchClass, which alternates between 2 classes
@@ -740,12 +753,12 @@ function toggleHideProjectEditPane() {
 
 // ENSURES UNHIDDEN
 function unhideProjectEditPane() {
-  unhideElement(PROJECT_EDIT_PANE, HIDE_CLASS);
+  unhide(PROJECT_EDIT_PANE);
 }
 
 // ENSURES HIDDEN
 function hideProjectEditPane() {
-  hideElement(PROJECT_EDIT_PANE, HIDE_CLASS);
+  hide(PROJECT_EDIT_PANE);
 }
 
 function resetProjectEditForm() {
@@ -768,12 +781,12 @@ function toggleHideTodoEditPane() {
 
 // ENSURES UNHIDDEN
 function unhideTodoEditPane() {
-  unhideElement(TODO_EDIT_PANE, HIDE_CLASS);
+  unhide(TODO_EDIT_PANE);
 }
 
 // ENSURES HIDDEN
 function hideTodoEditPane() {
-  hideElement(TODO_EDIT_PANE, HIDE_CLASS);
+  hide(TODO_EDIT_PANE);
 }
 
 function hideAndResetTodoEditForm() {
@@ -796,19 +809,19 @@ function projectsExist() {
 
 function hideEditThisProjectBtn() {
   if (!(projectsExist())) {
-    DOM.classify(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, [HIDE_CLASS]);
+    hide(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN);
   }
 }
 function hideDeleteThisProjectBtn() {
   if (!(projectsExist())) {
-    DOM.classify(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, [HIDE_CLASS]);
+    hide(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN);
   }
 }
 function unhideEditThisProjectBtn() {
-  DOM.declassify(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, [HIDE_CLASS]);
+  unhide(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN);
 }
 function unhideDeleteThisProjectBtn() {
-  DOM.declassify(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, [HIDE_CLASS]);
+  unhide(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN);
 }
 
 function projectFormModeIsCreate() {
@@ -857,9 +870,21 @@ function submitProjectForm() {
     projectObj.title = title;
   }
   // UNHIDE "Edit this Project" and "Delete this Project" btns
-  if (projectsExist()) {
-    unhideEditThisProjectBtn();
-    unhideDeleteThisProjectBtn();
+  // if (projectsExist()) {
+  //   unhideEditThisProjectBtn();
+  //   unhideDeleteThisProjectBtn();
+  //     // check if 'Add a Todo' and 'Hide/Show Tasks Buttons' are hidden
+  //   if (isHidden(TODO_OPTIONS_LI_ADD_TODO_BTN)) {
+  //     unhideAddTodoBtn();
+  //     unhideHideCompleteTodosBtn();
+  //   }
+  // }
+  unhideEditThisProjectBtn();
+  unhideDeleteThisProjectBtn();
+    // check if 'Add a Todo' and 'Hide/Show Tasks Buttons' are hidden
+  if (isHidden(TODO_OPTIONS_LI_ADD_TODO_BTN)) {
+    unhideAddTodoBtn();
+    unhideHideCompleteTodosBtn();
   }
   return projectEl;
 }
@@ -899,7 +924,7 @@ function unhideTodos(projectID) {
   const todoEls = document.querySelectorAll('.todo');
   todoEls.forEach(function(todoEl) {
     if (todoIDs.includes(todoEl.id)) {
-      DOM.declassify(todoEl, [HIDE_CLASS]);
+      unhide(todoEl);
     }
   })
 }
@@ -917,8 +942,10 @@ function selectProject() {
 function selectLastProject() {
   const projects = document.querySelectorAll('.project');
   let ctProjects = projects.length;
-  const latestProject = projects[--ctProjects];
-  DOM.classify(latestProject, ['selected']);
+  const lastProjectEl = projects[--ctProjects];
+  DOM.classify(lastProjectEl, ['selected']);
+  // unhide all todos for this project
+  unhideTodos(lastProjectEl.id);
 }
 
 function clearProjectSelection() {
@@ -971,8 +998,8 @@ function submitTodoForm() {
  * @param {*} hideButton 
  */
 function showHideButtons(showButton, hideButton) {
-  DOM.declassify(showButton, [HIDE_CLASS]);
-  DOM.classify(hideButton, [HIDE_CLASS]);
+  unhide(showButton);
+  hide(hideButton);
 }
 
 function showTasks() {
@@ -1073,6 +1100,7 @@ function getSelectedProjectEl() {
   return projectEl;
 }
 
+
 function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
   // HIDE form
   hideTodoEditPane();
@@ -1120,3 +1148,5 @@ function updateTask(title, isComplete, task) {
 }
 
 hideAllTasks();
+hideAddTodoBtn();
+hideHideCompleteTodosBtn();
