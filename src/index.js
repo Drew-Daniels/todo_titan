@@ -7,8 +7,6 @@ import './stylesheets/style.css';
 import todoTitanIcon from './icons/todo-titan-icon.svg';
 import addTodoIcon from './icons/add-todo-icon.svg';
 import allTimeIcon from './icons/all-time-icon.svg';
-import circleIcon from './icons/circle-icon.svg';
-import createNewProjectIcon from './icons/create-new-project-icon.svg';
 import githubIcon from './icons/github-icon.png';
 import hideCompleteTodosIcon from './icons/hide-complete-todos-icon.svg';
 import highPriorityIcon from './icons/high-priority-icon.svg';
@@ -18,7 +16,6 @@ import myProjectsIcon from './icons/my-projects-icon.svg';
 import projectDeleteIcon from './icons/project-delete-icon.svg';
 import projectEditIcon from './icons/project-edit-icon.svg';
 import projectListIcon from './icons/project-list-icon.svg';
-import stepsListIcon from './icons/steps-list-icon.svg';
 import submitIcon from './icons/submit-icon.svg';
 import taskAddIcon from './icons/task-add-icon.svg';
 import taskCompleteIcon from './icons/task-complete-icon.svg';
@@ -28,7 +25,6 @@ import thisWeekIcon from './icons/this-week-icon.svg';
 import timeSensitiveTaskIcon from './icons/time-sensitive-task-icon.svg';
 import todayIcon from './icons/today-icon.svg';
 import todoCompleteIcon from './icons/todo-complete-icon.svg';
-import todoDeleteIcon from './icons/todo-delete-icon.svg';
 import todoEditIcon from './icons/todo-edit-icon.svg';
 import todoExpandLessIcon from './icons/todo-expand-less-icon.svg';
 import todoExpandMoreIcon from './icons/todo-expand-more-icon.svg';
@@ -498,17 +494,6 @@ function isHidden(element) {
   return result;
 }
 
-function switchClass(btn, classOne, classTwo) {
-  const classes = DOM.getClasses(btn);
-  if (classes.includes(classOne)) {
-    DOM.declassify(btn, [classOne]);
-    DOM.classify(btn, [classTwo]);
-  } else {
-    DOM.declassify(btn, [classTwo]);
-    DOM.classify(btn, [classOne]);
-  }
-}
-
 function updateBtnText(btn, newBtnText) {
   const childNodes = btn.children;
   const childArr = [...childNodes];
@@ -517,22 +502,6 @@ function updateBtnText(btn, newBtnText) {
       childEl.innerHTML = newBtnText;
     }
   })
-}
-
-/**
- * Replaces an event listener with another
- */
-function switchButtonFn(btn, eventType, fn1, fn2) {
-  deactivateBtnFn(btn, eventType, fn1);
-  activateBtnFn(btn, eventType, fn2);
-}
-
-function activateBtnFn(btn, eventType, fn) {
-  btn.addEventListener(eventType, fn);
-}
-
-function deactivateBtnFn(btn, eventType, fn) {
-  btn.removeEventListener(eventType, fn);
 }
 
 function hideAllTodos() {
@@ -655,10 +624,6 @@ addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitTodoForm);
 addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
 addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
 addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
-
-function revealTasks() {
-
-}
 
 function updateTextContent(ele, newText) {
   ele.textContent = newText;
@@ -792,11 +757,6 @@ function hideAndResetProjectEditForm() {
 }
 
 // TODO EDIT PANE
-// ENSURES TOGGLED
-function toggleHideTodoEditPane() {
-  toggleClass(TODO_EDIT_PANE, HIDE_CLASS);
-}
-
 // ENSURES UNHIDDEN
 function unhideTodoEditPane() {
   unhide(TODO_EDIT_PANE);
@@ -1092,7 +1052,7 @@ function getStorage() {
  * @param {*} title 
  * @returns 
  */
-function createProject(title) {
+function createProject(attachTo, title) {
   const projectObj = new App.Project(title);
   const projectEl = drawProject(US_PROJECT_LIST_UL, projectObj)
   addBtnFn(projectEl.querySelector('button.project-btn'), selectProject, 'click');
@@ -1114,7 +1074,6 @@ function getSelectedProjectEl() {
   const projectEl = document.querySelector('.project.selected');
   return projectEl;
 }
-
 
 function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
   // HIDE form
@@ -1206,18 +1165,14 @@ function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) 
   return todoObj;
 }
 
-function addTask(taskTitle, isComplete, todo) {
-  const task = new App.Task(taskTitle, isComplete);
-  todo.addTask(task);
-  return task;
-}
-
-function updateTask(title, isComplete, task) {
-  task.title = title;
-  task.isComplete = isComplete;
-  return task;
-}
-
 hideAllTasks();
 hideAddTodoBtn();
 hideHideCompleteTodosBtn();
+
+// function main() {
+//   createProject('Today');
+//   createProject('This Week');
+//   createProject('All');
+// }
+
+// main();
