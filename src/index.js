@@ -508,6 +508,15 @@ function updateBtnText(btn, newBtnText) {
   })
 }
 
+function showSelectedProjectTodos() {
+  const projectID = getSelectedProjectID();
+  const todoIDs = getTodoIDs(projectID);
+  todoIDs.forEach(function (todoID) {
+    const todoNode = document.querySelector('#' + todoID);
+    unhide(todoNode);
+  })
+}
+
 function hideAllTodos() {
   const todoNodes = document.querySelectorAll('.todo');
   todoNodes.forEach(function ensureTodoHidden(todoNode) {
@@ -702,9 +711,12 @@ function clearTasksFromTodoForm(taskList) {
 function stageAddTodoForm() {
   setTodoEditHeaderToCreate();
   clearTasksFromTodoForm(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST);
+  // only create a todo to fill out the form
   let todo = new App.Todo();
   fillTodoForm(todo);
   unhideTodoEditPane();
+  // delete after form filled out
+  App.delTodo(todo.getID());
   todo = null;
 }
 
@@ -764,6 +776,7 @@ function hideAndResetTodoEditForm() {
 function resetTodoEditPane() {
   let todo = new App.Todo();
   fillTodoForm(todo);
+  App.delTodo(todo.getID());
   todo = null;
 }
 /**
@@ -998,13 +1011,12 @@ function hideTasks() {
 }
 
 /**
- * Used to route calls necessary to create a NEW instance of a project where the attributes are PASSED in
- * AGNOSTIC of forms or anything used to GET the title - is only passed a value from some other fn
- * @param {*} title 
- * @returns 
+ * Creates a new Project object, draws the project, and adds event listener
+ * @param {*} 
+ * @returns [ProjectObj, ProjectElement]
  */
-function createProject(title) {
-  const projectObj = new App.Project(title);
+function createProject(title, id) {
+  const projectObj = new App.Project(title, Array(), id);
   const projectEl = drawProject(US_PROJECT_LIST_UL, projectObj)
   addBtnFn(projectEl.querySelector('button.project-btn'), selectProject, 'click');
   clearProjectSelection();
@@ -1028,17 +1040,36 @@ function getSelectedProjectEl() {
   const projectEl = document.querySelector('.project.selected');
   return projectEl;
 }
-
-function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
+/**
+ * Create a new Todo object, 
+ * @param {*} title 
+ * @param {*} priority 
+ * @param {*} dueDate 
+ * @param {*} isComplete 
+ * @param {*} tasks 
+ * @param {*} notes 
+ * @param {*} id 
+ * @returns 
+ */
+function createTodo(title, priority, dueDate, isComplete, tasks, notes, projectID, id) {
   // HIDE form
   hideTodoEditPane();
   // RESET form
   resetTodoEditPane();
-  // GET selected project
+  // ASSIGN to specific project if projectID provided - otherwise assign to selected project
+  let todoObj;
+  let project;
+  let pid;
   const selectedProjectID = getSelectedProjectID();
-  const project = getProjectByID(selectedProjectID);
-  // CREATE todo
-  const todoObj = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, selectedProjectID);
+  // If a projectID is specified, use it - otherwise use the currently selected project's ID to assign the todo to
+  if (projectID) {
+    pid = projectID;
+    project = getProjectByID(projectID);
+  } else {
+    pid = selectedProjectID;
+    project = getProjectByID(selectedProjectID);
+  }
+  todoObj = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, pid, id);
   // ADD todo to project
   project.addTodo(todoObj);
   // DRAW todo
@@ -1182,13 +1213,18 @@ function getStorageItem(item) {
   return item;
 }
 
-
+/**
+ * Saves projects, todos, and tasks to separate localStorage key-item pairs
+ */
 function save() {
   const projects = App.getProjects();
   localStorage.setItem('projects', JSON.stringify(projects));
 
   const todos = App.getTodos();
   localStorage.setItem('todos', JSON.stringify(todos));
+
+  const tasks = App.getTasks();
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 function startup() {
@@ -1210,16 +1246,35 @@ function startup() {
   hideAllTasks();
   hideAddTodoBtn();
   hideHideCompleteTodosBtn();
-
+  
   // local storage steps here
+  // retrieve attribute values for projects
   const projects = getProjects();
   const todos = getTodos();
-  // const tasks = getTasks();
-  projects.forEach(function (project) {
-    const projectObj = createProject(project.title)[0];
-    const myTodoIDs = getTodoIDs(projectObj.getID());
-
+  const tasks = getTasks();
+  console.log(projects);
+  console.log(todos);
+  console.log(tasks);
+  projects.forEach(function reviveProject(project) {
+    // reCreate project instance
+    const projectObj = createProject(project.title, project.id)[0];
+    // recreate todo instances
+    todos.forEach(function reviveTodo(todo) {
+      if (todo.projectID === project.id) {
+        const todoObj = createTodo(todo.title, todo.priority, todo.dueDate, todo.isComplete, todo.tasks, todo.notes, todo.projectID, todo.id);
+        // tasks.forEach(function reviveTask(task) {
+        //   if (task.todoID === todo.id) {
+        //     const taskObj = new App.Task(task.title, task.isComplete, task.todoID, task.id);
+        //     const taskList = document.querySelector('#' + todo.id + ' .task-list');
+        //     drawTaskDisplayMode(taskList, taskObj);
+        //   }
+        // })
+      }
+    })
   })
+  updateCtTodos();
+  hideAllTodos();
+  showSelectedProjectTodos();
 }
 
 startup();

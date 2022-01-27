@@ -200,19 +200,18 @@ const APP = (() => {
     return rcvr;
   }
   // Task
-  function Task(title='New Task', isComplete=false, todoID) {
-    this.id = "i" + uuidv4();
+  function Task(title='New Task', isComplete=false, todoID, id) {
     this.title = title;
     this.isComplete  = isComplete;
     this.todoID = todoID;
+    this.id = id || ("i" + uuidv4());
 
     TASKS.push(this);
   }
   mixin(Task.prototype, hasID, hasTitle, {constructor: Task})
 
   // Todo
-  function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, tasks=Array(), notes='', projectID) {
-    this.id = "i" + uuidv4();
+  function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, tasks=Array(), notes='', projectID, id) {
     this.title = title;
     this.priority = priority;
     this.dueDate = dueDate;
@@ -220,16 +219,17 @@ const APP = (() => {
     this.tasks = tasks;
     this.notes = notes;
     this.projectID = projectID;
+    this.id = id || ("i" + uuidv4());
 
     TODOS.push(this);
   }
   mixin(Todo.prototype, hasID, hasTitle, hasPriority, hasDueDate, hasTasks, hasNotes, hasProject, {constructor: Todo});
 
   // Project
-  function Project(title='New Project', todos=Array()) {
-    this.id = uuidv4()
+  function Project(title='New Project', todos=Array(), id) {
     this.title = title;
     this._todos = todos;
+    this.id = id || ("i" + uuidv4());
     
     PROJECTS.push(this);
   }
