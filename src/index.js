@@ -377,6 +377,10 @@ function toggleTodoComplete() {
   // update App
   const todoObj = App.getTodo(todoEl.id);
   todoObj.isComplete = (!classes.includes(TODO_COMPLETE_CLASS));
+
+  // update localStorage
+  save();
+
   // update DOM
   updateCtTodos();
 }
@@ -606,24 +610,9 @@ function deleteSelectedProject() {
     hideEditThisProjectBtn();
     hideDeleteThisProjectBtn();
   }
+
+  save();
 }
-
-// Project Add and Project Edit button listeners
-addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, stageAddProjectForm);
-addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, stageEditProjectForm);
-
-// Todo Option button listeners
-addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, stageAddTodoForm);
-
-// Form listeners
-addBtnFn(PROJECT_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetProjectEditForm);
-// differentiate between submission from 'create' versions of form to 'edit' versions of the form
-addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitProjectForm);
-addBtnFn(TODO_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetTodoEditForm);
-addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitTodoForm);
-addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
-addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
-addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
 
 function updateTextContent(ele, newText) {
   ele.textContent = newText;
@@ -813,6 +802,17 @@ function projectFormModeIsCreate() {
   return result;
 }
 
+function updateBtnDisplay() {
+  if (projectsExist()) {
+    unhideEditThisProjectBtn();
+    unhideDeleteThisProjectBtn();
+    if (isHidden(TODO_OPTIONS_LI_ADD_TODO_BTN)) {
+      unhideAddTodoBtn();
+      unhideHideCompleteTodosBtn();
+    }
+  }
+}
+
 /**
  * Routes calls to GET project values to SEND to 'createProject()'
  */
@@ -829,7 +829,7 @@ function submitProjectForm() {
   // if EDIT then simply edit the project
   let projectEl;
   if (projectFormModeIsCreate()) {
-    projectEl = createProject(title);
+    projectEl = createProject(title)[1];
       // UNHIGHLIGHT the project with 'selected' class currently applied
       clearProjectSelection();
       // HIDE todos - since none will be for the NEW project
@@ -847,13 +847,8 @@ function submitProjectForm() {
     // do stuff with the project object here
     projectObj.title = title;
   }
-  unhideEditThisProjectBtn();
-  unhideDeleteThisProjectBtn();
-    // check if 'Add a Todo' and 'Hide/Show Tasks Buttons' are hidden
-  if (isHidden(TODO_OPTIONS_LI_ADD_TODO_BTN)) {
-    unhideAddTodoBtn();
-    unhideHideCompleteTodosBtn();
-  }
+  updateBtnDisplay();
+  save();
   return projectEl;
 }
 
@@ -964,6 +959,7 @@ function submitTodoForm() {
   } else {
     updateTodo(title, priority, dueDate, isComplete, tasks, notes, TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent);
   }
+  save();
   updateCtTodos();
 }
 
@@ -1001,63 +997,21 @@ function hideTasks() {
   showHideButtons(expanderBtn, minimizerBtn);
 }
 
-// LOCAL STORAGE Functions
-function storageAvailable(type) {
-  var storage;
-  try {
-      storage = window[type];
-      var x = '__storage_test__';
-      storage.setItem(x, x);
-      storage.removeItem(x);
-      return true;
-  }
-  catch(e) {
-      return e instanceof DOMException && (
-          // everything except Firefox
-          e.code === 22 ||
-          // Firefox
-          e.code === 1014 ||
-          // test name field too, because code might not be present
-          // everything except Firefox
-          e.name === 'QuotaExceededError' ||
-          // Firefox
-          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-          // acknowledge QuotaExceededError only if there's something already stored
-          (storage && storage.length !== 0);
-  }
-}
-
-function getStorage() {
-  return window['localStorage'];
-}
-
-// function getProjects() {
-//   let projectStorage;
-//   let projects;
-//   if (storageAvailable('localStorage')) {
-//     let locStorage = getStorage();
-//     projectStorage = locStorage.getItem('userProjects');
-//     if (!(projectStorage === null)) {
-//       projects = JSON.parse(projectStorage);
-//     }
-//   } else {
-//     projects = [];
-//   }
-//   return projects;
-// }
-
 /**
  * Used to route calls necessary to create a NEW instance of a project where the attributes are PASSED in
  * AGNOSTIC of forms or anything used to GET the title - is only passed a value from some other fn
  * @param {*} title 
  * @returns 
  */
-function createProject(attachTo, title) {
+function createProject(title) {
   const projectObj = new App.Project(title);
   const projectEl = drawProject(US_PROJECT_LIST_UL, projectObj)
   addBtnFn(projectEl.querySelector('button.project-btn'), selectProject, 'click');
-
-  return projectEl;
+  clearProjectSelection();
+  selectLastProject();
+  updateBtnDisplay();
+  save();
+  return [projectObj, projectEl];
 }
 
 function getSelectedProjectID() {
@@ -1099,6 +1053,8 @@ function createTodo(title, priority, dueDate, isComplete, tasks, notes) {
   addBtnFn(expanderBtn, showTasks);
   addBtnFn(minimizerBtn, hideTasks);
   addBtnFn(editBtn, stageEditTodoForm);
+
+  save();
 
   return todoEl;
 }
@@ -1162,17 +1118,108 @@ function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) 
     drawTaskDisplayMode(taskListEl, task);
   })
 
+  save();
+
   return todoObj;
 }
 
-hideAllTasks();
-hideAddTodoBtn();
-hideHideCompleteTodosBtn();
+// LOCAL STORAGE Functions
+function storageAvailable(type) {
+  var storage;
+  try {
+      storage = window[type];
+      var x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+  }
+  catch(e) {
+      return e instanceof DOMException && (
+          // everything except Firefox
+          e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+          // acknowledge QuotaExceededError only if there's something already stored
+          (storage && storage.length !== 0);
+  }
+}
 
-// function main() {
-//   createProject('Today');
-//   createProject('This Week');
-//   createProject('All');
-// }
+function getStorage() {
+  return window['localStorage'];
+}
 
-// main();
+function getProjects() {
+  const projects = getStorageItem('projects');
+  return projects;
+}
+
+function getTodos() {
+  const todos = getStorageItem('todos');
+  return todos;
+}
+
+function getTasks() {
+  const tasks = getStorageItem('tasks');
+  return tasks;
+}
+
+function getStorageItem(item) {
+  let itemStorage;
+  if (storageAvailable('localStorage')) {
+    let locStorage = getStorage();
+    itemStorage = locStorage.getItem(item);
+    if (!(itemStorage === null)) {
+      item = JSON.parse(itemStorage);
+    }
+  } else {
+    item = [];
+  }
+  return item;
+}
+
+
+function save() {
+  const projects = App.getProjects();
+  localStorage.setItem('projects', JSON.stringify(projects));
+
+  const todos = App.getTodos();
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+function startup() {
+  // Project Add and Project Edit button listeners
+  addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, stageAddProjectForm);
+  addBtnFn(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, stageEditProjectForm);
+  // Todo Option button listeners
+  addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, stageAddTodoForm);
+  // Form listeners
+  addBtnFn(PROJECT_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetProjectEditForm);
+  // differentiate between submission from 'create' versions of form to 'edit' versions of the form
+  addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitProjectForm);
+  addBtnFn(TODO_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetTodoEditForm);
+  addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitTodoForm);
+  addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
+  addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
+  addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
+
+  hideAllTasks();
+  hideAddTodoBtn();
+  hideHideCompleteTodosBtn();
+
+  // local storage steps here
+  const projects = getProjects();
+  const todos = getTodos();
+  // const tasks = getTasks();
+  projects.forEach(function (project) {
+    const projectObj = createProject(project.title)[0];
+    const myTodoIDs = getTodoIDs(projectObj.getID());
+
+  })
+}
+
+startup();

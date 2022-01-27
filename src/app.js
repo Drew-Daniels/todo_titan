@@ -4,8 +4,13 @@ import { format } from 'date-fns';
 const APP = (() => {
   const TODOS = [];
   const PROJECTS = [];
+  const TASKS = [];
 
   // module level functions
+  /**
+   * 
+   * @returns PROJECTS
+   */
   function getProjects() {
     return PROJECTS;
   }
@@ -34,6 +39,15 @@ const APP = (() => {
   function getTodo(todoID) {
     let todoObj = getByID(todoID, TODOS);
     return todoObj;
+  }
+
+  function getTasks() {
+    return TASKS;
+  }
+
+  function getTask(taskID) {
+    let taskObj = getByID(taskID, TASKS);
+    return taskObj;
   }
 
   function getByID(ID, array) {
@@ -186,11 +200,15 @@ const APP = (() => {
     return rcvr;
   }
   // Task
-  function Task(title='New Task', isComplete=false) {
+  function Task(title='New Task', isComplete=false, todoID) {
+    this.id = "i" + uuidv4();
     this.title = title;
     this.isComplete  = isComplete;
+    this.todoID = todoID;
+
+    TASKS.push(this);
   }
-  mixin(Task.prototype, hasTitle, {constructor: Task})
+  mixin(Task.prototype, hasID, hasTitle, {constructor: Task})
 
   // Todo
   function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, tasks=Array(), notes='', projectID) {
@@ -240,6 +258,8 @@ const APP = (() => {
     getTodos,
     getTodo,
     getTodoIDs,
+    getTasks,
+    getTask,
     // DEL
     delProject,
     delTodo,
