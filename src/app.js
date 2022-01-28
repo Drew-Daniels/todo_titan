@@ -96,7 +96,7 @@ const APP = (() => {
   }
 
   // PROJECT Methods
-  const hasTodos = {
+  const hasTodoChildren = {
     getTitle() {
       return this.title;
     },
@@ -112,7 +112,7 @@ const APP = (() => {
       return todos;
     },
     getTodoIDs() {
-      const todos = getTodos();
+      const todos = this.getTodos();
       const todoIDs = new Array();
       todos.forEach(function(todo) {
         const todoID = todo.getID();
@@ -121,7 +121,7 @@ const APP = (() => {
       return todoIDs;
     },
     getCtTodos() {
-      const todos = getTodos();
+      const todos = this.getTodos();
       const numTodos = todos.length;
       return numTodos;
     },
@@ -145,7 +145,7 @@ const APP = (() => {
           ct++;
         }
       }
-      return ct++;
+      return ct;
     },
     addTodoID(todoID) {
       this.todoIDs.push(todoID);
@@ -163,7 +163,7 @@ const APP = (() => {
       return this.priority;
     }
   }
-  const hasTasks = {
+  const hasTaskChildren = {
     getTasks() {
       const todoID = this.getID();
       const tasks = [];
@@ -196,10 +196,17 @@ const APP = (() => {
     }
   }
 
-  const hasProject = {
+  const hasProjectParent = {
     getProjectID() {
       return this.projectID;
     },
+  }
+
+  // TASK Methods
+  const hasTodoParent = {
+    getTodoID() {
+      return this.todoID;
+    }
   }
 
   // CLASS DEFINITIONS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +223,7 @@ const APP = (() => {
 
     TASKS.push(this);
   }
-  mixin(Task.prototype, hasID, hasTitle, {constructor: Task})
+  mixin(Task.prototype, hasID, hasTitle, hasTodoParent, {constructor: Task})
 
   // Todo
   function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, notes='', projectID, id=("i" + uuidv4())) {
@@ -230,7 +237,7 @@ const APP = (() => {
 
     TODOS.push(this);
   }
-  mixin(Todo.prototype, hasID, hasTitle, hasPriority, hasDueDate, hasTasks, hasNotes, hasProject, {constructor: Todo});
+  mixin(Todo.prototype, hasID, hasTitle, hasPriority, hasDueDate, hasTaskChildren, hasNotes, hasProjectParent, {constructor: Todo});
 
   // Project
   function Project(title='New Project', id=("i" + uuidv4())) {
@@ -240,7 +247,7 @@ const APP = (() => {
     PROJECTS.push(this);
   }
 
-  mixin(Project.prototype, hasID, hasTitle, hasTodos, {constructor: Project});
+  mixin(Project.prototype, hasID, hasTitle, hasTodoChildren, {constructor: Project});
 
   return {
     Project, 

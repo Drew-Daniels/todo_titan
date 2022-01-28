@@ -257,6 +257,7 @@ function updateCtTodos() {
     const projectObj = getProjectByID(projectID);
     const ctTodos = projectObj.getCtTodosIncomplete();
 
+    console.log(projectObj);
     const numTodosSpan = projectEl.querySelector('span.num-todos');
     numTodosSpan.textContent = ctTodos;
   })
@@ -612,8 +613,9 @@ function deleteSelectedProject() {
   App.delProject(selectedProject.getID());
   
   if (projectsExist()) {
-    const newlySelectedProject = selectLastProject();
-    unhideTodos(newlySelectedProject.id);
+    selectLastProject();
+    const newlySelectedProject = getSelectedProject();
+    unhideTodos(newlySelectedProject);
   } else {
     hideAddTodoBtn();
     hideHideCompleteTodosBtn();
@@ -936,16 +938,23 @@ function getTodoFormValues() {
     let dueDate = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value;
     let isComplete = TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT.checked;
     let tasks = getTodoFormTasks(document.querySelectorAll('.form-section > ul.task-list > li.task'));
-    let notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.textContent;
+    let notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value;
 
     return [title, priority, dueDate, isComplete, tasks, notes];
 }
 
 function submitTodoForm() {
   let [title, priority, dueDate, isComplete, tasks, notes] = getTodoFormValues();
+  console.log(title);
+  console.log(priority);
+  console.log(dueDate);
+  console.log(isComplete);
+  console.log(tasks);
+  console.log(notes);
+
   // inspect the header to determine what the outcome of submitting of the form should be
   if (TODO_EDIT_PANE_FORM_HEADER_SPAN.textContent === TODO_EDIT_HEADER_CREATE_TEXT) {
-    createAndDomifyTodo(title, priority, dueDate, isComplete, tasks, notes);
+    createAndDomifyTodo(title, priority, dueDate, isComplete, notes);
   } else {
     updateTodo(title, priority, dueDate, isComplete, tasks, notes, TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent);
   }
@@ -1079,8 +1088,8 @@ function domifyTodo(todoObj) {
   return todoEl;
 }
 
-function createAndDomifyTodo(title, priority, dueDate, isComplete, tasks, notes, projectID, id) {
-  const todoObj = createTodo(title, priority, dueDate, isComplete, tasks, notes, projectID, id);
+function createAndDomifyTodo(title, priority, dueDate, isComplete, notes, projectID, id) {
+  const todoObj = createTodo(title, priority, dueDate, isComplete, notes, projectID, id);
   const todoEl = domifyTodo(todoObj);
   return [todoObj, todoEl];
 }
@@ -1098,7 +1107,6 @@ function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) 
   todoObj.priority = priority;
   todoObj.dueDate = dueDate;
   todoObj.isComplete = isComplete;
-  todoObj.tasks = tasks;
   todoObj.notes = notes;
 
   // UPDATE DOM
@@ -1209,56 +1217,6 @@ function save() {
 
 }
 
-function reviveFromStorage(storageItems, reviverFn, attributesArray) {
-  const args = [];
-  const arr = [];
-  let arg;
-  storageItems.forEach(function(storageItem) {
-    attributesArray.forEach(function(attribute) {
-      arg = storageItem[attribute];
-      args.push(arg);
-    })
-    const obj = reviverFn(...args);
-    arr.push(obj);
-  })
-  return arr;
-}
-
-function reviveProjects(storageItems, reviverFn) {
-  const attrs = [
-    'title',
-    'id',
-  ]
-  const projects = reviveFromStorage(storageItems, reviverFn, attrs);
-  return projects;
-}
-
-function reviveTodos(storageItems, reviverFn) {
-  const attrs = [
-    'title',
-    'priority',
-    'dueDate',
-    'isComplete',
-    'tasks',
-    'notes',
-    'projectID',
-    'id',
-  ]
-  const todos = reviveFromStorage(storageItems, reviverFn, attrs);
-  return todos;
-}
-
-function reviveTasks(storageItems, reviverFn) {
-  const attrs = [
-    'title',
-    'isComplete',
-    'todoID',
-    'id',
-  ]
-  const tasks = reviveFromStorage(storageItems, reviverFn, attrs);
-  return tasks;
-}
-
 function startup() {
   // Project Add and Project Edit button listeners
   addBtnFn(US_PROJECT_LIST_ADD_PROJECT_BTN, stageAddProjectForm);
@@ -1284,11 +1242,6 @@ function startup() {
   const projectStorageItems = getStorageItem('projects');
   const todoStorageItems = getStorageItem('todos');
   const taskStorageItems = getStorageItem('tasks');
-
-  // transform objects from local storage back into Project, Todo, and Task objects
-  // const projects = reviveProjects(projectStorageItems, createProject);
-  // const todos = reviveTodos(todoStorageItems, createTodo);
-  // const tasks = reviveTasks(taskStorageItems, createTask);
 
   const projects = new Array();
   const todos = new Array();
@@ -1330,15 +1283,13 @@ function startup() {
       domifyProject(project);
       todos.forEach(function revealTodo(todo) {
         if (todo.projectID === project.getID()) {
-          const todoObj = createTodo(todo.title, todo.priority, todo.dueDate, todo.isComplete, todo.notes, todo.projectID, todo.id);
-          domifyTodo(todoObj);
-          // tasks.forEach(function revealTask(task) {
-          //   if (task.todoID === todo.id) {
-          //     const taskObj = new App.Task(task.title, task.isComplete, task.todoID, task.id);
-          //     const taskList = document.querySelector('#' + todo.id + ' .task-list');
-          //     drawTaskDisplayMode(taskList, taskObj);
-          //   }
-          // })
+          domifyTodo(todo);
+          const taskList = document.querySelector('#' + todo.id + ' .task-list');
+          tasks.forEach(function(task) {
+            if (task.todoID === todo.id) {
+              drawTaskDisplayMode(taskList, task);
+            }
+          })
         }
       })
     })

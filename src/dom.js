@@ -110,7 +110,7 @@ function createLabel(attachTo, labelFor, labelText, ...classes) {
   attachTo.appendChild(labelEl);
   return labelEl;
 }
-function createTextArea(attachTo, name, cols='30', rows='10', text='Default Text', ...classes) {
+function createTextArea(attachTo, name, cols='30', rows='10', text='', ...classes) {
   let textAreaEl = document.createElement('textarea');
   textAreaEl.name = name;
   textAreaEl.cols = cols;
