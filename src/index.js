@@ -169,7 +169,7 @@ const TODO_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_HEA
 const TODO_EDIT_PANE_FORM_DISCARD_BTN_IMG = DOM.createImage(TODO_EDIT_PANE_FORM_DISCARD_BTN, discardChangesIcon, 'something');
 
 // TODO id
-const TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM, '', 'hide');
+const TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM, '', 'todo-id-span', 'hide');
 
 // TODO title
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'edit-todo-title-section', 'form-section');
@@ -257,7 +257,6 @@ function updateCtTodos() {
     const projectObj = getProjectByID(projectID);
     const ctTodos = projectObj.getCtTodosIncomplete();
 
-    console.log(projectObj);
     const numTodosSpan = projectEl.querySelector('span.num-todos');
     numTodosSpan.textContent = ctTodos;
   })
@@ -910,10 +909,16 @@ function clearProjectSelection() {
   }
 }
 
-function getTodoFormTasks(taskNodes) {
-  let task;
-  let tasks = [];
-  taskNodes.forEach(function (taskNode) {
+/**
+ * 
+ * @param {*} taskNodes Array of DOM nodes that containing task data that can later be used to create tasks
+ * @returns 
+ */
+function getTodoFormTaskValues(taskNodes) {
+  let taskValues;
+  const todoID = TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent;
+  const taskValuesArray = new Array();
+  taskNodes.forEach(function(taskNode) {
     let taskIsComplete;
     let taskClasses = DOM.getClasses(taskNode);
     if (taskClasses.includes(TASK_COMPLETE_CLASS)) {
@@ -922,12 +927,44 @@ function getTodoFormTasks(taskNodes) {
       taskIsComplete = false;
     }
     let taskTitle = taskNode.querySelector('input').value;
-    task = new App.Task(taskTitle, taskIsComplete);
-    tasks.push(task);
+    taskValues = [taskTitle, taskIsComplete, todoID];
+    taskValuesArray.push(taskValues);
   })
 
+  return taskValuesArray;
+}
+
+function getTasksFromTaskValues(taskValuesArray) {
+  let title;
+  let isComplete;
+  let todoID;
+  let task;
+  const tasks = new Array();
+  taskValuesArray.forEach(function(taskValueArray) {
+    [title, isComplete, todoID] = taskValueArray;
+    task = new App.Task(title, isComplete, todoID);
+    tasks.push(task);
+  })
   return tasks;
 }
+
+function updateTasksFromTaskValues(taskValuesArray) {
+  let parentTodoID;
+  // delete all tasks that belong to this todoID
+  const oldTasks = App.getTasks();
+  let todoID;
+  oldTasks.forEach(function(oldTask) {
+    todoID = task.getTodoID();
+    if (todoID === parentTodoID) {
+      App.delTask(oldTask.getID());
+    }
+  })
+  // recreate these tasks and assign them to this Todo
+  const newTasks = getTasksFromTaskValues(taskValuesArray);
+
+  return newTasks;
+}
+
 /**
  * Returns the values from a TodoForm
  * @returns [title, priority, dueDate, isComplete, tasks, notes]
@@ -937,26 +974,40 @@ function getTodoFormValues() {
     let priority = document.querySelector('input[name="priority-level"]:checked').value;
     let dueDate = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value;
     let isComplete = TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT.checked;
-    let tasks = getTodoFormTasks(document.querySelectorAll('.form-section > ul.task-list > li.task'));
+    let taskValues = getTodoFormTaskValues(document.querySelectorAll('.form-section > ul.task-list > li.task'));
     let notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value;
 
-    return [title, priority, dueDate, isComplete, tasks, notes];
+    return [title, priority, dueDate, isComplete, taskValues, notes];
 }
 
+function todoFormInCreateMode() {
+  return (TODO_EDIT_PANE_FORM_HEADER_SPAN.textContent === TODO_EDIT_HEADER_CREATE_TEXT)
+}
+
+/**
+ * Collects Todo form values to either CREATE a new Todo object or UPDATE an existing Todo, and updating the screen
+ */
 function submitTodoForm() {
-  let [title, priority, dueDate, isComplete, tasks, notes] = getTodoFormValues();
+  let [title, priority, dueDate, isComplete, taskValues, notes] = getTodoFormValues();
   console.log(title);
   console.log(priority);
   console.log(dueDate);
   console.log(isComplete);
-  console.log(tasks);
+  console.log(taskValues);
   console.log(notes);
 
+  let tasks;
   // inspect the header to determine what the outcome of submitting of the form should be
-  if (TODO_EDIT_PANE_FORM_HEADER_SPAN.textContent === TODO_EDIT_HEADER_CREATE_TEXT) {
+  if (todoFormInCreateMode()) {
     createAndDomifyTodo(title, priority, dueDate, isComplete, notes);
+    // create tasks
+    tasks = getTasksFromTaskValues(taskValues);
+    // domify tasks
+
   } else {
-    updateTodo(title, priority, dueDate, isComplete, tasks, notes, TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent);
+    updateTodo(title, priority, dueDate, isComplete, notes, TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent);
+    // update tasks
+    updateTasksFromTaskValues(taskValues);
   }
   save();
   updateCtTodos();
@@ -1073,10 +1124,20 @@ function createTodo(title, priority, dueDate, isComplete, notes, projectID, id) 
   return todoObj;
 }
 
+/**
+ * Creates DOM elements to display a Todo object and adds appropriate listeners
+ * @param {*} todoObj 
+ * @returns 
+ */
 function domifyTodo(todoObj) {
   const todoEl = drawTodo(TODO_LIST, todoObj);
   hideAllTasks();
+  addTodoListeners(todoEl);
 
+  return todoEl;
+}
+
+function addTodoListeners(todoEl) {
   const expanderBtn = todoEl.querySelector('.expander-btn');
   const minimizerBtn = todoEl.querySelector('.minimizer-btn');
   const editBtn = todoEl.querySelector('.edit-todo-btn');
@@ -1088,6 +1149,17 @@ function domifyTodo(todoObj) {
   return todoEl;
 }
 
+/**
+ * Creates a new Todo object and adds DOM elements to display on the screen
+ * @param {*} title 
+ * @param {*} priority 
+ * @param {*} dueDate 
+ * @param {*} isComplete 
+ * @param {*} notes 
+ * @param {*} projectID 
+ * @param {*} id 
+ * @returns [Todo object, Todo HTML Element]
+ */
 function createAndDomifyTodo(title, priority, dueDate, isComplete, notes, projectID, id) {
   const todoObj = createTodo(title, priority, dueDate, isComplete, notes, projectID, id);
   const todoEl = domifyTodo(todoObj);
@@ -1277,6 +1349,10 @@ function startup() {
     );
     tasks.push(task);
   })
+
+  console.log(projects);
+  console.log(todos);
+  console.log(tasks);
 
   if (projects.length > 0) {
     projects.forEach(function(project) {

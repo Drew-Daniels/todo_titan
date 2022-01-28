@@ -8,7 +8,7 @@ const APP = (() => {
 
   // module level functions
   /**
-   * 
+   * Returns all Project objects kept in App memory
    * @returns PROJECTS
    */
   function getProjects() {
@@ -20,7 +20,10 @@ const APP = (() => {
     let projectObj = getByID(projectID, PROJECTS);
     return projectObj;
   }
-
+  /**
+   * Returns all Todo objects kept in App memory
+   * @returns TODOS
+   */
   function getTodos() {
     return TODOS;
   }
@@ -39,6 +42,10 @@ const APP = (() => {
     return todoObj;
   }
 
+  /**
+   * Returns all Task objects kept in App memory
+   * @returns TASKS
+   */
   function getTasks() {
     return TASKS;
   }
@@ -67,11 +74,24 @@ const APP = (() => {
       }
     }
   }
-  /** Deletes a Todo instance from TODOS array */
+  /**
+   * Deletes a Task object from TASKS array (App memory)
+   * @param {*} taskID 
+   */
+  function delTask(taskID) {
+    deleteByID(taskID, TASKS);
+  }
+  /**
+   * Deletes a Todo object from TODOS array (App memory)
+   * @param {*} todoID 
+   */
   function delTodo(todoID) {
     deleteByID(todoID, TODOS);
   }
-  /** Deletes a Project instance from PROJECTS array */
+  /**
+   * Deletes a Project object from PROJECTS array (App memory)
+   * @param {*} projectID 
+   */
   function delProject(projectID) {
     // FIRST delete all todos belonging to this project
     const project = getProject(projectID);
@@ -264,6 +284,7 @@ const APP = (() => {
     // DEL
     delProject,
     delTodo,
+    delTask,
   }
 })();
 
