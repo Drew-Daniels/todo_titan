@@ -41,19 +41,17 @@ import App from './app';
 const TITLE_TEXT = 'Todo Titan';
 const LOGO_TEXT = 'TODO Titan';
 const FOOTER_TEXT = 'View Source code on';
-const GITHUB_PROFILE_TEXT = 'Created by';
 const GITHUB_PROJECT_URL = 'https://github.com/Drew-Daniels/todo_titan';
 const GITHUB_PROFILE_CONTAINER_TEXT = 'Created by';
 const GITHUB_PROFILE_URL = 'https://github.com/Drew-Daniels';
 const GITHUB_PROFILE_ANCHOR_TEXT = 'Drew Daniels';
 
-const HTML = DOM.getHTML();
 const HEAD = DOM.getHead();
 
 // +++++ INITIAL PAGE SETUP +++++
 // === HEAD ===
-const FAVICON = DOM.createFavicon(todoTitanIcon, HEAD);
-const TITLE = DOM.createTitle(TITLE_TEXT, HEAD);
+DOM.createFavicon(todoTitanIcon, HEAD);
+DOM.createTitle(TITLE_TEXT, HEAD);
 
 // === BODY (Content-Container) ===
 const BODY = DOM.getBody();
@@ -66,8 +64,8 @@ const CONTENT = DOM.createDiv(BODY, 'content');
 const HEADER = DOM.createHeader(CONTENT);
 
 const LOGO_NAME_CONTAINER = DOM.createDiv(HEADER, 'logo-name-container');
-const LOGO_EL = DOM.createImage(LOGO_NAME_CONTAINER, todoTitanIcon, 'Todo Titan Checkmark Icon', 'logo')
-const LOGO_TEXT_EL = DOM.createSpan(LOGO_NAME_CONTAINER, LOGO_TEXT, "logo-text");
+DOM.createImage(LOGO_NAME_CONTAINER, todoTitanIcon, 'Todo Titan Checkmark Icon', 'logo')
+DOM.createSpan(LOGO_NAME_CONTAINER, LOGO_TEXT, "logo-text");
 
 const VIEW_PROJECTS_BUTTON = DOM.createButton(HEADER, 'option-btn', 'fancy-btn')
 VIEW_PROJECTS_BUTTON.id = 'view-projects-btn';
@@ -110,14 +108,14 @@ const PROJECT_PANE    = DOM.createDiv(MAIN, 'project-pane');
 const PROJECT_LIST_CONTAINER_US = DOM.createDiv(PROJECT_PANE, 'project-list-container', 'user-specified-projects');
 const US_PROJECT_LIST_HEADER = DOM.createDiv(PROJECT_LIST_CONTAINER_US, 'project-header');
 const US_PROJECT_LIST_HEADER_MAIN = DOM.createDiv(US_PROJECT_LIST_HEADER, 'project-header-main');
-const US_PROJECT_LIST_ICON = DOM.createImage(US_PROJECT_LIST_HEADER_MAIN, myProjectsIcon, 'My Projects Icon');
-const US_PROJECT_LIST_TITLE = DOM.createSpan(US_PROJECT_LIST_HEADER_MAIN, 'My Projects');
+DOM.createImage(US_PROJECT_LIST_HEADER_MAIN, myProjectsIcon, 'My Projects Icon');
+DOM.createSpan(US_PROJECT_LIST_HEADER_MAIN, 'My Projects');
 const US_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_US, 'project-list');
 
 const US_PROJECT_LIST_ADD_PROJECT_PANE = DOM.createDiv(PROJECT_PANE, 'add-project-btn-container')
 const US_PROJECT_LIST_ADD_PROJECT_BTN = DOM.createButton(US_PROJECT_LIST_ADD_PROJECT_PANE, 'add-project-btn', 'fancy-btn');
-const US_PROJECT_LIST_ADD_PROJECT_BTN_IMG = DOM.createImage(US_PROJECT_LIST_ADD_PROJECT_BTN, addProjectIcon);
-const US_PROJECT_LIST_ADD_PROJECT_BTN_SPAN = DOM.createSpan(US_PROJECT_LIST_ADD_PROJECT_BTN, 'Add a New Project');
+DOM.createImage(US_PROJECT_LIST_ADD_PROJECT_BTN, addProjectIcon);
+DOM.createSpan(US_PROJECT_LIST_ADD_PROJECT_BTN, 'Add a New Project');
 
 // +++++ TODO PANE +++++
 const TODO_PANE = DOM.createDiv(MAIN, 'todo-pane');
@@ -126,20 +124,20 @@ const TODO_OPTIONS_BAR = DOM.createDiv(TODO_PANE, 'todo-options-bar');
 const TODO_OPTIONS_LIST = DOM.createUL(TODO_OPTIONS_BAR, 'todo-options-list');
 const TODO_OPTIONS_LI_ADD_TODO = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
 const TODO_OPTIONS_LI_ADD_TODO_BTN = DOM.createButton(TODO_OPTIONS_LI_ADD_TODO, 'option-btn', 'fancy-btn', 'add-todo-btn', 'hide');
-const TODO_OPTIONS_LI_ADD_TODO_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_ADD_TODO_BTN, 'Add a Todo','todo-option-text');
-const TODO_OPTIONS_LI_ADD_TODO_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_ADD_TODO_BTN, addTodoIcon, 'Add Todo Icon', 'option-image');
+DOM.createSpan(TODO_OPTIONS_LI_ADD_TODO_BTN, 'Add a Todo','todo-option-text');
+DOM.createImage(TODO_OPTIONS_LI_ADD_TODO_BTN, addTodoIcon, 'Add Todo Icon', 'option-image');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
 const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN = DOM.createButton(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS, 'option-btn', 'fancy-btn', 'toggle-show-hide-complete-todos-btn', 'hide');
-const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos','todo-option-text');
-const TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, hideCompleteTodosIcon, 'Hide Complete Todos Icon', 'option-image');
+DOM.createSpan(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, 'Hide Complete Todos','todo-option-text');
+DOM.createImage(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, hideCompleteTodosIcon, 'Hide Complete Todos Icon', 'option-image');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
 const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_EDIT_THIS_PROJECT, 'option-btn', 'fancy-btn', 'edit-project-btn', 'hide');
-const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, 'Edit this project','todo-option-text');
-const TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN_IMG = DOM.createImage(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, projectEditIcon, 'Project Edit Icon', 'option-image');
+DOM.createSpan(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, 'Edit this project','todo-option-text');
+DOM.createImage(TODO_OPTIONS_LI_EDIT_THIS_PROJECT_BTN, projectEditIcon, 'Project Edit Icon', 'option-image');
 const TODO_OPTIONS_LI_DELETE_THIS_PROJECT = DOM.createLI(TODO_OPTIONS_LIST, 'todo-options-list-item');
 const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN = DOM.createButton(TODO_OPTIONS_LI_DELETE_THIS_PROJECT, 'option-btn', 'fancy-btn', 'delete-project-btn', 'hide');
-const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN_SPAN = DOM.createSpan(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'Delete this project','todo-option-text');
-const TODO_OPTIONS_LI_DELETE_THIS_PROJECT_IMG = DOM.createImage(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, projectDeleteIcon, 'Delete this project icon', 'option-image');
+DOM.createSpan(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'Delete this project','todo-option-text');
+DOM.createImage(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, projectDeleteIcon, 'Delete this project icon', 'option-image');
 
 // TODO LIST
 const TODO_LIST    = DOM.createUL(TODO_PANE, 'todo-list');
@@ -150,15 +148,15 @@ const PROJECT_EDIT_PANE_FORM = DOM.createForm(PROJECT_EDIT_PANE, 'project-edit-f
 const PROJECT_EDIT_PANE_FORM_HEADER = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'form-header', 'fancy-header');
 const PROJECT_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(PROJECT_EDIT_PANE_FORM_HEADER, 'Edit Project');
 const PROJECT_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(PROJECT_EDIT_PANE_FORM_HEADER, 'discard-project-btn');
-const PROJECT_EDIT_PANE_FORM_DISCARD_BTN_IMG = DOM.createImage(PROJECT_EDIT_PANE_FORM_DISCARD_BTN, discardChangesIcon, 'something');
+DOM.createImage(PROJECT_EDIT_PANE_FORM_DISCARD_BTN, discardChangesIcon, 'something');
 
 const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'edit-project-title-section', 'form-section');
-const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_LABEL = DOM.createLabel(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION, 'project-title', 'Project Title:','project-title-label');
+DOM.createLabel(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION, 'project-title', 'Project Title:','project-title-label');
 const PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_INPUT = DOM.createInput(PROJECT_EDIT_PANE_FORM_EDIT_PROJECT_TITLE_SECTION, 'text', 'project-title', 'Current Project Name');
 
 const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'submission-container');
 const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN = DOM.createButton(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER, 'submit-project-changes-btn','submit-changes-btn', 'fancy-btn');
-const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN_IMG = DOM.createImage(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitIcon);
+DOM.createImage(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitIcon);
 
 // ============ TODO EDIT PANE =========================
 const TODO_EDIT_PANE  = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
@@ -166,68 +164,68 @@ const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, 'todo-edit-form');
 const TODO_EDIT_PANE_FORM_HEADER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-header', 'fancy-header');
 const TODO_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM_HEADER, 'Edit Todo');
 const TODO_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_HEADER, 'discard-todo-btn');
-const TODO_EDIT_PANE_FORM_DISCARD_BTN_IMG = DOM.createImage(TODO_EDIT_PANE_FORM_DISCARD_BTN, discardChangesIcon, 'something');
+DOM.createImage(TODO_EDIT_PANE_FORM_DISCARD_BTN, discardChangesIcon, 'something');
 
 // TODO id
 const TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM, '', 'todo-id-span', 'hide');
 
 // TODO title
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'edit-todo-title-section', 'form-section');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION, 'todo-title', 'Todo Title:', 'todo-title-label');
+DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION, 'todo-title', 'Todo Title:', 'todo-title-label');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_SECTION, 'text', 'todo-title', 'Current Todo Title');
 
 // TODO isComplete
 const TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-section');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_SECTION, 'todo-is-complete', 'Complete?', 'todo-is-complete-label');
+DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_SECTION, 'todo-is-complete', 'Complete?', 'todo-is-complete-label');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_SECTION, 'checkbox', 'todo-is-complete');
 
 // TODO dueDate
 const TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-section');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_SECTION, 'todo-due-date', 'Due Date:', 'todo-due-date-label');
+DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_SECTION, 'todo-due-date', 'Due Date:', 'todo-due-date-label');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_SECTION, 'date', 'todo-due-date', '2022-12-31');
 
 // TODO priority
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-section');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LABEL = DOM.createSpan(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_SECTION, 'Priority:', 'todo-priority-level-label');
+DOM.createSpan(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_SECTION, 'Priority:', 'todo-priority-level-label');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_CONTAINER = DOM.createDiv(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_SECTION, 'priority-level-container');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1 = DOM.createDiv(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_CONTAINER, 'priority-level-line');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1, 'radio', 'priority-level', 'high');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1, 'priority-level-1', 'High');
+DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_1, 'priority-level-1', 'High');
 // TODO priority cont...
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2 = DOM.createDiv(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_CONTAINER, 'priority-level-line');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2, 'radio', 'priority-level', 'medium');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2, 'priority-level-2', 'Medium');
+DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_2, 'priority-level-2', 'Medium');
 // TODO priority cont...
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3 = DOM.createDiv(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_CONTAINER, 'priority-level-line');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3_INPUT = DOM.createInput(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3, 'radio', 'priority-level', 'low');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3, 'priority-level-3', 'Low');
+DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_PRIORITY_LEVEL_LINE_3, 'priority-level-3', 'Low');
 
 // TODO tasks
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-section');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LABEL = DOM.createSpan(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_SECTION, 'Tasks:', 'todo-tasks-label');
+DOM.createSpan(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_SECTION, 'Tasks:', 'todo-tasks-label');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST = DOM.createUL(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_SECTION, 'task-list');
 // TODO tasks cont...
 const TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-section');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_SECTION, 'add-task-btn', 'fancy-btn');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN_IMG = DOM.createImage(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, taskAddIcon, 'Add task icon');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, 'Add a task');
+DOM.createImage(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, taskAddIcon, 'Add task icon');
+DOM.createSpan(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, 'Add a task');
 
 // TODO notes
 const TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_SECTION = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-section');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_LABEL = DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_SECTION, 'todo-notes', 'Notes:');
+DOM.createLabel(TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_SECTION, 'todo-notes', 'Notes:');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA = DOM.createTextArea(TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_SECTION,'todo-notes', '30', '10', undefined);
 
 // TODO form submission
 const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_CONTAINER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'submission-container');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_CONTAINER, 'submit-todo-changes-btn', 'submit-changes-btn', 'fancy-btn');
-const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN_IMG = DOM.createImage(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitIcon, 'Submit Icon');
+DOM.createImage(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitIcon, 'Submit Icon');
 
 // Footer
 const FOOTER = DOM.createFooter(CONTENT);
 DOM.setInnerText(FOOTER, FOOTER_TEXT);
 
 const GITHUB_PROJECT_ANCHOR = DOM.createAnchor(FOOTER, GITHUB_PROJECT_URL);
-const GITHUB_IMG = DOM.createImage(GITHUB_PROJECT_ANCHOR, githubIcon, 'Github Icon', 'github-icon');
+DOM.createImage(GITHUB_PROJECT_ANCHOR, githubIcon, 'Github Icon', 'github-icon');
 
 const GITHUB_PROFILE_CONTAINER = DOM.createDiv(FOOTER, 'github-profile-container');
 GITHUB_PROFILE_CONTAINER.innerText = GITHUB_PROFILE_CONTAINER_TEXT;
@@ -266,66 +264,67 @@ function drawProject(attachTo, project) {
   let projectEl = DOM.createLI(attachTo, 'project');
   projectEl.id = project.getID();
   let projectElBtn = DOM.createButton(projectEl, 'project-btn');
-  let projectElImg = DOM.createImage(projectElBtn, projectListIcon,'project-image');
-  let projectElTitle = DOM.createSpan(projectElBtn, project.getTitle(),'project-title');
+  DOM.createImage(projectElBtn, projectListIcon,'project-image');
+  DOM.createSpan(projectElBtn, project.getTitle(),'project-title');
   let numTodosContainer = DOM.createDiv(projectEl, 'num-todos-container');
-  let numTodos = DOM.createSpan(numTodosContainer, project.getCtTodos(), 'num-todos');
+  DOM.createSpan(numTodosContainer, project.getCtTodos(), 'num-todos');
 
   attachTo.appendChild(projectEl);
 
   return projectEl;
 }
-function drawTodo(attachTo, todo) {
-  let todoEl = DOM.createLI(attachTo, 'todo');
-  todoEl.id = todo.getID();
-  // +++ line 1 +++
-  let line1 = DOM.createDiv(todoEl, 'todo-line-1');
-  // col 1
-  let col1 = DOM.createDiv(line1, 'todo-col-base', 'todo-col-1');
-  let todoCheckBoxBtn = DOM.createButton(col1, 'todo-checkbox');
-  let todoImg;
-  if (todo.isComplete === false) {
-    todoImg = todoIncompleteIcon;
-  } else {
-    todoImg = todoCompleteIcon;
-    todoEl = DOM.classify(todoEl, ['todo-complete']);
-  }
-  let checkboxBtnImg = DOM.createImage(todoCheckBoxBtn, todoImg, 'Todo Complete Image', 'todo-checkbox-btn-img');
-  let todoTitle = DOM.createSpan(col1, todo.getTitle(), 'todo-title');
 
-  // event listener
-  addBtnFn(todoCheckBoxBtn, toggleTodoComplete);
-  // col 2
-  let col2 = DOM.createDiv(line1, 'todo-col-base', 'todo-col-2');
-  // TODO: format the date
-  let dueDate = DOM.createSpan(col2, todo.getDueDate(),'todo-due-date');
-  let expanderContainer = DOM.createDiv(col2, 'expander-container');
-  let expandMoreBtn = DOM.createButton(expanderContainer, 'expander-btn');
-  let expandMoreBtnImg = DOM.createImage(expandMoreBtn, todoExpandMoreIcon);
-  let expandLessBtn = DOM.createButton(expanderContainer, 'minimizer-btn','hide');
-  let expandLessBtnImg = DOM.createImage(expandLessBtn, todoExpandLessIcon);
+function drawTodoLine1(todo, todoEl) {
+    let line1 = DOM.createDiv(todoEl, 'todo-line-1');
+    // col 1
+    let col1 = DOM.createDiv(line1, 'todo-col-base', 'todo-col-1');
+    let todoCheckBoxBtn = DOM.createButton(col1, 'todo-checkbox');
+    let todoImg;
+    if (todo.isComplete === false) {
+      todoImg = todoIncompleteIcon;
+    } else {
+      todoImg = todoCompleteIcon;
+      todoEl = DOM.classify(todoEl, ['todo-complete']);
+    }
+    DOM.createImage(todoCheckBoxBtn, todoImg, 'Todo Complete Image', 'todo-checkbox-btn-img');
+    DOM.createSpan(col1, todo.getTitle(), 'todo-title');
 
-  let editBtn = DOM.createButton(col2, 'edit-todo-btn');
-  let editBtnImg = DOM.createImage(col2, todoEditIcon)
-  editBtn.appendChild(editBtnImg);
+    // event listener
+    addBtnFn(todoCheckBoxBtn, toggleTodoComplete);
+    // col 2
+    let col2 = DOM.createDiv(line1, 'todo-col-base', 'todo-col-2');
+  
+    DOM.createSpan(col2, todo.getDueDate(),'todo-due-date');
+    let expanderContainer = DOM.createDiv(col2, 'expander-container');
+    let expandMoreBtn = DOM.createButton(expanderContainer, 'expander-btn');
+    DOM.createImage(expandMoreBtn, todoExpandMoreIcon);
+    let expandLessBtn = DOM.createButton(expanderContainer, 'minimizer-btn','hide');
+    DOM.createImage(expandLessBtn, todoExpandLessIcon);
 
-  let priorityImgURL;
-  switch (todo.getPriority()) {
-    case 'low':
-      priorityImgURL = lowPriorityIcon;
-      break;
-    case 'medium':
-      //something
-      priorityImgURL = mediumPriorityIcon;
-      break;
-    case 'high':
-      priorityImgURL = highPriorityIcon;
-      break;
-  }
-  let priorityBtn = DOM.createButton(col2, 'todo-priority-btn');
-  let priorityImg = DOM.createImage(priorityBtn, priorityImgURL, 'Todo Priority', 'todo-priority-btn-img');
+    let editBtn = DOM.createButton(col2, 'edit-todo-btn');
+    let editBtnImg = DOM.createImage(col2, todoEditIcon)
+    editBtn.appendChild(editBtnImg);
 
-  // +++ line 2 +++
+    let priorityImgURL;
+    switch (todo.getPriority()) {
+      case 'low':
+        priorityImgURL = lowPriorityIcon;
+        break;
+      case 'medium':
+        //something
+        priorityImgURL = mediumPriorityIcon;
+        break;
+      case 'high':
+        priorityImgURL = highPriorityIcon;
+        break;
+    }
+    let priorityBtn = DOM.createButton(col2, 'todo-priority-btn');
+    DOM.createImage(priorityBtn, priorityImgURL, 'Todo Priority', 'todo-priority-btn-img');    
+
+    return line1;
+}
+
+function drawTodoLine2(todo, todoEl) {
   let line2 = DOM.createDiv(todoEl, 'todo-line-2');
   let taskList = DOM.createUL(line2, 'task-list');
   let tasks = todo.getTasks();
@@ -333,7 +332,23 @@ function drawTodo(attachTo, todo) {
     drawTaskDisplayMode(taskList, task);
   });
 
+  return line2;
+}
+/**
+ * Takes a Todo object and adds necessary elements and event listeners to display it on-screen.
+ * @param {*} attachTo 
+ * @param {*} todo 
+ * @returns 
+ */
+function drawTodo(attachTo, todo) {
+  let todoEl = DOM.createLI(attachTo, 'todo');
+  todoEl.id = todo.getID();
+  
+  drawTodoLine1(todo, todoEl);
+  drawTodoLine2(todo, todoEl);
+
   attachTo.appendChild(todoEl);
+
   return todoEl;
 }
 
@@ -354,8 +369,8 @@ function drawTaskDisplayMode(attachTo, task) {
   } else {
     taskImg = taskCompleteIcon;
   }
-  let taskCheckboxImg = DOM.createImage(taskCheckbox, taskImg, 'Task Checkbox Image', 'task-checkbox-btn-img');
-  let taskTitle = DOM.createSpan(taskEl, task.getTitle(), 'task-title');
+  DOM.createImage(taskCheckbox, taskImg, 'Task Checkbox Image', 'task-checkbox-btn-img');
+  DOM.createSpan(taskEl, task.getTitle(), 'task-title');
 
   addBtnFn(taskCheckbox, toggleTaskComplete);
 
@@ -442,10 +457,10 @@ function drawTaskEditMode(attachTo, task) {
   let taskEl = DOM.createLI(attachTo, 'task');
 
   let btn = DOM.createButton(taskEl, 'task-checkbox-btn');
-  let img = DOM.createImage(btn, taskImg, 'task-checkbox-img');
-  let input = DOM.createInput(taskEl,'text', 'tasks', title);
+  DOM.createImage(btn, taskImg, 'task-checkbox-img');
+  DOM.createInput(taskEl,'text', 'tasks', title);
   let deleteBtn = DOM.createButton(taskEl, 'task-delete-btn');
-  let deleteBtnImg = DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Button Image', 'task-delete-btn-img');
+  DOM.createImage(deleteBtn, taskDeleteIcon, 'Task Delete Button Image', 'task-delete-btn-img');
 
   addBtnFn(deleteBtn, deleteTask);
   
@@ -902,6 +917,14 @@ function selectLastProject() {
   return lastProjectEl;
 }
 
+function selectFirstProject() {
+  const projectEls = document.querySelectorAll('.project');
+  const projectEl = projectEls[0];
+  selectProject(projectEl);
+  
+  return projectEl;
+}
+
 function clearProjectSelection() {
   const selectedProjectEl = getSelectedProjectEl();
   if (!(selectedProjectEl === null)) {
@@ -950,11 +973,11 @@ function getTasksFromTaskValues(taskValuesArray) {
 
 function updateTasksFromTaskValues(taskValuesArray) {
   let parentTodoID;
-  // delete all tasks that belong to this todoID
+  // delete tasks previously belonging to this todo
   const oldTasks = App.getTasks();
   let todoID;
   oldTasks.forEach(function(oldTask) {
-    todoID = task.getTodoID();
+    todoID = oldTask.getTodoID();
     if (todoID === parentTodoID) {
       App.delTask(oldTask.getID());
     }
@@ -996,18 +1019,13 @@ function submitTodoForm() {
   console.log(taskValues);
   console.log(notes);
 
-  let tasks;
   // inspect the header to determine what the outcome of submitting of the form should be
   if (todoFormInCreateMode()) {
-    createAndDomifyTodo(title, priority, dueDate, isComplete, notes);
-    // create tasks
-    tasks = getTasksFromTaskValues(taskValues);
-    // domify tasks
-
-  } else {
-    updateTodo(title, priority, dueDate, isComplete, notes, TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent);
-    // update tasks
     updateTasksFromTaskValues(taskValues);
+    createAndDomifyTodo(title, priority, dueDate, isComplete, notes);
+  } else {
+    updateTasksFromTaskValues(taskValues);
+    updateTodo(title, priority, dueDate, isComplete, notes, TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent);
   }
   save();
   updateCtTodos();
@@ -1171,6 +1189,17 @@ function createTask(title, isComplete, todoID, id) {
   return taskObj;
 }
 
+/**
+ * Updates a pre-existing todo in App memory and updates DOM elements
+ * @param {*} title 
+ * @param {*} priority 
+ * @param {*} dueDate 
+ * @param {*} isComplete 
+ * @param {*} tasks 
+ * @param {*} notes 
+ * @param {*} todoID 
+ * @returns [Todo object, Todo HTML Element]
+ */
 function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) {
   hideTodoEditPane();
   resetTodoEditPane();
@@ -1226,7 +1255,7 @@ function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) 
     drawTaskDisplayMode(taskListEl, task);
   })
 
-  return todoObj;
+  return [todoObj, todoEl];
 }
 
 // LOCAL STORAGE Functions
@@ -1371,6 +1400,8 @@ function startup() {
     })
     updateCtTodos();
     hideAllTodos();
+    clearProjectSelection();
+    selectFirstProject();
     showSelectedProjectTodos();
   }
 }
