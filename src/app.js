@@ -89,7 +89,7 @@ const APP = (() => {
     deleteByID(todoID, TODOS);
   }
   /**
-   * Deletes a Project object from PROJECTS array (App memory)
+   * Recursively deletes a Project, along with all Todos belonging to it, and all Task objects that point to those Todo objects
    * @param {*} projectID 
    */
   function delProject(projectID) {
@@ -97,6 +97,10 @@ const APP = (() => {
     const project = getProject(projectID);
     const todos = project.getTodos();
     todos.forEach(function(todo) {
+      const tasks = todo.getTasks();
+      tasks.forEach(function(task) {
+        delTask(task.getID());
+      })
       delTodo(todo.getID());
     })
     // THEN delete the project itself
@@ -194,6 +198,15 @@ const APP = (() => {
         }
       })
       return tasks;
+    },
+    getTaskIDs() {
+      const tasks = this.getTasks();
+      const taskIDs = new Array();
+      tasks.forEach(function(task) {
+        const taskID = task.getID();
+        taskIDs.push(taskID);
+      })
+      return taskIDs;
     },
     getCtTasksCond(getComplete=false) {
       let ct = 0;

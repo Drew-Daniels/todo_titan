@@ -31,6 +31,7 @@ import todoExpandMoreIcon from './icons/todo-expand-more-icon.svg';
 import todoIncompleteIcon from './icons/todo-incomplete-icon.svg';
 import addProjectIcon from './icons/add-project-icon.svg';
 import discardChangesIcon from './icons/discard-changes-icon.svg';
+import todoDeleteIcon from './icons/todo-delete-icon.svg';
 
 
 // Import DOM Elements
@@ -140,7 +141,7 @@ DOM.createSpan(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, 'Delete this project','t
 DOM.createImage(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, projectDeleteIcon, 'Delete this project icon', 'option-image');
 
 // TODO LIST
-const TODO_LIST    = DOM.createUL(TODO_PANE, 'todo-list');
+const TODO_LIST = DOM.createUL(TODO_PANE, 'todo-list');
 
 // PROJECT EDIT PANE
 const PROJECT_EDIT_PANE = DOM.createDiv(MAIN, 'project-edit-pane', 'hide');
@@ -159,7 +160,7 @@ const PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN = DOM.createButton(PROJECT
 DOM.createImage(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitIcon);
 
 // ============ TODO EDIT PANE =========================
-const TODO_EDIT_PANE  = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
+const TODO_EDIT_PANE = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
 const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, 'todo-edit-form');
 const TODO_EDIT_PANE_FORM_HEADER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-header', 'fancy-header');
 const TODO_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM_HEADER, 'Edit Todo');
@@ -219,6 +220,8 @@ const TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA = DOM.createTextArea(TODO_EDI
 const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_CONTAINER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'submission-container');
 const TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_CONTAINER, 'submit-todo-changes-btn', 'submit-changes-btn', 'fancy-btn');
 DOM.createImage(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitIcon, 'Submit Icon');
+const TODO_EDIT_PANE_FORM_EDIT_TODO_DELETE_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_CONTAINER, 'delete-todo-btn', 'submit-changes-btn', 'fancy-btn');
+DOM.createImage(TODO_EDIT_PANE_FORM_EDIT_TODO_DELETE_BTN, todoDeleteIcon, 'Trashcan Icon');
 
 // Footer
 const FOOTER = DOM.createFooter(CONTENT);
@@ -323,11 +326,17 @@ function drawTodoLine1(todo, todoEl) {
 
     return line1;
 }
-
+/**
+ * Creates the DOM elements to display tasks that belong to the passed-in Todo object
+ * @param {*} todo 
+ * @param {*} todoEl 
+ * @returns Div containing the task list for Todo object passed in
+ */
 function drawTodoLine2(todo, todoEl) {
   let line2 = DOM.createDiv(todoEl, 'todo-line-2');
   let taskList = DOM.createUL(line2, 'task-list');
   let tasks = todo.getTasks();
+  console.log(tasks);
   tasks.forEach(task => {
     drawTaskDisplayMode(taskList, task);
   });
@@ -608,11 +617,16 @@ function deleteChildren(parentEl) {
   }
 }
 
-function deleteSelectedProject() {
-  const selectedProject = getSelectedProject();
-  const selectedProjectEl = getSelectedProjectEl();
-  const todoIDs = selectedProject.getTodoIDs();
-  // delete all todo elements that have an id included in this array
+function getProjectEl(projectID) {
+  const projectEl = document.querySelector('.project#' + projectID);
+  return projectEl;
+}
+
+function deleteProjectElements(projectID) {
+  const projectObj = App.getProject(projectID);
+  const projectEl = getProjectEl(projectID);
+  // Delete Todo elements for this project
+  const todoIDs = projectObj.getTodoIDs();
   todoIDs.forEach(function(todoID) {
     const todoEl = document.querySelector('#' + todoID);
     if (todoEl) {
@@ -620,12 +634,26 @@ function deleteSelectedProject() {
       todoEl.remove();
     }
   })
+  // Delete Project elements for this project
+  deleteChildren(projectEl)
+  projectEl.parentNode.removeChild(projectEl);
+}
+
+/**
+ * // Recursively deletes this project along with all of its Todo objects, and those Todo objects' Tasks objects
+ * @param {*} projectID 
+ */
+function deleteProjectObjects(projectID) {
+    App.delProject(projectID);
+}
+
+function deleteSelectedProject() {
+  const selectedProjectID = getSelectedProjectID();
+
+  deleteProjectElements(selectedProjectID)
+  deleteProjectObjects(selectedProjectID);
   
-  deleteChildren(selectedProjectEl)
-  selectedProjectEl.parentNode.removeChild(selectedProjectEl);
-  
-  App.delProject(selectedProject.getID());
-  
+  // Select another Project element if one exists and displays its todos
   if (projectsExist()) {
     selectLastProject();
     const newlySelectedProject = getSelectedProject();
@@ -1330,6 +1358,7 @@ function startup() {
   addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitProjectForm);
   addBtnFn(TODO_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetTodoEditForm);
   addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitTodoForm);
+  addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_DELETE_BTN, );
   addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
   addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
   addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
