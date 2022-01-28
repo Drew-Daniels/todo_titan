@@ -168,9 +168,6 @@ const APP = (() => {
   const hasNotes = {
     getNotes() {
       return this.notes;
-    },
-    addNotes(notes) {
-      this.notes = notes;
     }
   }
 
@@ -200,18 +197,18 @@ const APP = (() => {
     return rcvr;
   }
   // Task
-  function Task(title='New Task', isComplete=false, todoID, id) {
+  function Task(title='New Task', isComplete=false, todoID, id=("i" + uuidv4())) {
     this.title = title;
     this.isComplete  = isComplete;
     this.todoID = todoID;
-    this.id = id || ("i" + uuidv4());
+    this.id = id;
 
     TASKS.push(this);
   }
   mixin(Task.prototype, hasID, hasTitle, {constructor: Task})
 
   // Todo
-  function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, tasks=Array(), notes='', projectID, id) {
+  function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, tasks=new Array(), notes='', projectID, id=("i" + uuidv4())) {
     this.title = title;
     this.priority = priority;
     this.dueDate = dueDate;
@@ -219,17 +216,17 @@ const APP = (() => {
     this.tasks = tasks;
     this.notes = notes;
     this.projectID = projectID;
-    this.id = id || ("i" + uuidv4());
+    this.id = id;
 
     TODOS.push(this);
   }
   mixin(Todo.prototype, hasID, hasTitle, hasPriority, hasDueDate, hasTasks, hasNotes, hasProject, {constructor: Todo});
 
   // Project
-  function Project(title='New Project', todos=Array(), id) {
+  function Project(title='New Project', todos=Array(), id=("i" + uuidv4())) {
     this.title = title;
     this._todos = todos;
-    this.id = id || ("i" + uuidv4());
+    this.id = id;
     
     PROJECTS.push(this);
   }

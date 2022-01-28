@@ -463,7 +463,7 @@ function fillProjectForm(project) {
 function fillTodoForm(todo) {
   TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent = todo.getID();
   TODO_EDIT_PANE_FORM_EDIT_TODO_TITLE_INPUT.value = todo.getTitle();
-  TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT.checked = todo.isComplete();
+  TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT.checked = todo.isComplete;
   TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value = todo.getDueDate();
 
   let priority = todo.getPriority();
@@ -483,8 +483,8 @@ function fillTodoForm(todo) {
 
   let tasks = todo.getTasks();
   tasks.forEach(task => drawTaskEditMode(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST, task))
-
-  TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value = todo.getNotes();
+  let notes = todo.getNotes();
+  TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value = notes;
 }
 
 // OPTION BUTTONS
@@ -611,7 +611,6 @@ function deleteSelectedProject() {
   App.delProject(selectedProjectID);
   
   if (projectsExist()) {
-  
     const newlySelectedProject = selectLastProject();
     unhideTodos(newlySelectedProject.id);
   } else {
@@ -850,7 +849,7 @@ function submitProjectForm() {
  * @returns Project
  */
 function getSelectedProject() {
-  const selectedProjectElID = getSelectedProjectID();
+  const selectedProjectElID = document.querySelector('.project.selected');
   const projectArray = App.getProjects();
   let project;
   projectArray.forEach(function (projectObj) {
@@ -946,13 +945,13 @@ function getTodoFormValues() {
     let dueDate = TODO_EDIT_PANE_FORM_EDIT_TODO_DUE_DATE_INPUT.value;
     let isComplete = TODO_EDIT_PANE_FORM_EDIT_TODO_IS_COMPLETE_INPUT.checked;
     let tasks = getTodoFormTasks(document.querySelectorAll('.form-section > ul.task-list > li.task'));
-    let notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.value;
+    let notes = TODO_EDIT_PANE_FORM_EDIT_TODO_NOTES_TEXTAREA.textContent;
 
     return [title, priority, dueDate, isComplete, tasks, notes];
 }
 
 function submitTodoForm() {
-  let title, priority, dueDate, isComplete, tasks, notes = getTodoFormValues();
+  let [title, priority, dueDate, isComplete, tasks, notes] = getTodoFormValues();
   // inspect the header to determine what the outcome of submitting of the form should be
   if (TODO_EDIT_PANE_FORM_HEADER_SPAN.textContent === TODO_EDIT_HEADER_CREATE_TEXT) {
     createAndDomifyTodo(title, priority, dueDate, isComplete, tasks, notes);
@@ -1003,7 +1002,6 @@ function hideTasks() {
  */
 function createProject(title, id) {
   const projectObj = new App.Project(title, Array(), id);
-  save();
   return projectObj;
 }
 
@@ -1035,8 +1033,8 @@ function createAndDomifyProject(title, id) {
 }
 
 function getSelectedProjectID() {
-  const selectedProject = getSelectedProject();
-  return selectedProject.getID();
+  const selectedProjectID = document.querySelector('.project.selected').id;
+  return selectedProjectID;
 }
 
 function getProjectByID(projectID) {
@@ -1061,20 +1059,13 @@ function getSelectedProjectEl() {
  * @returns 
  */
 function createTodo(title, priority, dueDate, isComplete, tasks, notes, projectID, id) {
-  console.log(projectID);
-  // HIDE form
   hideTodoEditPane();
-  // RESET form
   resetTodoEditPane();
-  // ASSIGN to specific project if projectID provided - otherwise assign to selected project
   let todoObj;
   let project;
   let pid;
   const selectedProjectID = getSelectedProjectID();
-  console.log(selectedProjectID);
-  // If a projectID is specified, use it - otherwise use the currently selected project's ID to assign the todo to
   if (projectID) {
-    console.log('here');
     pid = projectID;
     project = getProjectByID(projectID);
   } else {
@@ -1082,9 +1073,8 @@ function createTodo(title, priority, dueDate, isComplete, tasks, notes, projectI
     project = getProjectByID(selectedProjectID);
   }
   todoObj = new App.Todo(title, priority, dueDate, isComplete, tasks, notes, pid, id);
-  // ADD todo to project
+  
   project.addTodo(todoObj);
-  save();
 
   return todoObj;
 }
@@ -1171,8 +1161,6 @@ function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) 
     drawTaskDisplayMode(taskListEl, task);
   })
 
-  save();
-
   return todoObj;
 }
 
@@ -1206,33 +1194,19 @@ function getStorage() {
   return window['localStorage'];
 }
 
-function getProjectStorageItems() {
-  const projects = getStorageItem('projects');
-  return projects;
-}
-
-function getTodoStorageItems() {
-  const todos = getStorageItem('todos');
-  return todos;
-}
-
-function getTaskStorageItems() {
-  const tasks = getStorageItem('tasks');
-  return tasks;
-}
-
 function getStorageItem(item) {
   let itemStorage;
+  let parsedItem;
   if (storageAvailable('localStorage')) {
     let locStorage = getStorage();
     itemStorage = locStorage.getItem(item);
     if (!(itemStorage === null)) {
-      item = JSON.parse(itemStorage);
+      parsedItem = JSON.parse(itemStorage);
+    } else {
+      parsedItem = [];
     }
-  } else {
-    item = [];
   }
-  return item;
+  return parsedItem;
 }
 
 /**
@@ -1247,6 +1221,10 @@ function save() {
 
   const tasks = App.getTasks();
   localStorage.setItem('tasks', JSON.stringify(tasks));
+
+  console.log(projects);
+  console.log(todos);
+  console.log(tasks);
 }
 
 function reviveFromStorage(storageItems, reviverFn, attributesArray) {
@@ -1321,68 +1299,78 @@ function startup() {
   
   // local storage steps here
   // retrieve objects from local storage
-  const projectStorageItems = getProjectStorageItems();
-  const todoStorageItems = getTodoStorageItems();
-  const taskStorageItems = getTaskStorageItems();
+  const projectStorageItems = getStorageItem('projects');
+  const todoStorageItems = getStorageItem('todos');
+  const taskStorageItems = getStorageItem('tasks');
 
   // transform objects from local storage back into Project, Todo, and Task objects
-  const projects = reviveProjects(projectStorageItems, createProject);
+  // const projects = reviveProjects(projectStorageItems, createProject);
   // const todos = reviveTodos(todoStorageItems, createTodo);
   // const tasks = reviveTasks(taskStorageItems, createTask);
 
-  // const projects = [];
-  // const todos = [];
-  // const tasks = [];
+  const projects = new Array();
+  const todos = new Array();
+  const tasks = new Array();
 
-  // projectStorageItems.forEach(function (projectStorageItem) {
-  //   const project = createProject(
-  //     projectStorageItem.title, 
-  //     projectStorageItem.id
-  //   );
-  //   projects.push(project);
-  // })
+  projectStorageItems.forEach(function(projectStorageItem) {
+    const project = createProject(
+      projectStorageItem.title, 
+      projectStorageItem.id
+    );
+    projects.push(project);
+  })
 
-  // todoStorageItems.forEach(function (todoStorageItem) {
-  //   const todo = createTodo(
-  //     todoStorageItem.title, 
-  //     todoStorageItem.priority, 
-  //     todoStorageItem.dueDate,
-  //     todoStorageItem.isComplete,
-  //     todoStorageItem.tasks,
-  //     todoStorageItem.notes,
-  //     todoStorageItem.projectID,
-  //     todoStorageItem.id
-  //   );
-  //   todos.push(todo);
-  // })
+  todoStorageItems.forEach(function(todoStorageItem) {
+    console.log(todoStorageItem.title);
+    console.log(todoStorageItem.priority);
+    console.log(todoStorageItem.dueDate);
+    console.log(todoStorageItem.isComplete);
+    console.log(todoStorageItem.tasks);
+    console.log(todoStorageItem.notes);
+    console.log(todoStorageItem.projectID);
+    console.log(todoStorageItem.id);
 
-  // taskStorageItems.forEach(function (taskStorageItem) {
-  //   const task = createTask(
-  //     taskStorageItem.title, 
-  //     taskStorageItem.isComplete,
-  //     taskStorageItem.todoID,
-  //     taskStorageItem.id,
-  //   );
-  //   tasks.push(task);
-  // })
+    const todo = createTodo(
+      todoStorageItem.title, 
+      todoStorageItem.priority, 
+      todoStorageItem.dueDate,
+      todoStorageItem.isComplete,
+      todoStorageItem.tasks,
+      todoStorageItem.notes,
+      todoStorageItem.projectID,
+      todoStorageItem.id
+    );
+    todos.push(todo);
+  })
 
-  console.log(projects);
+  taskStorageItems.forEach(function(taskStorageItem) {
+    const task = createTask(
+      taskStorageItem.title, 
+      taskStorageItem.isComplete,
+      taskStorageItem.todoID,
+      taskStorageItem.id,
+    );
+    tasks.push(task);
+  })
+
+  // console.log(projects);
   // console.log(todos);
   // console.log(tasks);
 
   if (projects.length > 0) {
-    projects.forEach(function (project) {
+    projects.forEach(function revealProject(project) {
       domifyProject(project);
-      // todos.forEach(function (todo) {
+      // todos.forEach(function revealTodo(todo) {
+      //   console.log(todo);
       //   if (todo.projectID === project.getID()) {
       //     const todoObj = createTodo(todo.title, todo.priority, todo.dueDate, todo.isComplete, todo.tasks, todo.notes, todo.projectID, todo.id);
-      //     tasks.forEach(function (task) {
-      //       if (task.todoID === todo.id) {
-      //         const taskObj = new App.Task(task.title, task.isComplete, task.todoID, task.id);
-      //         const taskList = document.querySelector('#' + todo.id + ' .task-list');
-      //         drawTaskDisplayMode(taskList, taskObj);
-      //       }
-      //     })
+      //     // tasks.forEach(function revealTask(task) {
+      //     //   if (task.todoID === todo.id) {
+      //     //     const taskObj = new App.Task(task.title, task.isComplete, task.todoID, task.id);
+      //     //     const taskList = document.querySelector('#' + todo.id + ' .task-list');
+      //     //     drawTaskDisplayMode(taskList, taskObj);
+      //     //   }
+      //     // })
       //   }
       // })
     })
