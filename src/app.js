@@ -27,10 +27,8 @@ const APP = (() => {
 
   function getTodoIDs(projectID) {
     const project = getProject(projectID);
-    const todoIDs = [];
-    const todos = project.getTodos();
-    todos.forEach(function(todo) {
-      const todoID = todo.getID();
+    const todoIDs = project.getTodoIDs();
+    todoIDs.forEach(function(todoID) {
       todoIDs.push(todoID);
     })
     return todoIDs;
@@ -103,10 +101,29 @@ const APP = (() => {
       return this.title;
     },
     getTodos() {
-      return this._todos;
+      const projectID = this.getID();
+      const todos = new Array();
+      TODOS.forEach(function(todo) {
+        const parentID = todo.getProjectID();
+        if (parentID === projectID) {
+          todos.push(todo);
+        }
+      })
+      return todos;
+    },
+    getTodoIDs() {
+      const todos = getTodos();
+      const todoIDs = new Array();
+      todos.forEach(function(todo) {
+        const todoID = todo.getID();
+        todoIDs.push(todoID);
+      })
+      return todoIDs;
     },
     getCtTodos() {
-      return this._todos.length;
+      const todos = getTodos();
+      const numTodos = todos.length;
+      return numTodos;
     },
     getCtTodosComplete() {
       return this.getCtTodosConditional(true);
@@ -121,7 +138,7 @@ const APP = (() => {
      */
     getCtTodosConditional(isCompleteCondition) {
       let ct = 0;
-      const todos = this._todos;
+      const todos = this.getTodos();
       for (let i=0; i < todos.length; i++) {
         const todo = todos[i];
         if (todo.isComplete === isCompleteCondition) {
@@ -130,8 +147,8 @@ const APP = (() => {
       }
       return ct++;
     },
-    addTodo(todo) {
-      this._todos.push(todo);
+    addTodoID(todoID) {
+      this.todoIDs.push(todoID);
     },
   }
 
@@ -148,7 +165,15 @@ const APP = (() => {
   }
   const hasTasks = {
     getTasks() {
-      return this.tasks;
+      const todoID = this.getID();
+      const tasks = [];
+      TASKS.forEach(function(task) {
+        const parentID = task.getTodoID();
+        if (parentID === todoID) {
+          tasks.push(task);
+        }
+      })
+      return tasks;
     },
     getCtTasksCond(getComplete=false) {
       let ct = 0;
@@ -175,20 +200,6 @@ const APP = (() => {
     getProjectID() {
       return this.projectID;
     },
-    getProject() {
-      return this.project;
-    },
-    setProject(projectID) {
-      let projectObj;
-      for (let i=0; i < PROJECTS.length; i++) {
-        projectObj = PROJECTS[i];
-        if (projectObj.getID() === projectID) {
-          this.project = projectObj;
-        }
-      }
-      // Ensure this todo is added to parent project's array of todos
-      projectObj.push(this);
-    }
   }
 
   // CLASS DEFINITIONS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,12 +219,11 @@ const APP = (() => {
   mixin(Task.prototype, hasID, hasTitle, {constructor: Task})
 
   // Todo
-  function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, tasks=new Array(), notes='', projectID, id=("i" + uuidv4())) {
+  function Todo(title='New Todo', priority='low', dueDate=format(new Date(), 'yyyy-MM-dd'), isComplete=false, notes='', projectID, id=("i" + uuidv4())) {
     this.title = title;
     this.priority = priority;
     this.dueDate = dueDate;
     this.isComplete = isComplete;
-    this.tasks = tasks;
     this.notes = notes;
     this.projectID = projectID;
     this.id = id;
@@ -223,27 +233,14 @@ const APP = (() => {
   mixin(Todo.prototype, hasID, hasTitle, hasPriority, hasDueDate, hasTasks, hasNotes, hasProject, {constructor: Todo});
 
   // Project
-  function Project(title='New Project', todos=Array(), id=("i" + uuidv4())) {
+  function Project(title='New Project', id=("i" + uuidv4())) {
     this.title = title;
-    this._todos = todos;
     this.id = id;
     
     PROJECTS.push(this);
   }
 
   mixin(Project.prototype, hasID, hasTitle, hasTodos, {constructor: Project});
-
-  Project.prototype.setTodos = function() {
-    const that = this;
-    const projTitle = that.title;
-    const myTodos = [];
-    TODOS.forEach(function(todo) {
-      if (todo.getProject() === projTitle) {
-        myTodos.push(todo);
-      }
-    })
-    that.todos = myTodos;
-  }
 
   return {
     Project, 
