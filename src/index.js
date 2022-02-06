@@ -369,6 +369,7 @@ function drawTodo(attachTo, todo) {
  */
 function drawTaskDisplayMode(attachTo, task) {
   let taskEl = DOM.createLI(attachTo, 'task');
+  taskEl.id = task.getID();
 
   let taskCheckbox = DOM.createButton(taskEl, 'task-checkbox-btn');
   let taskImg;
@@ -425,6 +426,8 @@ function markTaskIncomplete(taskEl) {
 function toggleTaskComplete() {
   const that = this;
   const taskEl = that.parentNode;
+  const taskObj = App.getTask(taskEl.id);
+
   const taskImg = that.firstChild;
   const classes = DOM.getClasses(taskEl);
   if (classes.includes(TASK_COMPLETE_CLASS)) {
@@ -434,6 +437,8 @@ function toggleTaskComplete() {
     markTaskComplete(taskEl);
     taskImg.src = taskCompleteIcon;
   }
+  taskObj.isComplete = !taskObj.isComplete;
+  save();
 }
 
 function drawNewTask() {
