@@ -336,7 +336,6 @@ function drawTodoLine2(todo, todoEl) {
   let line2 = DOM.createDiv(todoEl, 'todo-line-2');
   let taskList = DOM.createUL(line2, 'task-list');
   let tasks = todo.getTasks();
-  console.log(tasks);
   tasks.forEach(task => {
     drawTaskDisplayMode(taskList, task);
   });
@@ -442,6 +441,7 @@ function drawNewTask() {
   let taskEl = drawTaskEditMode(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST, task);
   let taskCheckboxBtn = taskEl.querySelector('button.task-checkbox-btn');
   addBtnFn(taskCheckboxBtn, toggleTaskComplete, 'click');
+  App.delTask(task.getID());
   task = null;
 }
 
@@ -629,7 +629,7 @@ function deleteTodoElements(todoID) {
     todoEl.remove();
   }
   // delete tasks here later
-  
+
 }
 
 function deleteProjectElements(projectID) {
@@ -1022,23 +1022,6 @@ function getTasksFromTaskValues(taskValuesArray) {
   return tasks;
 }
 
-function updateTasksFromTaskValues(taskValuesArray) {
-  let parentTodoID;
-  // delete tasks previously belonging to this todo
-  const oldTasks = App.getTasks();
-  let todoID;
-  oldTasks.forEach(function(oldTask) {
-    todoID = oldTask.getTodoID();
-    if (todoID === parentTodoID) {
-      App.delTask(oldTask.getID());
-    }
-  })
-  // recreate these tasks and assign them to this Todo
-  const newTasks = getTasksFromTaskValues(taskValuesArray);
-
-  return newTasks;
-}
-
 /**
  * Returns the values from a TodoForm
  * @returns [title, priority, dueDate, isComplete, tasks, notes]
@@ -1062,21 +1045,16 @@ function todoFormInCreateMode() {
  * Collects Todo form values to either CREATE a new Todo object or UPDATE an existing Todo, and updating the screen
  */
 function submitTodoForm() {
+  let projectID = getSelectedProjectID();
+  let todoID = TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent;
   let [title, priority, dueDate, isComplete, taskValues, notes] = getTodoFormValues();
-  console.log(title);
-  console.log(priority);
-  console.log(dueDate);
-  console.log(isComplete);
-  console.log(taskValues);
-  console.log(notes);
-
   // inspect the header to determine what the outcome of submitting of the form should be
   if (todoFormInCreateMode()) {
-    updateTasksFromTaskValues(taskValues);
-    createAndDomifyTodo(title, priority, dueDate, isComplete, notes);
+    createAndDomifyTodo(title, priority, dueDate, isComplete, notes, projectID, todoID);
+    createAndDomifyTasks(taskValues, todoID);
   } else {
-    updateTasksFromTaskValues(taskValues);
-    updateTodo(title, priority, dueDate, isComplete, notes, TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent);
+    updateTodo(title, priority, dueDate, isComplete, notes, todoID);
+    // updateTasks(taskValues, todoID)
   }
   save();
   updateCtTodos();
@@ -1172,11 +1150,10 @@ function getSelectedProjectEl() {
  * @param {*} priority 
  * @param {*} dueDate 
  * @param {*} isComplete 
- * @param {*} tasks 
  * @param {*} notes 
  * @param {*} projectID 
  * @param {*} id 
- * @returns 
+ * @returns [Todo object]
  */
 function createTodo(title, priority, dueDate, isComplete, notes, projectID, id) {
   hideTodoEditPane();
@@ -1218,6 +1195,15 @@ function addTodoListeners(todoEl) {
   return todoEl;
 }
 
+function createAndDomifyTasks(taskValues, todoID) {
+  const todoEl = document.querySelector('#' + todoID);
+  const taskListEl = todoEl.querySelector('.task-list');
+  taskValues.forEach(function(tv) {
+    const taskObj = createTask(tv[0], tv[1], tv[2]);
+    drawTaskDisplayMode(taskListEl, taskObj);
+  })
+}
+
 /**
  * Creates a new Todo object and adds DOM elements to display on the screen
  * @param {*} title 
@@ -1246,12 +1232,11 @@ function createTask(title, isComplete, todoID, id) {
  * @param {*} priority 
  * @param {*} dueDate 
  * @param {*} isComplete 
- * @param {*} tasks 
  * @param {*} notes 
  * @param {*} todoID 
  * @returns [Todo object, Todo HTML Element]
  */
-function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) {
+function updateTodo(title, priority, dueDate, isComplete, notes, todoID) {
   hideTodoEditPane();
   resetTodoEditPane();
   const todoObj = App.getTodo(todoID);
@@ -1268,7 +1253,6 @@ function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) 
   const dueDateEl = todoEl.querySelector('.todo-due-date');
   const priorityBtnImg = todoEl.querySelector('.todo-priority-btn-img');
   const isCompleteBtnImg = todoEl.querySelector('.todo-checkbox-btn-img');
-  const taskListEl = todoEl.querySelector('.task-list');
 
   // Update DOM content using updated Todo values
   // TITLE
@@ -1300,11 +1284,6 @@ function updateTodo(title, priority, dueDate, isComplete, tasks, notes, todoID) 
     DOM.classify(todoEl, ['todo-complete']);
   }
   isCompleteBtnImg.src = checkboxImg;
-  // TASKS
-  deleteChildren(taskListEl);
-  tasks.forEach(function(task) {
-    drawTaskDisplayMode(taskListEl, task);
-  })
 
   return [todoObj, todoEl];
 }
@@ -1365,6 +1344,7 @@ function save() {
   localStorage.setItem('todos', JSON.stringify(todos));
 
   const tasks = App.getTasks();
+  console.log(tasks);
   localStorage.setItem('tasks', JSON.stringify(tasks));
 
 }
@@ -1443,12 +1423,6 @@ function startup() {
       todos.forEach(function revealTodo(todo) {
         if (todo.projectID === project.getID()) {
           domifyTodo(todo);
-          const taskList = document.querySelector('#' + todo.id + ' .task-list');
-          tasks.forEach(function(task) {
-            if (task.todoID === todo.id) {
-              drawTaskDisplayMode(taskList, task);
-            }
-          })
         }
       })
     })
