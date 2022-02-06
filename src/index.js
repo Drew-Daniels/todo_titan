@@ -622,21 +622,41 @@ function getProjectEl(projectID) {
   return projectEl;
 }
 
+function deleteTodoElements(todoID) {
+  const todoEl = document.querySelector('#' + todoID);
+  if (todoEl) {
+    deleteChildren(todoEl);
+    todoEl.remove();
+  }
+  // delete tasks here later
+  
+}
+
 function deleteProjectElements(projectID) {
   const projectObj = App.getProject(projectID);
   const projectEl = getProjectEl(projectID);
   // Delete Todo elements for this project
   const todoIDs = projectObj.getTodoIDs();
   todoIDs.forEach(function(todoID) {
-    const todoEl = document.querySelector('#' + todoID);
-    if (todoEl) {
-      deleteChildren(todoEl);
-      todoEl.remove();
-    }
+    deleteTodoElements(todoID);
   })
   // Delete Project elements for this project
   deleteChildren(projectEl)
   projectEl.parentNode.removeChild(projectEl);
+}
+
+function deleteTodoObjects(todoID) {
+  App.delTodo(todoID);
+}
+
+function deleteSelectedTodo() {
+  const todoID = TODO_EDIT_PANE_FORM_EDIT_TODO_ID_SPAN.textContent;
+  deleteTodoElements(todoID);
+  deleteTodoObjects(todoID);
+
+  hideTodoEditPane();
+  updateCtTodos();
+  save();
 }
 
 /**
@@ -752,6 +772,8 @@ function clearTasksFromTodoForm(taskList) {
 function stageAddTodoForm() {
   setTodoEditHeaderToCreate();
   clearTasksFromTodoForm(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST);
+  // hide delete button
+  hide(TODO_EDIT_PANE_FORM_EDIT_TODO_DELETE_BTN);
   let todo = new App.Todo();
   fillTodoForm(todo);
   unhideTodoEditPane();
@@ -765,6 +787,7 @@ function stageEditTodoForm() {
   setTodoEditHeaderToEdit();
   clearTasksFromTodoForm(TODO_EDIT_PANE_FORM_EDIT_TODO_TASK_LIST);
   fillTodoForm(todoObj);
+  unhide(TODO_EDIT_PANE_FORM_EDIT_TODO_DELETE_BTN);
   unhideTodoEditPane();
 }
 
@@ -1354,6 +1377,8 @@ function startup() {
   addBtnFn(TODO_OPTIONS_LI_ADD_TODO_BTN, stageAddTodoForm);
   // Form listeners
   addBtnFn(PROJECT_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetProjectEditForm);
+
+  addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_DELETE_BTN, deleteSelectedTodo);
   // differentiate between submission from 'create' versions of form to 'edit' versions of the form
   addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitProjectForm);
   addBtnFn(TODO_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetTodoEditForm);

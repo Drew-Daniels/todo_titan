@@ -82,10 +82,15 @@ const APP = (() => {
     deleteByID(taskID, TASKS);
   }
   /**
-   * Deletes a Todo object from TODOS array (App memory)
+   * Recursively deletes a Todo, along with all Tasks belonging to it
    * @param {*} todoID 
    */
   function delTodo(todoID) {
+    const todo = getTodo(todoID);
+    const tasks = todo.getTasks();
+    tasks.forEach(function(task) {
+      delTask(task.getID());
+    })
     deleteByID(todoID, TODOS);
   }
   /**
