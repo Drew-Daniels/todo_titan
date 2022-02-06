@@ -1041,6 +1041,23 @@ function todoFormInCreateMode() {
   return (TODO_EDIT_PANE_FORM_HEADER_SPAN.textContent === TODO_EDIT_HEADER_CREATE_TEXT)
 }
 
+function updateTasks(taskValues, todoID) {
+  // delete previous tasks for this todo
+  const todo = App.getTodo(todoID);
+  const tasks = todo.getTasks();
+  tasks.forEach(function(task) {
+    App.delTask(task.getID());
+  })
+  // create new tasks for this todo using task values
+  console.log(todoID);
+  const taskListEl = document.querySelector('#' + todoID + ' ul.task-list');
+  const oldTaskEls = taskListEl.querySelectorAll('li.task');
+  oldTaskEls.forEach(function (oldTaskEl) {
+    oldTaskEl.remove();
+  })
+  createAndDomifyTasks(taskValues, todoID);
+}
+
 /**
  * Collects Todo form values to either CREATE a new Todo object or UPDATE an existing Todo, and updating the screen
  */
@@ -1054,7 +1071,7 @@ function submitTodoForm() {
     createAndDomifyTasks(taskValues, todoID);
   } else {
     updateTodo(title, priority, dueDate, isComplete, notes, todoID);
-    // updateTasks(taskValues, todoID)
+    updateTasks(taskValues, todoID)
   }
   save();
   updateCtTodos();
