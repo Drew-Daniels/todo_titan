@@ -1385,7 +1385,7 @@ function startup() {
   addBtnFn(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitProjectForm);
   addBtnFn(TODO_EDIT_PANE_FORM_DISCARD_BTN, hideAndResetTodoEditForm);
   addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_SUBMISSION_BTN, submitTodoForm);
-  addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_DELETE_BTN, );
+  addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_DELETE_BTN, deleteSelectedTodo);
   addBtnFn(TODO_OPTIONS_LI_HIDE_COMPLETE_TODOS_BTN, toggleShowHideCompleteTodos);
   addBtnFn(TODO_OPTIONS_LI_DELETE_THIS_PROJECT_BTN, deleteSelectedProject);
   addBtnFn(TODO_EDIT_PANE_FORM_EDIT_TODO_ADD_TASK_BTN, drawNewTask);
