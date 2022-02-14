@@ -10,6 +10,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Todo Titan',
+      filename: './index.html',
     }),
   ],
   module: {
@@ -33,6 +34,6 @@ module.exports = {
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '.'),
   },
 };
