@@ -4,13 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
     "start": "webpack serve --open",
-    "build": "webpack",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "homepage": "https://drew-daniels.github.io/todo_titan/dist/"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
