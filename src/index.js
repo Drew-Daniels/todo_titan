@@ -146,6 +146,7 @@ const TODO_LIST = DOM.createUL(TODO_PANE, 'todo-list');
 // PROJECT EDIT PANE
 const PROJECT_EDIT_PANE = DOM.createDiv(MAIN, 'project-edit-pane', 'hide');
 const PROJECT_EDIT_PANE_FORM = DOM.createForm(PROJECT_EDIT_PANE, 'project-edit-form','mode-edit');
+PROJECT_EDIT_PANE_FORM.onsubmit = () => {return false};
 const PROJECT_EDIT_PANE_FORM_HEADER = DOM.createDiv(PROJECT_EDIT_PANE_FORM, 'form-header', 'fancy-header');
 const PROJECT_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(PROJECT_EDIT_PANE_FORM_HEADER, 'Edit Project');
 const PROJECT_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(PROJECT_EDIT_PANE_FORM_HEADER, 'discard-project-btn');
@@ -162,6 +163,7 @@ DOM.createImage(PROJECT_EDIT_PANE_FORM_SUBMISSION_CONTAINER_BTN, submitIcon);
 // ============ TODO EDIT PANE =========================
 const TODO_EDIT_PANE = DOM.createDiv(MAIN, 'todo-edit-pane', 'hide');
 const TODO_EDIT_PANE_FORM = DOM.createForm(TODO_EDIT_PANE, 'todo-edit-form');
+TODO_EDIT_PANE_FORM.onsubmit = () => {return false};
 const TODO_EDIT_PANE_FORM_HEADER = DOM.createDiv(TODO_EDIT_PANE_FORM, 'form-header', 'fancy-header');
 const TODO_EDIT_PANE_FORM_HEADER_SPAN = DOM.createSpan(TODO_EDIT_PANE_FORM_HEADER, 'Edit Todo');
 const TODO_EDIT_PANE_FORM_DISCARD_BTN = DOM.createButton(TODO_EDIT_PANE_FORM_HEADER, 'discard-todo-btn');
