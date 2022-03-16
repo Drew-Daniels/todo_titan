@@ -17,7 +17,6 @@
   "bugs": {
     "url": "https://github.com/Drew-Daniels/todo_titan/issues"
   },
-  "homepage": "https://github.com/Drew-Daniels/todo_titan/dist",
   "devDependencies": {
     "css-loader": "^6.5.1",
     "eslint": "^8.6.0",
