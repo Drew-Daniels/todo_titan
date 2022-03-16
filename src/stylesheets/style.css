@@ -98,7 +98,7 @@ footer {
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-top: 1em;
+  padding: 1em 0;
   flex-basis: 5em;
 }
 
@@ -121,7 +121,7 @@ button {
 
 form {
   background-color: #F9FDF6;
-  border: 0.06em solid #609931;
+  border: 0.06em solid #cfcfcf;
   border-radius: 1em;
   margin-right: 1em;
   padding-bottom: 1em;
@@ -176,6 +176,7 @@ textarea {
 
 .logo {
   height: 100%;
+  margin-right: 1em;
 }
 
 .logo-text {
@@ -193,7 +194,7 @@ textarea {
   display: flex;
   align-items: center;
   height: 5em;
-  margin-left: 1em;
+  margin: 1em;
 }
 
 #view-projects-btn {
@@ -202,10 +203,14 @@ textarea {
   margin-right: 1.5em;
 }
 
+input, textarea {
+  border: 0.06em solid #cfcfcf;
+}
+
 .project-pane {
   flex-basis: 28%;
   background-color: #F9FDF6;
-  border: 0.06em solid #609931;
+  border: 0.06em solid #cfcfcf;
   border-radius: 1em;
   margin-left: 1em;
   margin-right: 1em;
@@ -243,6 +248,11 @@ textarea {
 .project-header-main {
   display: flex;
   align-items: center;
+  padding-left: 1em;
+}
+
+.project-header-main > * {
+  margin-right: .5em;
 }
 
 .project {
@@ -257,6 +267,7 @@ textarea {
 
 .project-title {
   font-size: 1.31em;
+  margin-left: .5em;
 }
 
 .num-todos-container {
@@ -270,12 +281,13 @@ textarea {
   font-size: 16px;
   width: 1.5em;
   margin-right: 1em;
+  color: #3f3f3f;
 }
 
 .todo-pane {
   margin-right: 1em;
   background-color: #B6E394;
-  border: 0.06em solid #609931;
+  border: 0.06em solid #cfcfcf;
   border-radius: 1em;
   display: flex;
   flex: 1 1 69%;
@@ -322,7 +334,7 @@ textarea {
 .todo {
   display: flex;
   flex-direction: column;
-  border: 0.06em solid #609931;
+  border: 0.06em solid #cfcfcf;
   border-radius: 1em;
   background-color: #F9FDF6;
   align-items: center;
@@ -442,6 +454,7 @@ textarea {
 .github-icon {
   width: 1.5em;
   height: auto;
+  margin: .5em 0;
 }
 
 .github-profile-link {

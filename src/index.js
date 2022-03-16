@@ -68,10 +68,10 @@ const LOGO_NAME_CONTAINER = DOM.createDiv(HEADER, 'logo-name-container');
 DOM.createImage(LOGO_NAME_CONTAINER, todoTitanIcon, 'Todo Titan Checkmark Icon', 'logo')
 DOM.createSpan(LOGO_NAME_CONTAINER, LOGO_TEXT, "logo-text");
 
-const VIEW_PROJECTS_BUTTON = DOM.createButton(HEADER, 'option-btn', 'fancy-btn')
-VIEW_PROJECTS_BUTTON.id = 'view-projects-btn';
-const VIEW_PROJECTS_BUTTON_SPAN = DOM.createSpan(VIEW_PROJECTS_BUTTON, 'View Projects');
-const VIEW_PROJECTS_BUTTON_IMAGE = DOM.createImage(VIEW_PROJECTS_BUTTON, projectListIcon);
+// const VIEW_PROJECTS_BUTTON = DOM.createButton(HEADER, 'option-btn', 'fancy-btn')
+// VIEW_PROJECTS_BUTTON.id = 'view-projects-btn';
+// const VIEW_PROJECTS_BUTTON_SPAN = DOM.createSpan(VIEW_PROJECTS_BUTTON, 'View Projects');
+// const VIEW_PROJECTS_BUTTON_IMAGE = DOM.createImage(VIEW_PROJECTS_BUTTON, projectListIcon);
 
 
 // ++++++++++ Main ++++++++++
@@ -115,7 +115,7 @@ const US_PROJECT_LIST_UL = DOM.createUL(PROJECT_LIST_CONTAINER_US, 'project-list
 
 const US_PROJECT_LIST_ADD_PROJECT_PANE = DOM.createDiv(PROJECT_PANE, 'add-project-btn-container')
 const US_PROJECT_LIST_ADD_PROJECT_BTN = DOM.createButton(US_PROJECT_LIST_ADD_PROJECT_PANE, 'add-project-btn', 'fancy-btn');
-DOM.createImage(US_PROJECT_LIST_ADD_PROJECT_BTN, addProjectIcon);
+DOM.createImage(US_PROJECT_LIST_ADD_PROJECT_BTN, addProjectIcon, 'Addition sign icon', ['add-new-project-icon']);
 DOM.createSpan(US_PROJECT_LIST_ADD_PROJECT_BTN, 'Add a New Project');
 
 // +++++ TODO PANE +++++
@@ -1056,7 +1056,6 @@ function updateTasks(taskValues, todoID) {
     App.delTask(task.getID());
   })
   // create new tasks for this todo using task values
-  console.log(todoID);
   const taskListEl = document.querySelector('#' + todoID + ' ul.task-list');
   const oldTaskEls = taskListEl.querySelectorAll('li.task');
   oldTaskEls.forEach(function (oldTaskEl) {
@@ -1368,7 +1367,6 @@ function save() {
   localStorage.setItem('todos', JSON.stringify(todos));
 
   const tasks = App.getTasks();
-  console.log(tasks);
   localStorage.setItem('tasks', JSON.stringify(tasks));
 
 }
@@ -1436,10 +1434,6 @@ function startup() {
     );
     tasks.push(task);
   })
-
-  console.log(projects);
-  console.log(todos);
-  console.log(tasks);
 
   if (projects.length > 0) {
     projects.forEach(function(project) {
